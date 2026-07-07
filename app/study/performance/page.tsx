@@ -40,7 +40,7 @@ export default function PerformancePage() {
   const best = Math.max(...SCORES);
 
   return (
-    <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       <BackHeader title="Performance" />
 
       <main className="px-gutter pt-2 pb-28">
@@ -72,21 +72,21 @@ export default function PerformancePage() {
           <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" preserveAspectRatio="none">
             <defs>
               <linearGradient id="perfFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgb(0 27 166)" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="rgb(0 27 166)" stopOpacity="0" />
+                <stop offset="0%" stopColor="rgb(37 99 235)" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="rgb(37 99 235)" stopOpacity="0" />
               </linearGradient>
             </defs>
             <path d={area} fill="url(#perfFill)" />
             <polyline
               points={line}
               fill="none"
-              stroke="rgb(0 27 166)"
+              stroke="rgb(37 99 235)"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-            <circle cx={peak.x} cy={peak.y} r="4" fill="rgb(0 27 166)" />
-            <circle cx={peak.x} cy={peak.y} r="8" fill="rgb(0 27 166)" fillOpacity="0.15" />
+            <circle cx={peak.x} cy={peak.y} r="4" fill="rgb(37 99 235)" />
+            <circle cx={peak.x} cy={peak.y} r="8" fill="rgb(37 99 235)" fillOpacity="0.15" />
           </svg>
         </div>
 

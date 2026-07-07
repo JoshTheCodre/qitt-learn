@@ -7,6 +7,8 @@ import { COURSES, getCourse } from "@/lib/courses";
 const QUICK_ACTIONS = [
   { label: "Course materials", icon: "library_books", iconWrap: "bg-primary/10 text-primary", sub: "materials" },
   { label: "Course outline", icon: "format_list_bulleted", iconWrap: "bg-tertiary/10 text-tertiary", sub: "outline" },
+  { label: "Lecture notes", icon: "edit_note", iconWrap: "bg-amber-100 text-amber-600", sub: "notes" },
+  { label: "Recordings", icon: "play_circle", iconWrap: "bg-rose-100 text-rose-600", sub: "recordings" },
 ];
 
 const ACCENT = {
@@ -23,7 +25,7 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
   if (!course) notFound();
 
   return (
-    <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       <CourseHeader code={course.code} units={course.units} />
 
       <main className="px-gutter pb-28">

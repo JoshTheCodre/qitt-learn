@@ -55,7 +55,7 @@ export default function QuizPage() {
 
   if (done) {
     return (
-      <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col items-center justify-center px-gutter text-center">
+      <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col items-center justify-center px-gutter text-center">
         <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
           <span className="material-symbols-outlined text-[40px] text-primary leading-none">
             military_tech
@@ -89,7 +89,7 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col">
       {/* Header */}
       <header className="flex items-center gap-3 px-gutter py-4 shrink-0">
         <button
@@ -176,7 +176,7 @@ export default function QuizPage() {
       </main>
 
       {/* Action */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-gutter pb-5 pt-3 bg-background">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-gutter pb-5 pt-3 bg-background">
         {revealed ? (
           <button
             type="button"

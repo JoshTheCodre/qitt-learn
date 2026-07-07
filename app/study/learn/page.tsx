@@ -22,7 +22,7 @@ export default function StudyToolPage() {
   const canStart = type && course && fileName;
 
   return (
-    <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       <BackHeader title="Study" />
 
       <main className="px-gutter pt-2 pb-28">

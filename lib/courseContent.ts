@@ -28,6 +28,37 @@ export function getMaterials(course: Course): Material[] {
   ];
 }
 
+export interface LectureNote {
+  id: string;
+  title: string;
+  week: string;
+  size: string;
+}
+
+export function getLectureNotes(course: Course): LectureNote[] {
+  return [
+    { id: "1", title: `${course.code} — Introduction`, week: "Week 1", size: "1.2 MB" },
+    { id: "2", title: `${course.code} — Foundations`, week: "Week 2", size: "0.9 MB" },
+    { id: "3", title: `${course.code} — Core Concepts`, week: "Week 3", size: "1.6 MB" },
+    { id: "4", title: `${course.code} — Applications`, week: "Week 5", size: "1.1 MB" },
+  ];
+}
+
+export interface Recording {
+  id: string;
+  title: string;
+  duration: string;
+  date: string;
+}
+
+export function getRecordings(course: Course): Recording[] {
+  return [
+    { id: "1", title: `${course.code} — Lecture 1`, duration: "48 min", date: "Mon, Jul 7" },
+    { id: "2", title: `${course.code} — Lecture 2`, duration: "52 min", date: "Fri, Jul 11" },
+    { id: "3", title: `${course.code} — Tutorial`, duration: "31 min", date: "Mon, Jul 14" },
+  ];
+}
+
 export interface OutlineWeek {
   week: number;
   topic: string;

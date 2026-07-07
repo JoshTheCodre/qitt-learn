@@ -52,7 +52,7 @@ export default function TimetablePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       {/* Top bar */}
       <div className="flex items-center gap-3 px-gutter pt-5 pb-3">
         <button

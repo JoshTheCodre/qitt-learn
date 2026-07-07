@@ -110,7 +110,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[480px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       {/* Banner hero */}
       <div className="relative h-32 bg-gradient-to-tr from-primary via-blue-600 to-cyan-400">
         <button
@@ -315,7 +315,7 @@ export default function ProfilePage() {
       <div className="px-gutter mt-4 pb-28">
         <button
           type="button"
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/login")}
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-error-container border border-error/10 text-error font-display text-sm font-semibold squishy-press"
         >
           <span className="material-symbols-outlined text-[18px] leading-none">logout</span>

@@ -76,7 +76,7 @@ export default function TodaysClasses() {
             className="min-w-[190px] sm:min-w-[210px] md:min-w-[240px] bg-white rounded-[20px] p-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-outline-variant/30 flex flex-col gap-2.5 bento-card-hover group"
           >
             <div className="flex items-center justify-between">
-              <span className="font-display text-[18px] font-bold text-primary group-hover:text-primary-container transition-colors">
+              <span className="font-display text-[15px] font-bold text-primary group-hover:text-primary-container transition-colors">
                 {c.code}
               </span>
               <span className="px-2.5 py-0.5 rounded-full font-display text-[11px] font-semibold bg-primary/5 text-primary">
@@ -88,13 +88,13 @@ export default function TodaysClasses() {
                 <span className="material-symbols-outlined text-[16px] text-primary/60">
                   location_on
                 </span>
-                <span className="font-display text-xs font-medium">{c.location}</span>
+                <span className="font-display text-[13px] font-medium">{c.location}</span>
               </div>
               <div className="flex items-center gap-2 text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-primary/60">
                   schedule
                 </span>
-                <span className="font-display text-xs font-medium">{c.time}</span>
+                <span className="font-display text-[13px] font-medium">{c.time}</span>
               </div>
             </div>
           </div>

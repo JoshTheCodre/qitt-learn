@@ -24,7 +24,7 @@ export default function StudyReadPage() {
   const isLast = page >= pages.length - 1;
 
   return (
-    <div className="mx-auto w-full max-w-[480px] bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col" style={{ minHeight: "100dvh" }}>
+    <div className="mx-auto w-full max-w-[430px] bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col" style={{ minHeight: "100dvh" }}>
       {/* Header */}
       <header className="flex items-center gap-3 px-gutter py-4 shrink-0">
         <button
