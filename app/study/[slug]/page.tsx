@@ -1,8 +1,11 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import BottomNav from "@/components/dashboard/BottomNav";
 import CourseHeader from "@/components/study/CourseHeader";
-import { COURSES, getCourse } from "@/lib/courses";
+import { resolveCourse, type ResolvedCourse } from "@/lib/store";
 
 const QUICK_ACTIONS = [
   { label: "Course materials", icon: "library_books", iconWrap: "bg-primary/10 text-primary", sub: "materials" },
@@ -16,16 +19,39 @@ const ACCENT = {
   tertiary: { badge: "bg-tertiary/10 text-tertiary" },
 } as const;
 
-export function generateStaticParams() {
-  return COURSES.map((c) => ({ slug: c.slug }));
-}
+export default function CourseDetailPage() {
+  const params = useParams();
+  const slug = String(params.slug);
+  const [course, setCourse] = useState<ResolvedCourse | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
-export default function CourseDetailPage({ params }: { params: { slug: string } }) {
-  const course = getCourse(params.slug);
-  if (!course) notFound();
+  useEffect(() => {
+    setCourse(resolveCourse(slug));
+    setLoaded(true);
+  }, [slug]);
+
+  const frame =
+    "mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20";
+
+  if (!loaded) return <div className={frame} />;
+
+  if (!course) {
+    return (
+      <div className={frame}>
+        <CourseHeader code="Course" units="" />
+        <div className="flex flex-col items-center justify-center py-24 gap-2 text-center px-gutter">
+          <span className="material-symbols-outlined text-[40px] text-outline-variant">search_off</span>
+          <p className="font-display text-sm font-medium text-on-surface-variant">Course not found.</p>
+        </div>
+        <BottomNav />
+      </div>
+    );
+  }
+
+  const schedule = course.schedule ?? [];
 
   return (
-    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className={frame}>
       <CourseHeader code={course.code} units={course.units} />
 
       <main className="px-gutter pb-28">
@@ -60,43 +86,45 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
         </section>
 
         {/* Class schedule */}
-        <section className="mt-8">
-          <h3 className="font-display text-[18px] font-bold text-on-surface mb-4">Weekly Schedule</h3>
-          <div className="space-y-3">
-            {course.schedule.map((session, i) => {
-              const accent = ACCENT[session.accent];
-              return (
-                <div
-                  key={`${session.day}-${i}`}
-                  className="bg-surface-container-lowest rounded-2xl p-4 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-outline-variant/30"
-                >
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div
-                      className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center font-display font-semibold ${accent.badge}`}
-                    >
-                      {session.day}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-on-surface font-display text-sm font-semibold">
-                        {session.time}
-                      </div>
-                      <p className="mt-0.5 font-display text-xs font-medium text-on-surface-variant">
-                        {session.location}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    aria-label="Set reminder"
-                    className="w-10 h-10 shrink-0 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors squishy-press"
+        {schedule.length > 0 && (
+          <section className="mt-8">
+            <h3 className="font-display text-[18px] font-bold text-on-surface mb-4">Weekly Schedule</h3>
+            <div className="space-y-3">
+              {schedule.map((session, i) => {
+                const accent = ACCENT[session.accent];
+                return (
+                  <div
+                    key={`${session.day}-${i}`}
+                    className="bg-surface-container-lowest rounded-2xl p-4 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-outline-variant/30"
                   >
-                    <span className="material-symbols-outlined leading-none">notifications_active</span>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div
+                        className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center font-display font-semibold ${accent.badge}`}
+                      >
+                        {session.day}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-on-surface font-display text-sm font-semibold">
+                          {session.time}
+                        </div>
+                        <p className="mt-0.5 font-display text-xs font-medium text-on-surface-variant">
+                          {session.location}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      aria-label="Set reminder"
+                      className="w-10 h-10 shrink-0 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors squishy-press"
+                    >
+                      <span className="material-symbols-outlined leading-none">notifications_active</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </main>
 
       <BottomNav />

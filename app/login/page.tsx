@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { loginUser } from "@/lib/store";
 
 const FIELD =
   "w-full rounded-xl border border-outline-variant/50 bg-surface-container-lowest px-4 py-3 font-body text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary";
@@ -12,13 +13,18 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
 
   const canSubmit = email.trim() && password.trim();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
-    router.push("/");
+    if (loginUser(email, password)) {
+      router.push("/");
+    } else {
+      setError("Incorrect email or password.");
+    }
   }
 
   return (
@@ -78,6 +84,10 @@ export default function LoginPage() {
             </button>
           </div>
         </div>
+
+        {error && (
+          <p className="font-body text-[13px] font-medium text-error text-center">{error}</p>
+        )}
 
         <button
           type="submit"

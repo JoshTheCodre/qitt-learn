@@ -1,4 +1,4 @@
-import type { Course } from "./courses";
+type CourseRef = { code: string; title: string };
 
 export interface Material {
   id: string;
@@ -18,7 +18,7 @@ export function formatStyle(format: Material["format"]) {
   return FORMAT_ICON[format];
 }
 
-export function getMaterials(course: Course): Material[] {
+export function getMaterials(course: CourseRef): Material[] {
   return [
     { id: "1", title: `${course.code} Lecture Note 1`, type: "Lecture Note", size: "2.4 MB", format: "PDF" },
     { id: "2", title: `${course.code} Lecture Note 2`, type: "Lecture Note", size: "1.8 MB", format: "PDF" },
@@ -35,7 +35,7 @@ export interface LectureNote {
   size: string;
 }
 
-export function getLectureNotes(course: Course): LectureNote[] {
+export function getLectureNotes(course: CourseRef): LectureNote[] {
   return [
     { id: "1", title: `${course.code} — Introduction`, week: "Week 1", size: "1.2 MB" },
     { id: "2", title: `${course.code} — Foundations`, week: "Week 2", size: "0.9 MB" },
@@ -51,7 +51,7 @@ export interface Recording {
   date: string;
 }
 
-export function getRecordings(course: Course): Recording[] {
+export function getRecordings(course: CourseRef): Recording[] {
   return [
     { id: "1", title: `${course.code} — Lecture 1`, duration: "48 min", date: "Mon, Jul 7" },
     { id: "2", title: `${course.code} — Lecture 2`, duration: "52 min", date: "Fri, Jul 11" },
@@ -64,7 +64,7 @@ export interface OutlineWeek {
   topic: string;
 }
 
-export function getOutline(course: Course): OutlineWeek[] {
+export function getOutline(course: CourseRef): OutlineWeek[] {
   return [
     { week: 1, topic: `Introduction to ${course.title}` },
     { week: 2, topic: "Foundations and Key Terms" },

@@ -1,0 +1,174 @@
+// Auto-generated from public/uniport_courses.json — faculty -> departments
+export interface Faculty {
+  faculty: string;
+  departments: string[];
+}
+
+export const SCHOOL = "University of Port Harcourt";
+
+export const FACULTIES: Faculty[] = [
+  {
+    "faculty": "AGRICULTURE",
+    "departments": [
+      "AGRICULTURAL ECONOMICS AND AGRIBUSINESS MANAGEMENT",
+      "AGRICULTURAL EXTENSION AND DEVELOPMENT STUDIES",
+      "AGRICULTURE ECONOMICS AND EXTENSION",
+      "ANIMAL SCIENCE",
+      "CROP AND SOIL SCIENCE",
+      "FISHERIES",
+      "FOOD, NUTRITION AND HOME SCIENCE",
+      "FORESTRY AND WILDLIFE MANAGEMENT"
+    ]
+  },
+  {
+    "faculty": "ALLIED HEALTH SCIENCES",
+    "departments": [
+      "MEDICAL LABORATORY SCIENCE"
+    ]
+  },
+  {
+    "faculty": "BASIC MEDICAL SCIENCES",
+    "departments": [
+      "HUMAN ANATOMY",
+      "HUMAN PHYSIOLOGY"
+    ]
+  },
+  {
+    "faculty": "CLINICAL SCIENCES",
+    "departments": [
+      "MEDICINE AND SURGERY",
+      "NURSING SCIENCE"
+    ]
+  },
+  {
+    "faculty": "COMMUNICATION AND MEDIA STUDIES",
+    "departments": [
+      "ADVERTISING AND PUBLIC RELATIONS",
+      "BROADCASTING",
+      "FILM AND MULTIMEDIA STUDIES",
+      "JOURNALISM AND MEDIA STUDIES"
+    ]
+  },
+  {
+    "faculty": "COMPUTING",
+    "departments": [
+      "COMPUTER SCIENCE",
+      "CYBER SECURITY",
+      "INFORMATION TECHNOLOGY"
+    ]
+  },
+  {
+    "faculty": "DENTISTRY",
+    "departments": [
+      "DENTISTRY AND DENTAL SURGERY"
+    ]
+  },
+  {
+    "faculty": "EDUCATION",
+    "departments": [
+      "ADULT AND NON-FORMAL EDUCATION",
+      "BUSINESS EDUCATION",
+      "CURRICULUM STUDIES AND EDUCATIONAL TECHNOLOGY",
+      "EARLY CHILDHOOD AND PRIMARY EDUCATION",
+      "EDUCATIONAL FOUNDATIONS",
+      "EDUCATIONAL MANAGEMENT AND PLANNING",
+      "EDUCATIONAL PSYCHOLOGY, GUIDANCE AND COUNSELLING",
+      "HEALTH PROMOTION, ENVIRONMENTAL AND SAFETY EDUCATION",
+      "SCIENCE EDUCATION",
+      "SPORT AND EXERCISE SCIENCE"
+    ]
+  },
+  {
+    "faculty": "ENGINEERING",
+    "departments": [
+      "CHEMICAL ENGINEERING",
+      "CIVIL ENGINEERING",
+      "ELECTRICAL ENGINEERING",
+      "ELECTRONIC ENGINEERING",
+      "ENVIRONMENTAL ENGINEERING",
+      "GAS ENGINEERING",
+      "MECHANICAL ENGINEERING",
+      "MECHATRONIC ENGINEERING",
+      "PETROLEUM ENGINEERING"
+    ]
+  },
+  {
+    "faculty": "HUMANITIES",
+    "departments": [
+      "ENGLISH STUDIES",
+      "FINE ARTS AND DESIGN",
+      "FOREIGN LANGUAGES AND LITERATURE",
+      "HISTORY AND DIPLOMATIC STUDIES",
+      "LINGUISTICS AND COMMUNICATION STUDIES",
+      "MUSIC",
+      "PHILOSOPHY",
+      "RELIGIOUS AND CULTURAL STUDIES",
+      "THEATRE AND FILM STUDIES"
+    ]
+  },
+  {
+    "faculty": "LAW",
+    "departments": [
+      "CIVIL LAW"
+    ]
+  },
+  {
+    "faculty": "MANAGEMENT SCIENCES",
+    "departments": [
+      "ACCOUNTING",
+      "EMPLOYMENT RELATIONS AND HUMAN RESOURCE MANAGEMENT",
+      "FINANCE AND BANKING",
+      "HOSPITALITY AND TOURISM MANAGEMENT",
+      "INNOVATION AND ENTREPRENUERSHIP",
+      "INSURANCE",
+      "MANAGEMENT",
+      "MARKETING",
+      "PROCUREMENT MANAGEMENT",
+      "PROJECT MANAGEMENT"
+    ]
+  },
+  {
+    "faculty": "PHARMACEUTICAL SCIENCES",
+    "departments": [
+      "CLINICAL PHARMACY AND MANAGEMENT"
+    ]
+  },
+  {
+    "faculty": "SCHOOL OF SCIENCE LABORATORY TECHNOLOGY",
+    "departments": [
+      "BIOCHEMISTRY AND CHEMISTRY TECHNOLOGY",
+      "BIOLOGY AND BIOTECHNOLOGY",
+      "BIOMEDICAL TECHNOLOGY",
+      "GEOLOGY AND MINING TECHNOLOGY",
+      "INDUSTRIAL CHEMISTRY AND PETROLEUM TECHNOLOGY",
+      "MICROBIOLOGY TECHNOLOGY",
+      "PHYSICS WITH ELECTRONIC TECHNOLOGY",
+      "PHYSICS WITH PRODUCTION TECHNOLOGY"
+    ]
+  },
+  {
+    "faculty": "SCIENCE",
+    "departments": [
+      "ANIMAL AND ENVIRONMENTAL BIOLOGY",
+      "BIOCHEMISTRY",
+      "GEOLOGY",
+      "MATHEMATICS AND STATISTICS",
+      "MICROBIOLOGY",
+      "PHYSICS",
+      "PLANT SCIENCE AND BIOTECHNOLOGY",
+      "PURE AND INDUSTRIAL CHEMISTRY"
+    ]
+  },
+  {
+    "faculty": "SOCIAL SCIENCES",
+    "departments": [
+      "ECONOMICS",
+      "GEOGRAPHY AND ENVIRONMENTAL MANAGEMENT",
+      "LIBRARY AND INFORMATION SCIENCE",
+      "POLITICAL SCIENCE AND ADMINISTRATIVE STUDIES",
+      "PUBLIC ADMINISTRATION",
+      "SOCIAL WORKS",
+      "SOCIOLOGY"
+    ]
+  }
+];

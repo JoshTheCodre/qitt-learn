@@ -13,7 +13,7 @@ export default function DashboardPage() {
         <SchoolCalendar />
         <QuickActions />
         <OverviewHero />
-        <CourseList topClass="mt-8" stats={{ courses: 5, units: 21 }} />
+        <CourseList topClass="mt-8" showStats />
       </main>
       <BottomNav />
     </div>

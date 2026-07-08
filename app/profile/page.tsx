@@ -1,41 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BottomNav from "@/components/dashboard/BottomNav";
-
-interface Profile {
-  name: string;
-  email: string;
-  phone: string | null;
-  university: string;
-  department: string;
-  level: string;
-  semester: string;
-  session: string;
-  student_code: string;
-  picture_url: string | null;
-  created_at: string;
-}
-
-interface CarryoverCourse {
-  course_code: string;
-  course_title: string | null;
-}
-
-const PROFILE: Profile = {
-  name: "Joshua Boyi",
-  email: "joshua.boyi@gmail.com",
-  phone: "+234 801 234 5678",
-  university: "University of Nigeria, Nsukka",
-  department: "Computer Science",
-  level: "200",
-  semester: "Second Semester",
-  session: "2025/2026",
-  student_code: "CSC/2023/0142",
-  picture_url: null,
-  created_at: "2023-09-15",
-};
+import {
+  getCurrentUser,
+  updateCurrentUser,
+  logout,
+  type UserProfile,
+  type CarryoverCourse,
+} from "@/lib/store";
 
 function InfoRow({
   icon,
@@ -66,48 +40,79 @@ function InfoRow({
 
 export default function ProfilePage() {
   const router = useRouter();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [notifOn, setNotifOn] = useState(false);
   const [testMsg, setTestMsg] = useState<string | null>(null);
-  const [carryover, setCarryover] = useState<CarryoverCourse[]>([
-    { course_code: "PHY 101", course_title: "General Physics I" },
-  ]);
+  const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
   const [addingCO, setAddingCO] = useState(false);
   const [coCode, setCoCode] = useState("");
   const [coTitle, setCoTitle] = useState("");
 
-  const initials =
-    PROFILE.name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase() || "?";
-
-  const joinedDate = new Date(PROFILE.created_at).toLocaleDateString("en-NG", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+    setProfile(user.profile);
+    setCarryover(user.carryover);
+    setNotifOn(user.notifOn);
+  }, [router]);
 
   function saveCarryover() {
     if (!coCode.trim()) return;
-    setCarryover((prev) => [
-      ...prev,
+    const next = [
+      ...carryover,
       { course_code: coCode.trim().toUpperCase(), course_title: coTitle.trim() || null },
-    ]);
+    ];
+    setCarryover(next);
+    updateCurrentUser({ carryover: next });
     setAddingCO(false);
     setCoCode("");
     setCoTitle("");
   }
 
   function removeCarryover(code: string) {
-    setCarryover((prev) => prev.filter((c) => c.course_code !== code));
+    const next = carryover.filter((c) => c.course_code !== code);
+    setCarryover(next);
+    updateCurrentUser({ carryover: next });
+  }
+
+  function toggleNotif() {
+    const next = !notifOn;
+    setNotifOn(next);
+    updateCurrentUser({ notifOn: next });
   }
 
   function sendTest() {
     setTestMsg("Notification sent ✓");
     setTimeout(() => setTestMsg(null), 4000);
   }
+
+  function signOut() {
+    logout();
+    router.push("/login");
+  }
+
+  if (!profile) {
+    return (
+      <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20" />
+    );
+  }
+
+  const initials =
+    profile.name
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "?";
+
+  const joinedDate = new Date(profile.created_at).toLocaleDateString("en-NG", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
@@ -129,14 +134,14 @@ export default function ProfilePage() {
         </div>
 
         <div className="mt-3 flex items-center gap-2 flex-wrap">
-          <h2 className="font-display text-[22px] font-bold text-on-surface">{PROFILE.name}</h2>
+          <h2 className="font-display text-[22px] font-bold text-on-surface">{profile.name}</h2>
           <span className="rounded-full bg-green-100 text-green-700 px-2.5 py-0.5 font-display text-xs font-semibold">
-            {PROFILE.level} Level
+            {profile.level} Level
           </span>
         </div>
         <div className="mt-1 flex items-center gap-1.5 text-on-surface-variant">
           <span className="material-symbols-outlined text-[16px] leading-none">mail</span>
-          <span className="font-display text-sm font-medium truncate">{PROFILE.email}</span>
+          <span className="font-display text-sm font-medium truncate">{profile.email}</span>
         </div>
 
         {/* Actions */}
@@ -154,16 +159,16 @@ export default function ProfilePage() {
 
       {/* Info card */}
       <div className="mx-gutter mt-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm px-4">
-        <InfoRow icon="mail" iconColor="text-blue-500" label="Email" value={PROFILE.email} />
-        <InfoRow icon="call" iconColor="text-emerald-500" label="Phone" value={PROFILE.phone} />
-        <InfoRow icon="school" iconColor="text-violet-500" label="University" value={PROFILE.university} />
-        <InfoRow icon="menu_book" iconColor="text-amber-500" label="Department" value={PROFILE.department} />
-        <InfoRow icon="stairs" iconColor="text-cyan-500" label="Level" value={`${PROFILE.level} Level`} />
+        <InfoRow icon="mail" iconColor="text-blue-500" label="Email" value={profile.email} />
+        <InfoRow icon="call" iconColor="text-emerald-500" label="Phone" value={profile.phone} />
+        <InfoRow icon="school" iconColor="text-violet-500" label="University" value={profile.university} />
+        <InfoRow icon="menu_book" iconColor="text-amber-500" label="Department" value={profile.department} />
+        <InfoRow icon="stairs" iconColor="text-cyan-500" label="Level" value={`${profile.level} Level`} />
         <InfoRow
           icon="calendar_today"
           iconColor="text-rose-500"
           label="Semester"
-          value={`${PROFILE.semester}, ${PROFILE.session}`}
+          value={`${profile.semester}, ${profile.session}`}
         />
         <InfoRow icon="event" iconColor="text-on-surface-variant" label="Joined" value={joinedDate} />
       </div>
@@ -189,7 +194,7 @@ export default function ProfilePage() {
           <button
             type="button"
             aria-label="Toggle notifications"
-            onClick={() => setNotifOn((v) => !v)}
+            onClick={toggleNotif}
             className={`relative shrink-0 w-11 h-6 rounded-full transition-colors duration-200 ${
               notifOn ? "bg-primary" : "bg-surface-container-highest"
             }`}
@@ -315,7 +320,7 @@ export default function ProfilePage() {
       <div className="px-gutter mt-4 pb-28">
         <button
           type="button"
-          onClick={() => router.push("/login")}
+          onClick={signOut}
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-error-container border border-error/10 text-error font-display text-sm font-semibold squishy-press"
         >
           <span className="material-symbols-outlined text-[18px] leading-none">logout</span>

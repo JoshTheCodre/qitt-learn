@@ -1,20 +1,40 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
-import { COURSES, getCourse } from "@/lib/courses";
+import { resolveCourse, type ResolvedCourse } from "@/lib/store";
 import { getMaterials } from "@/lib/courseContent";
 
-export function generateStaticParams() {
-  return COURSES.map((c) => ({ slug: c.slug }));
-}
+const FRAME =
+  "mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20";
 
-export default function CourseMaterialsPage({ params }: { params: { slug: string } }) {
-  const course = getCourse(params.slug);
-  if (!course) notFound();
+export default function CourseMaterialsPage() {
+  const slug = String(useParams().slug);
+  const [course, setCourse] = useState<ResolvedCourse | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setCourse(resolveCourse(slug));
+    setLoaded(true);
+  }, [slug]);
+
+  if (!loaded) return <div className={FRAME} />;
+  if (!course) {
+    return (
+      <div className={FRAME}>
+        <BackHeader title="Course Materials" />
+        <p className="px-gutter pt-8 font-display text-sm font-medium text-on-surface-variant">
+          Course not found.
+        </p>
+      </div>
+    );
+  }
 
   const materials = getMaterials(course);
 
   return (
-    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    <div className={FRAME}>
       <BackHeader title="Course Materials" />
 
       <main className="px-gutter pt-2 pb-28">
@@ -42,7 +62,7 @@ export default function CourseMaterialsPage({ params }: { params: { slug: string
                 <p className="font-display text-sm font-semibold text-on-surface truncate">
                   {m.title}
                 </p>
-                <div className="mt-1 flex items-center gap-1.5 font-display text-xs font-medium text-on-surface-variant">
+                <div className="mt-1 flex items-center gap-1.5 font-body text-xs font-medium text-on-surface-variant">
                   <span>{m.format}</span>
                   <span className="w-1 h-1 rounded-full bg-on-surface-variant/40" />
                   <span>{m.size}</span>

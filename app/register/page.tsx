@@ -4,9 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SelectField } from "@/components/study/StudyFields";
+import { SCHOOL, FACULTIES } from "@/lib/uniport";
+import { registerUser } from "@/lib/store";
 
-const DEPARTMENTS = ["Computer Science", "Mathematics", "Physics", "Statistics", "Engineering"];
-const LEVELS = ["100 Level", "200 Level", "300 Level", "400 Level"];
+const LEVELS = ["100 Level", "200 Level", "300 Level", "400 Level", "500 Level"];
+const FACULTY_NAMES = FACULTIES.map((f) => f.faculty);
 
 const FIELD =
   "w-full rounded-xl border border-outline-variant/50 bg-surface-container-lowest px-4 py-3 font-body text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary";
@@ -17,15 +19,33 @@ export default function RegisterPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [school, setSchool] = useState(SCHOOL);
+  const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  const canSubmit = name.trim() && email.trim() && password.trim() && department && level;
+  const departmentOptions = FACULTIES.find((f) => f.faculty === faculty)?.departments ?? [];
 
-  function handleSubmit(e: React.FormEvent) {
+  const canSubmit =
+    name.trim() && email.trim() && password.trim() && faculty && department && level && !busy;
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
+    setBusy(true);
+    await registerUser({
+      name,
+      email,
+      phone,
+      password,
+      university: school,
+      faculty,
+      department,
+      level,
+    });
     router.push("/");
   }
 
@@ -70,6 +90,18 @@ export default function RegisterPage() {
           />
         </div>
         <div>
+          <label className={LABEL}>
+            Phone <span className="font-normal normal-case text-on-surface-variant/60">(optional)</span>
+          </label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="+234 801 234 5678"
+            className={FIELD}
+          />
+        </div>
+        <div>
           <label className={LABEL}>Password</label>
           <input
             type="password"
@@ -79,13 +111,28 @@ export default function RegisterPage() {
             className={FIELD}
           />
         </div>
+
+        <SelectField label="School" value={school} onChange={setSchool} options={[SCHOOL]} />
+
+        <SelectField
+          label="Faculty"
+          value={faculty}
+          onChange={(v) => {
+            setFaculty(v);
+            setDepartment("");
+          }}
+          options={FACULTY_NAMES}
+          placeholder="Select faculty"
+        />
+
         <SelectField
           label="Department"
           value={department}
           onChange={setDepartment}
-          options={DEPARTMENTS}
-          placeholder="Select department"
+          options={departmentOptions}
+          placeholder={faculty ? "Select department" : "Choose a faculty first"}
         />
+
         <SelectField
           label="Level"
           value={level}
@@ -99,7 +146,7 @@ export default function RegisterPage() {
           disabled={!canSubmit}
           className="mt-2 w-full py-4 rounded-2xl bg-primary text-on-primary font-display text-sm font-semibold disabled:opacity-40 squishy-press"
         >
-          Create account
+          {busy ? "Creating account…" : "Create account"}
         </button>
       </form>
 
