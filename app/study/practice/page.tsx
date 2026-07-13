@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
-import JungleBackdrop from "@/components/JungleBackdrop";
+import PatternBackdrop from "@/components/PatternBackdrop";
 import { SelectField } from "@/components/study/StudyFields";
 import { COURSES } from "@/lib/courses";
 import { haptic } from "@/lib/haptics";
@@ -13,8 +13,10 @@ const TIMES = ["No limit", "10", "20", "30"];
 const TYPES = ["MCQ", "Flashcards"];
 const COURSE_CODES = COURSES.map((c) => c.code);
 
+// Near-black rather than the muted on-surface-variant — the copy needs real weight
+// to sit cleanly over the patterned backdrop.
 const LABEL =
-  "block font-display text-xs font-semibold uppercase tracking-wide text-on-surface-variant mb-2";
+  "block font-display text-xs font-semibold uppercase tracking-wide text-on-surface mb-2";
 
 function Segmented({
   value,
@@ -28,8 +30,8 @@ function Segmented({
   suffix?: string;
 }) {
   return (
-    <div className="animated-field rounded-xl p-[1.5px]">
-      <div className="flex gap-1 rounded-[10px] bg-surface-container p-1">
+    <div className="animated-field rounded-xl p-px">
+      <div className="flex gap-1 rounded-[11px] bg-surface-container p-1">
         {options.map((o) => {
           const active = o === value;
           return (
@@ -44,7 +46,7 @@ function Segmented({
               className={`flex-1 rounded-lg py-2 font-display text-[13px] font-semibold transition-colors ${
                 active
                   ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
-                  : "text-on-surface-variant"
+                  : "text-on-surface/60"
               }`}
             >
               {o}
@@ -69,18 +71,18 @@ export default function PracticeToolPage() {
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
-      <JungleBackdrop />
+      <PatternBackdrop />
 
       <div className="relative z-10">
         <BackHeader title="Practice" transparent home />
       </div>
 
       <main className="relative z-10 px-gutter pt-2 pb-28">
-        <section className="mb-7 rounded-2xl border border-outline-variant/30 bg-primary/[0.04] p-4">
+        <section className="mb-7 rounded-2xl border border-emerald-700/15 bg-emerald-600/[0.05] p-4">
           <h2 className="font-display text-[17px] font-bold leading-tight text-on-surface">
             Revise. Understand. Ace.
           </h2>
-          <p className="mt-1 font-body text-[12px] font-medium text-on-surface-variant">
+          <p className="mt-1 font-body text-[12px] font-medium text-on-surface/75">
             Turn your notes and past questions into a quiz, and walk into the
             exam hall ready.
           </p>
@@ -114,8 +116,8 @@ export default function PracticeToolPage() {
                     aria-pressed={active}
                     className={`rounded-full px-3.5 py-2 font-display text-[13px] font-semibold transition-colors squishy-press ${
                       active
-                        ? "bg-primary text-on-primary"
-                        : "border border-outline-variant/50 bg-surface-container-lowest text-on-surface-variant"
+                        ? "bg-emerald-700 text-white"
+                        : "border border-outline-variant/50 bg-surface-container-lowest text-on-surface/70"
                     }`}
                   >
                     {m}
@@ -148,9 +150,9 @@ export default function PracticeToolPage() {
                 haptic("select"); // one tick per step, like a physical detent
                 setCount(next);
               }}
-              className="w-full cursor-pointer accent-primary"
+              className="w-full cursor-pointer accent-emerald-700"
             />
-            <div className="mt-1.5 flex justify-between font-body text-[10px] font-medium text-on-surface-variant">
+            <div className="mt-1.5 flex justify-between font-body text-[10px] font-medium text-on-surface/65">
               <span>5</span>
               <span>50</span>
             </div>
@@ -174,9 +176,11 @@ export default function PracticeToolPage() {
         </div>
       </main>
 
-      {/* The bar carries the backdrop's shade rather than a white blur, so the
-          bottom of the screen reads as one continuous piece of forest floor. */}
-      <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-[430px] -translate-x-1/2 bg-gradient-to-t from-emerald-800/[0.14] via-emerald-700/[0.06] to-transparent px-gutter pb-5 pt-6 backdrop-blur-[2px]">
+      {/* Opaque, so scrolling content is hidden rather than sliding visibly under the
+          button. Softly tinted rather than pure white, and the fade strip above it lets
+          content dissolve into the bar instead of being cut by a hard edge. */}
+      <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-[430px] -translate-x-1/2 bg-[#e9f2ee] px-gutter pb-5 pt-3">
+        <div className="pointer-events-none absolute inset-x-0 bottom-full h-10 bg-gradient-to-t from-[#e9f2ee] to-transparent" />
         {/* The sweeping border is the reward for a complete setup — it only runs
             once the button is actually armed, so it reads as "ready", not decoration. */}
         <div

@@ -5,7 +5,7 @@ import { useRef } from "react";
 const FIELD =
   "w-full rounded-xl border border-outline-variant/50 bg-surface-container-lowest px-4 py-3 font-display text-sm font-medium text-on-surface focus:outline-none focus:border-primary";
 const LABEL =
-  "block font-display text-xs font-semibold uppercase tracking-wide text-on-surface-variant mb-2";
+  "block font-display text-xs font-semibold uppercase tracking-wide text-on-surface mb-2";
 
 export function SelectField({
   label,
@@ -30,8 +30,9 @@ export function SelectField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={`${FIELD} appearance-none pr-10 ${
-          // The ring IS the border when glowing — keeping the grey one too would double it up.
-          glow ? "rounded-[10px] border-transparent" : ""
+          // The ring IS the border when glowing — keeping the grey one (or the blue
+          // focus border inherited from FIELD) would fight it.
+          glow ? "rounded-[11px] border-transparent focus:border-transparent" : ""
         }`}
       >
         {placeholder && <option value="">{placeholder}</option>}
@@ -50,7 +51,7 @@ export function SelectField({
   return (
     <div>
       <label className={LABEL}>{label}</label>
-      {glow ? <div className="animated-field rounded-xl p-[1.5px]">{control}</div> : control}
+      {glow ? <div className="animated-field rounded-xl p-px">{control}</div> : control}
     </div>
   );
 }

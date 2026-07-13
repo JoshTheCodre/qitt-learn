@@ -11,11 +11,16 @@ export default function Header({
   showAvatar = true,
   showNotification = true,
   paddingX = "px-gutter",
+  transparent = false,
 }: {
   title?: string;
   showAvatar?: boolean;
   showNotification?: boolean;
   paddingX?: string;
+  // Opt in on pages with artwork behind the header — the default white bar would
+  // otherwise paint over the top of it. Once scrolled it still goes frosted, so the
+  // content passing underneath stays readable.
+  transparent?: boolean;
 }) {
   const [scrolled, setScrolled] = useState(false);
 
@@ -29,7 +34,11 @@ export default function Header({
   return (
     <header
       className={`w-full top-0 z-40 transition-all ${
-        scrolled ? "shadow-sm bg-white/90 backdrop-blur-md" : "bg-background"
+        scrolled
+          ? "shadow-sm bg-white/90 backdrop-blur-md"
+          : transparent
+            ? "bg-transparent"
+            : "bg-background"
       }`}
     >
       <div className={`flex items-center justify-between py-4 ${paddingX}`}>
@@ -53,9 +62,9 @@ export default function Header({
               <h1 className="font-display text-[24px] leading-tight font-bold text-primary">
                 Hello, Joshua
               </h1>
-              <p className="font-display text-sm font-medium text-on-surface-variant">
+              <p className="font-display text-sm font-medium text-on-surface/70">
                 Computer Science{" "}
-                <span className="inline-block w-1 h-1 rounded-full bg-green-400 align-middle mx-0.5" />{" "}
+                <span className="inline-block w-1 h-1 rounded-full bg-emerald-500 align-middle mx-0.5" />{" "}
                 200lvl
               </p>
             </div>
