@@ -30,6 +30,21 @@ const atypDisplay = localFont({
   adjustFontFallback: false,
 });
 
+// Self-hosted + preloaded so icons paint with the first render instead of waiting on
+// a Google Fonts round trip. Subset to the icons this app actually uses (see
+// scripts note in globals.css) — add a new icon to the app, refresh this file.
+// display:"block" keeps the ligature text hidden until the font lands, so you never
+// see the raw word ("home", "calendar_today") flash in place of the glyph.
+const materialSymbols = localFont({
+  src: "../public/fonts/material-symbols-outlined.woff2",
+  variable: "--font-icons",
+  display: "block",
+  weight: "400",
+  style: "normal",
+  preload: true,
+  adjustFontFallback: false,
+});
+
 export const metadata: Metadata = {
   title: "Qitt",
   description: "Your AI-powered academic assistant.",
@@ -54,7 +69,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`light ${atypDisplay.variable} ${atypText.variable}`}>
+    <html
+      lang="en"
+      className={`light ${atypDisplay.variable} ${atypText.variable} ${materialSymbols.variable}`}
+    >
       <body className="bg-background text-on-surface font-body text-base min-h-screen">
         {children}
       </body>

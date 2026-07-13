@@ -1,9 +1,10 @@
 import Link from "next/link";
+import Icon3D, { type Icon3DName } from "@/components/Icon3D";
 
-const TABS = [
-  { label: "Study", href: "/study/learn", icon: "auto_stories", gradient: "from-violet-500 to-fuchsia-500" },
-  { label: "Practice", href: "/study/practice", icon: "stylus_note", gradient: "from-amber-400 to-orange-500" },
-  { label: "Performance", href: "/study/performance", icon: "trending_up", gradient: "from-emerald-400 to-teal-500" },
+const TABS: { label: string; href: string; icon: Icon3DName }[] = [
+  { label: "Study", href: "/study/learn", icon: "study" },
+  { label: "Practice", href: "/study/practice", icon: "practice" },
+  { label: "Performance", href: "/study/performance", icon: "performance" },
 ];
 
 export default function ForYouTabs() {
@@ -17,12 +18,7 @@ export default function ForYouTabs() {
             href={tab.href}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-2 bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/20 transition-all squishy-press"
           >
-            <span
-              className={`material-symbols-outlined text-[20px] leading-none bg-gradient-to-br ${tab.gradient} bg-clip-text text-transparent`}
-              style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
-            >
-              {tab.icon}
-            </span>
+            <Icon3D name={tab.icon} size={22} />
             <span className="font-display text-xs font-semibold text-on-surface-variant">
               {tab.label}
             </span>

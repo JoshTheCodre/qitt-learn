@@ -1,17 +1,18 @@
 import Link from "next/link";
+import Icon3D, { type Icon3DName } from "@/components/Icon3D";
 
-const ACTIONS = [
+const ACTIONS: { label: string; icon: Icon3DName; href: string; iconWrap: string }[] = [
   {
     label: "Request Material",
-    icon: "request_page",
+    icon: "request",
     href: "/request",
-    iconWrap: "bg-amber-100/70 text-amber-700",
+    iconWrap: "bg-amber-100/70",
   },
   {
     label: "Contribute Material",
-    icon: "cloud_upload",
+    icon: "contribute",
     href: "/contribute",
-    iconWrap: "bg-emerald-100/70 text-emerald-700",
+    iconWrap: "bg-emerald-100/70",
   },
 ];
 
@@ -27,7 +28,7 @@ export default function QuickActions() {
           <div
             className={`w-10 h-10 rounded-lg flex items-center justify-center ${action.iconWrap}`}
           >
-            <span className="material-symbols-outlined">{action.icon}</span>
+            <Icon3D name={action.icon} size={24} />
           </div>
           <span className="font-display text-[13px] font-semibold text-on-surface text-left whitespace-nowrap">
             {action.label}

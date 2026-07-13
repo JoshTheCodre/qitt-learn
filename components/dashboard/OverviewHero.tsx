@@ -1,9 +1,11 @@
 import Link from "next/link";
+import Icon3D, { type Icon3DName } from "@/components/Icon3D";
 
-const TOOLS = [
-  { label: "Study", icon: "auto_stories", href: "/study/learn" },
-  { label: "Practice", icon: "quiz", href: "/study/practice" },
-  { label: "Performance", icon: "insights", href: "/study/performance" },
+const TOOLS: { label: string; icon: Icon3DName; href: string }[] = [
+  // Study is parked for now — re-enable with grid-cols-3 below.
+  // { label: "Study", icon: "study", href: "/study/learn" },
+  { label: "Practice", icon: "practice", href: "/study/practice" },
+  { label: "Performance", icon: "performance", href: "/study/performance" },
 ];
 
 export default function OverviewHero() {
@@ -29,14 +31,14 @@ export default function OverviewHero() {
           <h2 className="font-display text-[16px] font-bold">For You</h2>
 
           {/* Tools — top, horizontal */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             {TOOLS.map((tool) => (
               <Link
                 key={tool.label}
                 href={tool.href}
                 className="rounded-2xl bg-white/10 hover:bg-white/20 px-2 py-2.5 flex items-center justify-center gap-1.5 backdrop-blur-sm transition-colors squishy-press"
               >
-                <span className="material-symbols-outlined text-[18px] leading-none">{tool.icon}</span>
+                <Icon3D name={tool.icon} size={20} priority />
                 <span className="font-body text-[11px] font-semibold whitespace-nowrap">{tool.label}</span>
               </Link>
             ))}
