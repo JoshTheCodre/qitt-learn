@@ -90,3 +90,81 @@ textarea {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/*
+ * Moving gradient border.
+ *
+ * Wrap the target in `.animated-border` with a little padding; the child paints
+ * over the middle, so only the padding ring shows as the border:
+ *
+ *   <div class="animated-border rounded-2xl p-[1.5px]">
+ *     <button class="rounded-[15px] bg-primary w-full">…</button>
+ *   </div>
+ *
+ * The angle has to be a registered custom property — CSS cannot interpolate an
+ * unregistered one, so without @property the gradient would jump, not sweep.
+ */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-sweep {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* Primary action: a bright green-dominated comet sweeping the ring. */
+.animated-border {
+  /* Fallback first: browsers without @property keep a static gradient ring
+     rather than dropping the background entirely. */
+  background: linear-gradient(100deg, #10b981, #34d399, #60a5fa);
+  background: conic-gradient(
+    from var(--border-angle),
+    rgba(16, 185, 129, 0) 0deg,
+    rgba(16, 185, 129, 0) 185deg,
+    #10b981 245deg,
+    #34d399 290deg,
+    #6ee7b7 320deg,
+    #60a5fa 342deg,
+    rgba(16, 185, 129, 0) 360deg
+  );
+  animation: border-sweep 3.5s linear infinite;
+}
+
+/*
+ * Inputs: the same idea, deliberately quieter — a full green ring that drifts
+ * rather than a comet that races. Inputs sit under the primary action in the
+ * hierarchy, so they must never out-shine it.
+ */
+.animated-field {
+  background: linear-gradient(100deg, #34d399, #10b981);
+  background: conic-gradient(
+    from var(--border-angle),
+    #34d399 0deg,
+    #10b981 70deg,
+    #6ee7b7 140deg,
+    #059669 210deg,
+    #a7f3d0 280deg,
+    #34d399 360deg
+  );
+  animation: border-sweep 9s linear infinite;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-border,
+  .animated-field {
+    animation: none;
+  }
+
+  .animated-border {
+    background: linear-gradient(100deg, #10b981, #34d399, #60a5fa);
+  }
+
+  .animated-field {
+    background: linear-gradient(100deg, #34d399, #10b981);
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { haptic } from "@/lib/haptics";
 
 type Question = {
   q: string;
@@ -31,15 +32,19 @@ export default function QuizPage() {
 
   function submit() {
     if (selected === null) return;
+    const correct = selected === current.answer;
+    haptic(correct ? "success" : "error");
     setRevealed(true);
-    if (selected === current.answer) setScore((s) => s + 1);
+    if (correct) setScore((s) => s + 1);
   }
 
   function next() {
     if (index + 1 >= total) {
+      haptic("success");
       setDone(true);
       return;
     }
+    haptic("tap");
     setIndex((i) => i + 1);
     setSelected(null);
     setRevealed(false);
@@ -146,7 +151,11 @@ export default function QuizPage() {
                 key={i}
                 type="button"
                 disabled={revealed}
-                onClick={() => setSelected(i)}
+                onClick={() => {
+                  if (selected === i) return;
+                  haptic("select");
+                  setSelected(i);
+                }}
                 className={`w-full flex items-center gap-3 rounded-2xl border-2 p-4 text-left transition-colors ${style}`}
               >
                 <span
@@ -186,14 +195,18 @@ export default function QuizPage() {
             {index + 1 >= total ? "See results" : "Next question"}
           </button>
         ) : (
-          <button
-            type="button"
-            onClick={submit}
-            disabled={selected === null}
-            className="w-full py-4 rounded-2xl bg-primary text-on-primary font-display text-sm font-semibold disabled:opacity-40 squishy-press"
-          >
-            Submit answer
-          </button>
+          <div className={`rounded-2xl ${selected !== null ? "animated-border p-[1.5px]" : ""}`}>
+            <button
+              type="button"
+              onClick={submit}
+              disabled={selected === null}
+              className={`w-full py-4 bg-primary text-on-primary font-display text-sm font-semibold disabled:opacity-40 squishy-press ${
+                selected !== null ? "rounded-[15px]" : "rounded-2xl"
+              }`}
+            >
+              Submit answer
+            </button>
+          </div>
         )}
       </div>
     </div>

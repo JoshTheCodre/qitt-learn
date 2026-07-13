@@ -2,12 +2,23 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const atypText = localFont({
+// Chillax (Fontshare) — one family across the whole platform, driving both the
+// display and body variables. Replaces the Atyp TRIAL cuts, which were not
+// licensed for production use.
+//
+// woff2 rather than the old OTFs: ~20KB per weight instead of ~100KB+.
+//
+// The src/fallback arrays are duplicated across the two calls on purpose: next/font
+// is an SWC compile-time plugin, and its arguments must be inline literals. Hoisting
+// them into a shared const fails the build with "Font loader values must be
+// explicitly written literals" — and TypeScript will not warn you, because it's a
+// compiler-plugin rule, not a type rule.
+const chillaxBody = localFont({
   src: [
-    { path: "../public/fonts/AtypTextTRIAL-Regular-BF65727125ea126.otf", weight: "400", style: "normal" },
-    { path: "../public/fonts/AtypTextTRIAL-Medium-BF65727125d9c4c.otf", weight: "500", style: "normal" },
-    { path: "../public/fonts/AtypTextTRIAL-Semibold-BF65727125e65f1.otf", weight: "600", style: "normal" },
-    { path: "../public/fonts/AtypTextTRIAL-Bold-BF65727125ceed1.otf", weight: "700", style: "normal" },
+    { path: "../public/fonts/Chillax-400.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/Chillax-500.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/Chillax-600.woff2", weight: "600", style: "normal" },
+    { path: "../public/fonts/Chillax-700.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-body",
   display: "swap",
@@ -15,14 +26,15 @@ const atypText = localFont({
   adjustFontFallback: false,
 });
 
-const atypDisplay = localFont({
+const chillaxDisplay = localFont({
   src: [
-    { path: "../public/fonts/AtypDisplayTRIAL-Regular-BF65727125d566e.otf", weight: "400", style: "normal" },
-    { path: "../public/fonts/AtypDisplayTRIAL-Medium-BF65727125b8683.otf", weight: "500", style: "normal" },
-    { path: "../public/fonts/AtypDisplayTRIAL-Semibold-BF65727125c6fc9.otf", weight: "600", style: "normal" },
-    { path: "../public/fonts/AtypDisplayTRIAL-Bold-BF65727125c8d1d.otf", weight: "700", style: "normal" },
-    // Map extrabold (800) to the heaviest available weight instead of faux-bolding
-    { path: "../public/fonts/AtypDisplayTRIAL-Bold-BF65727125c8d1d.otf", weight: "800", style: "normal" },
+    { path: "../public/fonts/Chillax-400.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/Chillax-500.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/Chillax-600.woff2", weight: "600", style: "normal" },
+    { path: "../public/fonts/Chillax-700.woff2", weight: "700", style: "normal" },
+    // 800 maps to the heaviest cut Chillax ships, rather than letting the browser
+    // synthesise a faux-bold.
+    { path: "../public/fonts/Chillax-700.woff2", weight: "800", style: "normal" },
   ],
   variable: "--font-display",
   display: "swap",
@@ -71,7 +83,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`light ${atypDisplay.variable} ${atypText.variable} ${materialSymbols.variable}`}
+      className={`light ${chillaxDisplay.variable} ${chillaxBody.variable} ${materialSymbols.variable}`}
     >
       <body className="bg-background text-on-surface font-body text-base min-h-screen">
         {children}

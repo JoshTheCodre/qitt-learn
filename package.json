@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "icons": "node scripts/build-icon3d.mjs"
+    "icons": "node scripts/build-icon3d.mjs",
+    "illustration": "node scripts/build-jungle.mjs"
   },
   "dependencies": {
     "next": "^14.2.35",

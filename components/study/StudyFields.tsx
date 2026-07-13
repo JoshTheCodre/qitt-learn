@@ -13,33 +13,44 @@ export function SelectField({
   onChange,
   options,
   placeholder,
+  glow = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: readonly string[];
   placeholder?: string;
+  // Wrap the control in a drifting green gradient ring. Opt-in, so the plain
+  // selects on other pages are untouched.
+  glow?: boolean;
 }) {
+  const control = (
+    <div className="relative">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`${FIELD} appearance-none pr-10 ${
+          // The ring IS the border when glowing — keeping the grey one too would double it up.
+          glow ? "rounded-[10px] border-transparent" : ""
+        }`}
+      >
+        {placeholder && <option value="">{placeholder}</option>}
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+      <span className="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+        expand_more
+      </span>
+    </div>
+  );
+
   return (
     <div>
       <label className={LABEL}>{label}</label>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`${FIELD} appearance-none pr-10`}
-        >
-          {placeholder && <option value="">{placeholder}</option>}
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
-        <span className="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-          expand_more
-        </span>
-      </div>
+      {glow ? <div className="animated-field rounded-xl p-[1.5px]">{control}</div> : control}
     </div>
   );
 }
