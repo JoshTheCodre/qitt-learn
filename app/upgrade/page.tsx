@@ -3,7 +3,6 @@
 import { useState } from "react";
 import BackHeader from "@/components/BackHeader";
 import PatternBackdrop from "@/components/PatternBackdrop";
-import IconFlat from "@/components/IconFlat";
 import { haptic } from "@/lib/haptics";
 import { PRICE_LABEL, startCheckout } from "@/lib/billing";
 
@@ -183,7 +182,9 @@ export default function UpgradePage() {
         </div>
 
         <div className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-brand/[0.06] px-3 py-3">
-          <IconFlat name="calendar" size={18} />
+          <span className="material-symbols-outlined icon-filled text-[17px] leading-none text-brand">
+            calendar_month
+          </span>
           <p className="font-body text-[11px] font-medium text-on-surface/70">
             One payment. Covers the whole semester.
           </p>
