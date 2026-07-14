@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BottomNav from "@/components/dashboard/BottomNav";
+import CourseSearch from "@/components/CourseSearch";
+import type { CatalogCourse } from "@/lib/catalog";
 import {
   getCurrentUser,
   updateCurrentUser,
@@ -43,8 +45,6 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
   const [addingCO, setAddingCO] = useState(false);
-  const [coCode, setCoCode] = useState("");
-  const [coTitle, setCoTitle] = useState("");
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -56,17 +56,14 @@ export default function ProfilePage() {
     setCarryover(user.carryover);
   }, [router]);
 
-  function saveCarryover() {
-    if (!coCode.trim()) return;
-    const next = [
+  function addCarryover(course: CatalogCourse) {
+    const next: CarryoverCourse[] = [
       ...carryover,
-      { course_code: coCode.trim().toUpperCase(), course_title: coTitle.trim() || null },
+      { course_code: course.code, course_title: course.title, unit: course.unit },
     ];
     setCarryover(next);
     updateCurrentUser({ carryover: next });
     setAddingCO(false);
-    setCoCode("");
-    setCoTitle("");
   }
 
   function removeCarryover(code: string) {
@@ -218,41 +215,13 @@ export default function ProfilePage() {
             </div>
           ))}
           {addingCO ? (
-            <div className="py-3 space-y-2">
-              <input
-                value={coCode}
-                onChange={(e) => setCoCode(e.target.value.toUpperCase())}
-                placeholder="Course code (e.g. CSC 301)"
-                className="w-full rounded-xl border border-outline-variant/50 px-3 py-2.5 font-display text-[13px] font-medium text-on-surface placeholder:font-normal placeholder:text-on-surface-variant focus:outline-none focus:border-primary"
-              />
-              <input
-                value={coTitle}
-                onChange={(e) => setCoTitle(e.target.value)}
-                placeholder="Course title (optional)"
-                className="w-full rounded-xl border border-outline-variant/50 px-3 py-2.5 font-display text-[13px] text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary"
-              />
-              <div className="flex gap-2 pb-1">
-                <button
-                  type="button"
-                  onClick={saveCarryover}
-                  disabled={!coCode.trim()}
-                  className="flex-1 py-2.5 rounded-xl font-display text-[13px] font-semibold text-on-primary bg-primary disabled:opacity-50 squishy-press"
-                >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAddingCO(false);
-                    setCoCode("");
-                    setCoTitle("");
-                  }}
-                  className="flex-1 py-2.5 rounded-xl bg-surface-container text-on-surface-variant font-display text-[13px] font-semibold squishy-press"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+            // Picked from the school catalog, not typed. Free text let you invent a
+            // course that doesn't exist, and gave the carryover no real title or units.
+            <CourseSearch
+              excludeCodes={carryover.map((c) => c.course_code)}
+              onSelect={addCarryover}
+              onCancel={() => setAddingCO(false)}
+            />
           ) : (
             <button
               type="button"

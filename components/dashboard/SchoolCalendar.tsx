@@ -1,5 +1,4 @@
 import Link from "next/link";
-import IconFlat from "@/components/IconFlat";
 
 const TERM = {
   label: "Second Semester",
@@ -35,17 +34,16 @@ export default function SchoolCalendar() {
         </svg>
 
         <div className="relative z-10 w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center shrink-0">
-          <IconFlat name="calendar" size={20} />
+          <span className="material-symbols-outlined icon-filled text-[18px] leading-none text-brand">
+            calendar_month
+          </span>
         </div>
-        <div className="relative z-10 min-w-0 flex-1">
-          <p className="truncate font-display text-[16px] font-bold leading-tight text-on-surface">
-            Week {TERM.week}
-            <span className="ml-1 font-semibold text-on-surface/40">of {TERM.totalWeeks}</span>
-          </p>
-          <p className="truncate font-body text-[11px] font-semibold uppercase tracking-[0.06em] text-brand">
-            {TERM.label}
-          </p>
-        </div>
+        <p className="relative z-10 min-w-0 flex-1 truncate font-display text-[14px] font-bold text-on-surface">
+          Week {TERM.week}
+          <span className="font-semibold text-on-surface/40"> of {TERM.totalWeeks}</span>
+          <span className="mx-1.5 text-on-surface/25">·</span>
+          <span className="font-semibold text-on-surface/60">{TERM.label}</span>
+        </p>
         <span className="material-symbols-outlined icon-filled relative z-10 shrink-0 text-[20px] text-brand transition-transform group-hover:translate-x-0.5">
           chevron_right
         </span>

@@ -30,6 +30,9 @@ export interface StoredCourse {
 export interface CarryoverCourse {
   course_code: string;
   course_title: string | null;
+  // Present when the course was picked from the school catalog. Optional because
+  // carryovers saved before the picker existed were typed by hand and have no unit.
+  unit?: number | null;
 }
 
 export interface UserRecord {
@@ -218,9 +221,9 @@ export function resolveCourse(slug: string): ResolvedCourse | null {
     return {
       slug,
       code: c.course_code,
-      // Units are unknown for a carryover — it was typed in by hand, not derived from
-      // the catalog. Show a dash rather than inventing a number.
-      units: "—",
+      // Dash, not "0", for legacy carryovers typed in before the catalog picker existed
+      // — inventing a unit count is worse than admitting we don't know it.
+      units: c.unit != null ? String(c.unit) : "—",
       title: c.course_title || c.course_code,
     };
   }

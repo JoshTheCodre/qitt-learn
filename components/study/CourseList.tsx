@@ -113,6 +113,43 @@ export default function CourseList({
           </Link>
         );
       })}
+
+      {carryover.length > 0 && (
+        <>
+          {/* Divider label — carryovers are this semester's list too, but they're not
+              the same thing as your registered courses, so they're set apart. */}
+          <div className="flex items-center gap-2.5 pt-2">
+            <span className="h-px flex-1 bg-outline-variant/50" />
+            <span className="font-display text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface/45">
+              Carryover Courses
+            </span>
+            <span className="h-px flex-1 bg-outline-variant/50" />
+          </div>
+
+          {carryover.map((c) => (
+            <Link
+              key={c.course_code}
+              href={`/study/${carryoverSlug(c.course_code)}`}
+              className="w-full flex items-center justify-between gap-3 rounded-xl border border-amber-300/50 bg-amber-50/40 p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] hover:border-amber-400 transition-all squishy-press"
+            >
+              <div className="min-w-0">
+                <p className="font-body text-[15px] font-semibold text-on-surface truncate">
+                  {c.course_title || c.course_code}
+                </p>
+                <div className="mt-1.5 flex items-center gap-2 font-body text-[12px] font-medium text-on-surface-variant">
+                  <span>{c.course_code}</span>
+                  <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                    Carryover
+                  </span>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-[20px] text-on-surface-variant shrink-0">
+                chevron_right
+              </span>
+            </Link>
+          ))}
+        </>
+      )}
     </section>
   );
 }
