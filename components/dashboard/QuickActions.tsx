@@ -1,23 +1,25 @@
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
 
-// Accents as "R G B" channels — see the note on ActionCard.accent.
-const BLUE = "54 102 156"; // #36669c
-const MINT = "62 201 149"; // #3ec995
-
+/*
+ * Each card carries its own colour, sampled from its icon's dominant hue — so the
+ * glow, the icon tile and the arrow all agree with the artwork instead of forcing
+ * four different icons into one blue/mint palette.
+ * See the note on ActionCard.accent for why these are "R G B" channels, not hex.
+ */
 const ACTIONS: ActionCardProps[] = [
   {
     label: "Request",
     caption: "Ask for material",
     icon: "request",
     href: "/request",
-    accent: BLUE,
+    accent: "218 72 127", // #da487f — envelope pink
   },
   {
     label: "Contribute",
     caption: "Share your notes",
     icon: "contribute",
     href: "/contribute",
-    accent: MINT,
+    accent: "255 201 84", // #ffc954 — folder amber
   },
 ];
 

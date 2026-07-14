@@ -1,25 +1,22 @@
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
 
-// Accents as "R G B" channels — see the note on ActionCard.accent.
-const BLUE = "54 102 156"; // #36669c
-const MINT = "62 201 149"; // #3ec995
-
+// Accents sampled from each icon's dominant hue — see QuickActions for the rationale.
 const TOOLS: ActionCardProps[] = [
   // Study is parked for now — re-enable and the grid still works.
-  // { label: "Study", caption: "Read your notes", icon: "study", href: "/study/learn", accent: BLUE },
+  // { label: "Study", caption: "Read your notes", icon: "study", href: "/study/learn", accent: "94 168 88" },
   {
     label: "Practice",
     caption: "Quiz yourself",
     icon: "practice",
     href: "/study/practice",
-    accent: MINT,
+    accent: "244 126 83", // #f47e53 — pencil coral
   },
   {
     label: "Performance",
     caption: "Track your scores",
     icon: "performance",
     href: "/study/performance",
-    accent: BLUE,
+    accent: "74 150 212", // #4a96d4 — chart blue
   },
 ];
 
