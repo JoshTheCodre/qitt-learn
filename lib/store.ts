@@ -83,6 +83,7 @@ export interface RegisterInput {
   password: string;
   phone?: string;
   regNumber?: string;
+  pictureUrl?: string | null;
   university: string;
   faculty: string;
   department: string;
@@ -132,7 +133,7 @@ export async function registerUser(input: RegisterInput): Promise<void> {
     session: "2025 / 2026",
     student_code: genStudentCode(input.faculty, now),
     reg_number: input.regNumber?.trim() || null,
-    picture_url: null,
+    picture_url: input.pictureUrl || null,
     created_at: now.toISOString(),
   };
   const courses = await deriveCourses(input.department, levelNum);

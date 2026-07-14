@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getCurrentUser } from "@/lib/store";
 
 const AVATAR_URL =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuAU3WKEecXrJ8DkLkSCOfbDsos1cylYgWky_LWRq6C6LkwwpxKlBwMdrR8XyYfNNPYzeL4lfvnG_rLK-0HtjoVWSISbkZFoWOZXKBaMQs9GJ0OVXGiAYOOd1MiJ2TNtkxvyYFgrBvea_e5UGmjJebQRjxTHZ42HsPCr0cihlp8_O6-mL3EiKjMHNjlEqfFMSwe5Mqc5ipYXlfBXzBOlQnS1LuT9J3vcnCkhmQYaODaHGwuc6x8_fN46Xcw3RCJpu5OY7PVsqAYalMI";
@@ -23,12 +24,18 @@ export default function Header({
   transparent?: boolean;
 }) {
   const [scrolled, setScrolled] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // The avatar chosen at signup. Falls back to the stock image if none was picked.
+  useEffect(() => {
+    setAvatar(getCurrentUser()?.profile.picture_url ?? null);
   }, []);
 
   return (
@@ -50,7 +57,7 @@ export default function Header({
               className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant squishy-press"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="w-full h-full object-cover" alt="Student avatar" src={AVATAR_URL} />
+              <img className="w-full h-full object-cover" alt="Student avatar" src={avatar ?? AVATAR_URL} />
             </Link>
           )}
           {title ? (

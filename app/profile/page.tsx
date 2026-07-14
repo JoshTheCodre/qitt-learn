@@ -129,8 +129,18 @@ export default function ProfilePage() {
 
       {/* Identity */}
       <div className="relative z-10 px-gutter -mt-12">
-        <div className="w-20 h-20 rounded-full ring-4 ring-background flex items-center justify-center text-white text-[24px] font-bold shadow-lg bg-gradient-to-br from-violet-500 via-primary to-sky-500">
-          {initials}
+        <div className="w-20 h-20 overflow-hidden rounded-full ring-4 ring-background flex items-center justify-center text-white text-[24px] font-bold shadow-lg bg-gradient-to-br from-violet-500 via-primary to-sky-500">
+          {profile.picture_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={profile.picture_url}
+              alt=""
+              className="h-full w-full object-cover"
+              draggable={false}
+            />
+          ) : (
+            initials
+          )}
         </div>
 
         <div className="mt-3 flex items-center gap-2 flex-wrap">

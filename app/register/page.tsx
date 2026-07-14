@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SelectField } from "@/components/study/StudyFields";
+import AvatarPicker from "@/components/AvatarPicker";
+import PatternBackdrop from "@/components/PatternBackdrop";
 import { SCHOOL, FACULTIES } from "@/lib/uniport";
 import { registerUser } from "@/lib/store";
 
@@ -21,6 +23,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [regNumber, setRegNumber] = useState("");
+  const [pictureUrl, setPictureUrl] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [school, setSchool] = useState(SCHOOL);
   const [faculty, setFaculty] = useState("");
@@ -42,6 +45,7 @@ export default function RegisterPage() {
       email,
       phone,
       regNumber,
+      pictureUrl,
       password,
       university: school,
       faculty,
@@ -53,25 +57,31 @@ export default function RegisterPage() {
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 px-6 pt-6 pb-8">
+      {/* Abstract tile, not the study one — signing up shouldn't already feel like
+          being inside the app. */}
+      <PatternBackdrop variant="auth" />
+
       <button
         type="button"
         aria-label="Go back"
         onClick={() => router.push("/landing")}
-        className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center squishy-press"
+        className="relative z-10 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center squishy-press"
       >
         <span className="material-symbols-outlined text-[20px] text-on-surface-variant leading-none">
           arrow_back
         </span>
       </button>
 
-      <h1 className="mt-5 font-display text-[26px] font-bold text-on-surface tracking-tight">
+      <h1 className="relative z-10 mt-5 font-display text-[26px] font-bold text-on-surface tracking-tight">
         Create account
       </h1>
-      <p className="mt-1 font-body text-sm font-medium text-on-surface-variant">
+      <p className="relative z-10 mt-1 font-body text-sm font-medium text-on-surface-variant">
         Join Qitt and start studying smarter.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+      <form onSubmit={handleSubmit} className="relative z-10 mt-7 space-y-4">
+        <AvatarPicker value={pictureUrl} onChange={setPictureUrl} />
+
         <div>
           <label className={LABEL}>Full name</label>
           <input
