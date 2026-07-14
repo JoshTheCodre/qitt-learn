@@ -20,6 +20,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [regNumber, setRegNumber] = useState("");
   const [password, setPassword] = useState("");
   const [school, setSchool] = useState(SCHOOL);
   const [faculty, setFaculty] = useState("");
@@ -40,6 +41,7 @@ export default function RegisterPage() {
       name,
       email,
       phone,
+      regNumber,
       password,
       university: school,
       faculty,
@@ -98,6 +100,19 @@ export default function RegisterPage() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+234 801 234 5678"
+            className={FIELD}
+          />
+        </div>
+        <div>
+          {/* Optional — deliberately no "(optional)" tag, unlike Phone above. It stays
+              out of canSubmit, so a blank value still registers. */}
+          <label className={LABEL}>Reg Number</label>
+          <input
+            type="text"
+            value={regNumber}
+            onChange={(e) => setRegNumber(e.target.value.toUpperCase())}
+            placeholder="U2021/5570001"
+            autoComplete="off"
             className={FIELD}
           />
         </div>

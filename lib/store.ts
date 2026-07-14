@@ -12,6 +12,10 @@ export interface UserProfile {
   semester: string; // "Second Semester"
   session: string; // "2025 / 2026"
   student_code: string;
+  // The school-issued registration number. Optional at signup — and optional on the
+  // type too, because accounts created before this field existed have no such key in
+  // localStorage. Typing it as `string | null` would be a lie about those records.
+  reg_number?: string | null;
   picture_url: string | null;
   created_at: string; // ISO
 }
@@ -78,6 +82,7 @@ export interface RegisterInput {
   email: string;
   password: string;
   phone?: string;
+  regNumber?: string;
   university: string;
   faculty: string;
   department: string;
@@ -126,6 +131,7 @@ export async function registerUser(input: RegisterInput): Promise<void> {
     semester: "Second Semester",
     session: "2025 / 2026",
     student_code: genStudentCode(input.faculty, now),
+    reg_number: input.regNumber?.trim() || null,
     picture_url: null,
     created_at: now.toISOString(),
   };

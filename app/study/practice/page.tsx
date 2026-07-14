@@ -191,7 +191,16 @@ export default function PracticeToolPage() {
             disabled={!canStart}
             onClick={() => {
               haptic("tap");
-              router.push("/study/quiz");
+              // Carry the setup through, so the session screen reflects what was chosen
+              // instead of ignoring it.
+              const q = new URLSearchParams({
+                course,
+                mode,
+                type,
+                count: String(count),
+                time,
+              });
+              router.push(`/study/quiz?${q}`);
             }}
             className={`flex w-full items-center justify-center gap-2 bg-emerald-800 py-4 font-display text-sm font-semibold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] transition-opacity disabled:opacity-40 disabled:shadow-none squishy-press ${
               canStart ? "rounded-[15px]" : "rounded-2xl"
