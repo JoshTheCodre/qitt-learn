@@ -9,13 +9,13 @@ const AVATAR_URL =
 export default function Header({
   title,
   showAvatar = true,
-  showNotification = true,
+  showUpgrade = true,
   paddingX = "px-gutter",
   transparent = false,
 }: {
   title?: string;
   showAvatar?: boolean;
-  showNotification?: boolean;
+  showUpgrade?: boolean;
   paddingX?: string;
   // Opt in on pages with artwork behind the header — the default white bar would
   // otherwise paint over the top of it. Once scrolled it still goes frosted, so the
@@ -70,14 +70,24 @@ export default function Header({
             </div>
           )}
         </div>
-        {showNotification && (
-          <Link
-            href="/notifications"
-            aria-label="Notifications"
-            className="w-10 h-10 rounded-xl flex items-center justify-center bg-surface-container hover:bg-surface-container-high transition-colors squishy-press"
-          >
-            <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
-          </Link>
+        {showUpgrade && (
+          // Quiet by design: the moving gradient IS the border, so the pill itself stays
+          // a plain surface. It's a standing offer, not a call to action.
+          <div className="animated-ring shrink-0 rounded-full p-px">
+            <Link
+              href="/upgrade"
+              // Opaque fill — a translucent one would let the conic gradient show through
+              // the middle instead of only the 1px ring.
+              className="flex items-center gap-1 rounded-full bg-background px-2.5 py-1.5 transition-colors hover:bg-surface-container squishy-press"
+            >
+              {/* Filled, and in the accent rather than the label's blue — one spot of
+                  colour is what makes a quiet pill still catch the eye. */}
+              <span className="material-symbols-outlined icon-filled text-[14px] leading-none text-accent">
+                bolt
+              </span>
+              <span className="font-display text-[12px] font-semibold text-brand">Upgrade</span>
+            </Link>
+          </div>
         )}
       </div>
     </header>

@@ -170,9 +170,34 @@ textarea {
   opacity: 0.55;
 }
 
+/*
+ * Standing offer (the Upgrade pill): a single slow comet, drawn from the themable
+ * brand/accent slots so it tracks whatever palette the page is in rather than
+ * importing the green CTA colours. Slowest of the three — it should be noticed on
+ * the second glance, not the first.
+ */
+.animated-ring {
+  background: linear-gradient(
+    100deg,
+    rgb(var(--brand-rgb, 37 99 235)),
+    rgb(var(--accent-rgb, 16 185 129))
+  );
+  background: conic-gradient(
+    from var(--border-angle),
+    rgb(var(--brand-rgb, 37 99 235) / 0.15) 0deg,
+    rgb(var(--brand-rgb, 37 99 235) / 0.15) 200deg,
+    rgb(var(--brand-rgb, 37 99 235) / 0.9) 268deg,
+    rgb(var(--accent-rgb, 16 185 129)) 310deg,
+    rgb(var(--accent-rgb, 16 185 129) / 0.25) 338deg,
+    rgb(var(--brand-rgb, 37 99 235) / 0.15) 360deg
+  );
+  animation: border-sweep 6s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animated-border,
-  .animated-field {
+  .animated-field,
+  .animated-ring {
     animation: none;
   }
 
@@ -182,5 +207,13 @@ textarea {
 
   .animated-field {
     background: linear-gradient(100deg, #34d399, #10b981);
+  }
+
+  .animated-ring {
+    background: linear-gradient(
+      100deg,
+      rgb(var(--brand-rgb, 37 99 235)),
+      rgb(var(--accent-rgb, 16 185 129))
+    );
   }
 }
