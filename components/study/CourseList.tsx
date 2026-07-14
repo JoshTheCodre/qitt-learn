@@ -41,12 +41,17 @@ export default function CourseList({
   showStats?: boolean;
 }) {
   const [courses, setCourses] = useState<StoredCourse[]>([]);
+  const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
 
   useEffect(() => {
     const user = getUserCourses();
     setCourses(user.length ? user : SAMPLE_COURSES);
+    setCarryover(getUserCarryover());
   }, []);
 
+  // Carryover units are unknown (typed by hand, not from the catalog), so they don't
+  // contribute to the total — and the course count stays the count of THIS semester's
+  // courses. Overstating either would be a lie about the workload.
   const totalUnits = courses.reduce((sum, c) => sum + (parseInt(c.units, 10) || 0), 0);
 
   return (
