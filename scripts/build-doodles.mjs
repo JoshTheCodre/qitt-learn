@@ -46,17 +46,69 @@ const LAYOUT = [
   ["clip", 14, 96, -20, 0.8],
 ];
 
-const body = LAYOUT.map(
-  ([name, x, y, rot, scale]) =>
-    `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${scale})">${MOTIFS[name]}</g>`
-).join("\n  ");
+/*
+ * Second tile, for the auth screens (register / login).
+ *
+ * Deliberately a different language: abstract geometry rather than study objects, on a
+ * larger, sparser grid. Reusing the study doodles here would make signing up feel like
+ * you were already inside the app.
+ */
+const ALT_SIZE = 320;
+const ALT_STROKE = "#36669c"; // brand steel blue
+const ALT_OPACITY = 0.07;
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}">
-  <g fill="none" stroke="${STROKE}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="${OPACITY}">
+const ALT_MOTIFS = {
+  ring: `<circle cx="0" cy="0" r="11"/><circle cx="0" cy="0" r="5"/>`,
+  plus: `<path d="M0 -9 L0 9"/><path d="M-9 0 L9 0"/>`,
+  spark: `<path d="M0 -11 Q1.5 -1.5 11 0 Q1.5 1.5 0 11 Q-1.5 1.5 -11 0 Q-1.5 -1.5 0 -11 Z"/>`,
+  wave: `<path d="M-13 0 Q-6.5 -7 0 0 T13 0"/>`,
+  tri: `<path d="M0 -10 L9 7 L-9 7 Z"/>`,
+  arc: `<path d="M-10 7 A 12 12 0 0 1 10 7"/>`,
+  dots: `<circle cx="-7" cy="0" r="1.6"/><circle cx="0" cy="0" r="1.6"/><circle cx="7" cy="0" r="1.6"/>`,
+  square: `<rect x="-8" y="-8" width="16" height="16" rx="3"/>`,
+  chev: `<path d="M-7 -6 L2 0 L-7 6"/><path d="M2 -6 L11 0 L2 6"/>`,
+};
+
+const ALT_LAYOUT = [
+  ["ring", 52, 46, 0, 1.0],
+  ["spark", 168, 30, 14, 0.95],
+  ["wave", 268, 62, -8, 1.0],
+  ["plus", 108, 118, 20, 0.9],
+  ["tri", 228, 142, -12, 0.85],
+  ["dots", 34, 158, 30, 1.0],
+  ["square", 296, 176, 18, 0.85],
+  ["arc", 138, 214, 8, 1.0],
+  ["chev", 244, 258, -14, 0.9],
+  ["ring", 60, 266, 0, 0.75],
+  ["spark", 300, 300, 22, 0.7],
+  ["plus", 190, 300, -16, 0.75],
+];
+
+const render = (layout, motifs) =>
+  layout
+    .map(
+      ([name, x, y, rot, scale]) =>
+        `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${scale})">${motifs[name]}</g>`
+    )
+    .join("\n  ");
+
+const tile = (size, stroke, opacity, width, body) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  <g fill="none" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}">
   ${body}
   </g>
 </svg>`;
 
 mkdirSync("public/illustrations", { recursive: true });
-writeFileSync("public/illustrations/doodles.svg", svg);
-console.log(`wrote doodles.svg — ${SIZE}x${SIZE} tile, ${LAYOUT.length} motifs`);
+
+writeFileSync(
+  "public/illustrations/doodles.svg",
+  tile(SIZE, STROKE, OPACITY, 1.6, render(LAYOUT, MOTIFS))
+);
+writeFileSync(
+  "public/illustrations/doodles-auth.svg",
+  tile(ALT_SIZE, ALT_STROKE, ALT_OPACITY, 1.5, render(ALT_LAYOUT, ALT_MOTIFS))
+);
+
+console.log(`wrote doodles.svg      — ${SIZE}x${SIZE} tile, ${LAYOUT.length} study motifs`);
+console.log(`wrote doodles-auth.svg — ${ALT_SIZE}x${ALT_SIZE} tile, ${ALT_LAYOUT.length} abstract motifs`);
