@@ -8,7 +8,8 @@ import PatternBackdrop from "@/components/PatternBackdrop";
 
 export default function DashboardPage() {
   return (
-    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
+    // theme-home rebinds the brand/accent colour slots for this page only
+    <div className="theme-home mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       <PatternBackdrop />
 
       {/* z-10 lifts the page above the absolutely-positioned backdrop */}
@@ -18,7 +19,7 @@ export default function DashboardPage() {
           <SchoolCalendar />
           <QuickActions />
           <OverviewHero />
-          <CourseList topClass="mt-8" showStats />
+          <CourseList topClass="mt-6" showStats />
         </main>
       </div>
 

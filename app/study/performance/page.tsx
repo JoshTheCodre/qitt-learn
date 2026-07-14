@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import BackHeader from "@/components/BackHeader";
+import PatternBackdrop from "@/components/PatternBackdrop";
 
 const RANGES = ["All Time", "This Month", "This Week"];
 
@@ -41,9 +42,14 @@ export default function PerformancePage() {
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
-      <BackHeader title="Performance" />
+      <PatternBackdrop />
 
-      <main className="px-gutter pt-2 pb-28">
+      {/* z-10 lifts the page above the absolutely-positioned backdrop */}
+      <div className="relative z-10">
+        <BackHeader title="Performance" transparent />
+      </div>
+
+      <main className="relative z-10 px-gutter pt-2 pb-28">
         {/* Filters */}
         <div className="flex items-center justify-between gap-3 mb-4">
           <span className="rounded-full bg-primary/5 text-primary px-3 py-1.5 font-display text-xs font-semibold">

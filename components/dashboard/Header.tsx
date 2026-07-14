@@ -59,7 +59,7 @@ export default function Header({
             </h1>
           ) : (
             <div>
-              <h1 className="font-display text-[24px] leading-tight font-bold text-primary">
+              <h1 className="font-display text-[24px] leading-tight font-bold text-brand">
                 Hello, Joshua
               </h1>
               <p className="font-display text-sm font-medium text-on-surface/70">

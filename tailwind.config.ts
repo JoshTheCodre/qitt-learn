@@ -9,6 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Themable slots. They fall back to the existing primary blue, so a component
+        // using `brand`/`accent` looks identical everywhere EXCEPT inside a scope that
+        // overrides the vars (`.theme-home`). That's what keeps the homepage palette
+        // from leaking into the 15 other pages sharing Header/BottomNav/CourseList.
+        // Channel triplets (not hex) so Tailwind's /opacity modifiers still work.
+        brand: "rgb(var(--brand-rgb, 37 99 235) / <alpha-value>)",
+        accent: "rgb(var(--accent-rgb, 16 185 129) / <alpha-value>)",
         "on-secondary-fixed-variant": "#4a4737",
         "on-primary-container": "#afb7ff",
         "inverse-surface": "#2f3133",

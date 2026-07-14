@@ -20,7 +20,7 @@ const ACCENTS: Record<string, string> = {
   PHY: "bg-rose-50 text-rose-600",
   CHM: "bg-amber-50 text-amber-600",
 };
-const DEFAULT_ACCENT = "bg-primary/5 text-primary";
+const DEFAULT_ACCENT = "bg-brand/5 text-brand";
 
 function accentFor(code: string) {
   const prefix = code.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase();
@@ -49,7 +49,7 @@ export default function CourseList({
         <div className="flex items-center gap-2">
           <h3 className="font-display text-[17px] font-semibold text-on-surface">Courses</h3>
           {!showStats && (
-            <span className="rounded-full bg-primary/5 text-primary px-2 py-0.5 font-display text-[11px] font-semibold">
+            <span className="rounded-full bg-brand/5 text-brand px-2 py-0.5 font-display text-[11px] font-semibold">
               {courses.length}
             </span>
           )}
@@ -83,7 +83,7 @@ export default function CourseList({
           <Link
             key={course.slug}
             href={`/study/${course.slug}`}
-            className="w-full flex items-center justify-between gap-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] hover:border-primary/30 transition-all squishy-press"
+            className="w-full flex items-center justify-between gap-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] hover:border-brand/30 transition-all squishy-press"
           >
             <div className="min-w-0">
               <p className="font-body text-[15px] font-semibold text-on-surface truncate">

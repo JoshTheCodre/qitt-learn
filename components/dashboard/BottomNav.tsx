@@ -21,7 +21,7 @@ export default function BottomNav() {
             key={item.label}
             href={item.href}
             className={`flex flex-col items-center justify-center px-4 py-1.5 relative transition-colors ${
-              active ? "text-primary" : "text-on-surface-variant hover:text-primary"
+              active ? "text-brand" : "text-on-surface-variant hover:text-brand"
             }`}
           >
             <span
@@ -30,7 +30,7 @@ export default function BottomNav() {
               {item.icon}
             </span>
             <span className="font-display text-xs font-medium">{item.label}</span>
-            {active && <div className="absolute -bottom-1 w-1 h-1 bg-primary rounded-full" />}
+            {active && <div className="absolute -bottom-1 w-1 h-1 bg-brand rounded-full" />}
           </Link>
         );
       })}

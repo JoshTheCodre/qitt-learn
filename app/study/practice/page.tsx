@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
-import PatternBackdrop from "@/components/PatternBackdrop";
+import JungleBackdrop from "@/components/JungleBackdrop";
 import { SelectField } from "@/components/study/StudyFields";
 import { COURSES } from "@/lib/courses";
 import { haptic } from "@/lib/haptics";
@@ -14,7 +14,7 @@ const TYPES = ["MCQ", "Flashcards"];
 const COURSE_CODES = COURSES.map((c) => c.code);
 
 // Near-black rather than the muted on-surface-variant — the copy needs real weight
-// to sit cleanly over the patterned backdrop.
+// to sit cleanly over the foliage behind it.
 const LABEL =
   "block font-display text-xs font-semibold uppercase tracking-wide text-on-surface mb-2";
 
@@ -46,7 +46,7 @@ function Segmented({
               className={`flex-1 rounded-lg py-2 font-display text-[13px] font-semibold transition-colors ${
                 active
                   ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
-                  : "text-on-surface/60"
+                  : "text-on-surface/85"
               }`}
             >
               {o}
@@ -71,7 +71,7 @@ export default function PracticeToolPage() {
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
-      <PatternBackdrop />
+      <JungleBackdrop />
 
       <div className="relative z-10">
         <BackHeader title="Practice" transparent home />
