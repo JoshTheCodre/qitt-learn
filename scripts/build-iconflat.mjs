@@ -21,16 +21,44 @@ const SRC_DIR = path.join(process.cwd(), "public", "icons", "flat");
 const OUT_FILE = path.join(process.cwd(), "lib", "iconflat.generated.ts");
 const SIZE = 96; // 4x the largest render size, so it stays crisp on retina
 
+/*
+ * Per-icon hue shift, so the set lands on a cool palette (violet / teal / green /
+ * blue) without losing the gloss.
+ *
+ * Rotating the hue keeps every gradient, highlight and shadow intact — it only moves
+ * the colour around the wheel. Hand-recolouring the SVGs would have meant flattening
+ * those gradients, which is exactly the shine we want to keep.
+ *
+ * `hue` is a rotation in degrees from the artwork's own hue, not an absolute target.
+ * `sat` tames the result where a straight rotation lands somewhere neon.
+ */
+const TINT = {
+  // envelope: pink (337°) -> violet
+  request: { hue: 298, sat: 0.95 },
+  // folder: amber (41°) -> teal. Full saturation here goes neon cyan.
+  contribute: { hue: 139, sat: 0.65 },
+  // green book and the chart are already cool — leave them alone.
+  practice: { hue: 0, sat: 1 },
+  performance: { hue: 0, sat: 1 },
+  study: { hue: 0, sat: 1 },
+};
+
 const files = (await readdir(SRC_DIR)).filter((f) => f.endsWith(".svg")).sort();
 
 const entries = [];
 for (const file of files) {
   const name = path.basename(file, ".svg");
   const input = await readFile(path.join(SRC_DIR, file));
-  const webp = await sharp(input, { density: 384 })
-    .resize(SIZE, SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .webp({ quality: 92, effort: 6 })
-    .toBuffer();
+  const tint = TINT[name] ?? { hue: 0, sat: 1 };
+
+  let pipe = sharp(input, { density: 384 }).resize(SIZE, SIZE, {
+    fit: "contain",
+    background: { r: 0, g: 0, b: 0, alpha: 0 },
+  });
+  if (tint.hue || tint.sat !== 1) {
+    pipe = pipe.modulate({ hue: tint.hue, saturation: tint.sat });
+  }
+  const webp = await pipe.webp({ quality: 92, effort: 6 }).toBuffer();
 
   entries.push({ name, uri: `data:image/webp;base64,${webp.toString("base64")}` });
   console.log(

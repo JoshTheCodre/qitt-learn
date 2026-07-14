@@ -9,14 +9,14 @@ const TOOLS: ActionCardProps[] = [
     caption: "Quiz yourself",
     icon: "practice",
     href: "/study/practice",
-    accent: "244 126 83", // #f47e53 — pencil coral
+    accent: "130 209 109", // #82d16d — book green
   },
   {
     label: "Performance",
     caption: "Track your scores",
     icon: "performance",
     href: "/study/performance",
-    accent: "74 150 212", // #4a96d4 — chart blue
+    accent: "76 148 208", // #4c94d0 — chart blue
   },
 ];
 
