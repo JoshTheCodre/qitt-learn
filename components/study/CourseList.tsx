@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getUserCourses, type StoredCourse } from "@/lib/store";
+import {
+  carryoverSlug,
+  getUserCarryover,
+  getUserCourses,
+  type CarryoverCourse,
+  type StoredCourse,
+} from "@/lib/store";
 import { COURSES as SAMPLE } from "@/lib/courses";
 
 const SAMPLE_COURSES: StoredCourse[] = SAMPLE.map((c) => ({

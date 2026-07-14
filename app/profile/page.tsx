@@ -41,8 +41,6 @@ function InfoRow({
 export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [notifOn, setNotifOn] = useState(false);
-  const [testMsg, setTestMsg] = useState<string | null>(null);
   const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
   const [addingCO, setAddingCO] = useState(false);
   const [coCode, setCoCode] = useState("");
@@ -56,7 +54,6 @@ export default function ProfilePage() {
     }
     setProfile(user.profile);
     setCarryover(user.carryover);
-    setNotifOn(user.notifOn);
   }, [router]);
 
   function saveCarryover() {
@@ -76,17 +73,6 @@ export default function ProfilePage() {
     const next = carryover.filter((c) => c.course_code !== code);
     setCarryover(next);
     updateCurrentUser({ carryover: next });
-  }
-
-  function toggleNotif() {
-    const next = !notifOn;
-    setNotifOn(next);
-    updateCurrentUser({ notifOn: next });
-  }
-
-  function sendTest() {
-    setTestMsg("Notification sent ✓");
-    setTimeout(() => setTestMsg(null), 4000);
   }
 
   function signOut() {
@@ -181,53 +167,6 @@ export default function ProfilePage() {
           value={`${profile.semester}, ${profile.session}`}
         />
         <InfoRow icon="event" iconColor="text-on-surface-variant" label="Joined" value={joinedDate} />
-      </div>
-
-      {/* Notifications */}
-      <div className="mx-gutter mt-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm px-4">
-        <div className="flex items-center gap-3 py-3.5">
-          <div className="w-9 h-9 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-            <span
-              className={`material-symbols-outlined text-[18px] leading-none ${
-                notifOn ? "text-primary" : "text-on-surface-variant"
-              }`}
-            >
-              {notifOn ? "notifications_active" : "notifications_off"}
-            </span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-display text-sm font-semibold text-on-surface">Push Notifications</p>
-            <p className="font-display text-[11px] text-on-surface-variant leading-tight mt-0.5">
-              {notifOn ? "You'll get alerts for new activity" : "Tap to enable push alerts"}
-            </p>
-          </div>
-          <button
-            type="button"
-            aria-label="Toggle notifications"
-            onClick={toggleNotif}
-            className={`relative shrink-0 w-11 h-6 rounded-full transition-colors duration-200 ${
-              notifOn ? "bg-primary" : "bg-surface-container-highest"
-            }`}
-          >
-            <span
-              className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all duration-200 ${
-                notifOn ? "left-5" : "left-0.5"
-              }`}
-            />
-          </button>
-        </div>
-        {notifOn && (
-          <div className="pb-3.5">
-            <button
-              type="button"
-              onClick={sendTest}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary/5 border border-primary/10 text-primary font-display text-[13px] font-semibold squishy-press"
-            >
-              <span className="material-symbols-outlined text-[16px] leading-none">notifications</span>
-              {testMsg ?? "Send test notification"}
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Carryover courses */}

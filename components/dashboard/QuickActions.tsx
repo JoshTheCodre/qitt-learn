@@ -1,21 +1,23 @@
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
 
+// Accents as "R G B" channels — see the note on ActionCard.accent.
+const BLUE = "54 102 156"; // #36669c
+const MINT = "62 201 149"; // #3ec995
+
 const ACTIONS: ActionCardProps[] = [
   {
     label: "Request",
     caption: "Ask for material",
     icon: "request",
     href: "/request",
-    tile: "bg-[#36669c]/10 ring-[#36669c]/15",
-    wash: "from-[#36669c]/[0.07]",
+    accent: BLUE,
   },
   {
     label: "Contribute",
     caption: "Share your notes",
     icon: "contribute",
     href: "/contribute",
-    tile: "bg-[#3ec995]/15 ring-[#3ec995]/20",
-    wash: "from-[#3ec995]/[0.09]",
+    accent: MINT,
   },
 ];
 

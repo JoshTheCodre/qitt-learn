@@ -183,6 +183,18 @@ export function getUserCourse(slug: string): StoredCourse | null {
   return getUserCourses().find((c) => c.slug === slug) ?? null;
 }
 
+export function getUserCarryover(): CarryoverCourse[] {
+  return getCurrentUser()?.carryover ?? [];
+}
+
+/** Carryover courses are stored by code only, so their slug is derived from it. */
+export function carryoverSlug(code: string): string {
+  return code
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export interface ResolvedCourse {
   slug: string;
   code: string;
@@ -191,12 +203,27 @@ export interface ResolvedCourse {
   schedule?: ClassSession[];
 }
 
-// Resolve a course by slug from the user's courses, falling back to the sample catalog.
+// Resolve a course by slug from the user's courses, falling back to the sample catalog,
+// then to carryover. Without the carryover case, tapping a carryover course on the
+// dashboard would land on a dead page.
 export function resolveCourse(slug: string): ResolvedCourse | null {
   const u = getUserCourse(slug);
   if (u) return u;
+
   const s = STATIC_COURSES.find((c) => c.slug === slug);
-  return s
-    ? { slug: s.slug, code: s.code, units: s.units, title: s.title, schedule: s.schedule }
-    : null;
+  if (s) return { slug: s.slug, code: s.code, units: s.units, title: s.title, schedule: s.schedule };
+
+  const c = getUserCarryover().find((x) => carryoverSlug(x.course_code) === slug);
+  if (c) {
+    return {
+      slug,
+      code: c.course_code,
+      // Units are unknown for a carryover — it was typed in by hand, not derived from
+      // the catalog. Show a dash rather than inventing a number.
+      units: "—",
+      title: c.course_title || c.course_code,
+    };
+  }
+
+  return null;
 }
