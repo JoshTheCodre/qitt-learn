@@ -2,11 +2,17 @@ import Header from "@/components/dashboard/Header";
 import SchoolCalendar from "@/components/dashboard/SchoolCalendar";
 import QuickActions from "@/components/dashboard/QuickActions";
 import OverviewHero from "@/components/dashboard/OverviewHero";
+import ForYouHero from "@/components/dashboard/ForYouHero";
 import CourseList from "@/components/study/CourseList";
 import BottomNav from "@/components/dashboard/BottomNav";
 import PatternBackdrop from "@/components/PatternBackdrop";
+import { isAndroid } from "@/lib/platform";
 
 export default function DashboardPage() {
+  // Android gets the gradient "For You" card; everything else (iOS, desktop) keeps the
+  // flat ActionCard grid. Decided on the server so the wrong variant never flashes.
+  const android = isAndroid();
+
   return (
     // theme-home rebinds the brand/accent colour slots for this page only
     <div className="theme-home mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
@@ -18,7 +24,7 @@ export default function DashboardPage() {
         <main className="px-2.5 pb-24">
           <SchoolCalendar />
           <QuickActions />
-          <OverviewHero />
+          {android ? <ForYouHero /> : <OverviewHero />}
           <CourseList topClass="mt-6" showStats />
         </main>
       </div>
