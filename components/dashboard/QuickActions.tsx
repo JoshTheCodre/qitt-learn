@@ -1,26 +1,18 @@
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
 
-/*
- * Each card carries its own colour, sampled from its icon's dominant hue (all cool: violet / teal / green / blue) — so the
- * glow, the icon tile and the arrow all agree with the artwork instead of forcing
- * four different icons into one blue/mint palette.
- * See the note on ActionCard.accent for why these are "R G B" channels, not hex.
- */
+// Clean Material Symbols line icons, all in the single brand accent — see ActionCard.
 const ACTIONS: ActionCardProps[] = [
   {
     label: "Request",
     caption: "Ask for material",
-    icon: "request",
+    icon: "download",
     href: "/request",
-    accent: "147 156 226", // #939ce2 — envelope violet
   },
   {
     label: "Contribute",
     caption: "Share your notes",
-    icon: "contribute",
+    icon: "cloud_upload",
     href: "/contribute",
-    accent: "20 184 200",  // #14b8c8 — folder teal (deepened from the icon's #38e3fb: the
-                          // raw cyan is too pale for the hover arrow to read on white)
   },
 ];
 

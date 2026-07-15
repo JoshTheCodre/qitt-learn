@@ -1,22 +1,20 @@
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
 
-// Accents sampled from each icon's dominant hue — see QuickActions for the rationale.
+// Same clean line-icon + brand accent as QuickActions, so all four cards match.
 const TOOLS: ActionCardProps[] = [
   // Study is parked for now — re-enable and the grid still works.
-  // { label: "Study", caption: "Read your notes", icon: "study", href: "/study/learn", accent: "94 168 88" },
+  // { label: "Study", caption: "Read your notes", icon: "menu_book", href: "/study/learn" },
   {
     label: "Practice",
     caption: "Quiz yourself",
-    icon: "practice",
+    icon: "quiz",
     href: "/study/practice",
-    accent: "130 209 109", // #82d16d — book green
   },
   {
     label: "Performance",
     caption: "Track your scores",
-    icon: "performance",
+    icon: "insights",
     href: "/study/performance",
-    accent: "76 148 208", // #4c94d0 — chart blue
   },
 ];
 

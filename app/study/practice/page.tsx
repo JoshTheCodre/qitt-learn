@@ -31,6 +31,7 @@ function Segmented({
 }) {
   return (
     <div className="animated-field rounded-xl p-px">
+      {/* Gray track, pure-white selected pill, strong black text */}
       <div className="flex gap-1 rounded-[11px] bg-surface-container p-1">
         {options.map((o) => {
           const active = o === value;
@@ -45,8 +46,8 @@ function Segmented({
               }}
               className={`flex-1 rounded-lg py-2 font-display text-[13px] font-semibold transition-colors ${
                 active
-                  ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
-                  : "text-on-surface/85"
+                  ? "bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.1)]"
+                  : "text-black"
               }`}
             >
               {o}
@@ -160,7 +161,10 @@ export default function PracticeToolPage() {
 
           {/* Time — segmented, because the options are short and mutually exclusive */}
           <div>
-            <label className={LABEL}>Time limit</label>
+            {/* Pure black label, not the shared LABEL's text-on-surface gray */}
+            <label className="mb-2 block font-display text-xs font-semibold uppercase tracking-wide text-black">
+              Time limit
+            </label>
             <Segmented
               value={time}
               onChange={setTime}
@@ -170,7 +174,9 @@ export default function PracticeToolPage() {
           </div>
 
           <div>
-            <label className={LABEL}>Type</label>
+            <label className="mb-2 block font-display text-xs font-semibold uppercase tracking-wide text-black">
+              Type
+            </label>
             <Segmented value={type} onChange={setType} options={TYPES} />
           </div>
         </div>
