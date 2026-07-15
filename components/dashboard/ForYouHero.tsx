@@ -5,14 +5,14 @@
  * on purpose; see lib/platform.ts for why, and for the cost.
  */
 import Link from "next/link";
-import IconFlat, { type IconFlatName } from "@/components/IconFlat";
 
-// Full-colour 2D icons — monochrome glyphs read as inactive against the card.
-const TOOLS: { label: string; icon: IconFlatName; href: string }[] = [
+// Same Material Symbols glyphs the flat homepage cards use (see OverviewHero), so the
+// two dashboard variants share one icon language. White on the dark gradient.
+const TOOLS: { label: string; icon: string; href: string }[] = [
   // Study is parked for now — re-enable with grid-cols-3 below.
-  // { label: "Study", icon: "study", href: "/study/learn" },
-  { label: "Practice", icon: "practice", href: "/study/practice" },
-  { label: "Performance", icon: "performance", href: "/study/performance" },
+  // { label: "Study", icon: "menu_book", href: "/study/learn" },
+  { label: "Practice", icon: "quiz", href: "/study/practice" },
+  { label: "Performance", icon: "insights", href: "/study/performance" },
 ];
 
 export default function ForYouHero() {
@@ -92,7 +92,9 @@ export default function ForYouHero() {
                 className="flex items-center gap-2 rounded-xl bg-white/[0.09] px-2.5 py-2 ring-1 ring-inset ring-white/[0.12] backdrop-blur-sm transition-colors hover:bg-white/[0.16] squishy-press"
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/[0.14] ring-1 ring-inset ring-white/10">
-                  <IconFlat name={tool.icon} size={16} />
+                  <span className="material-symbols-outlined text-[16px] leading-none text-white">
+                    {tool.icon}
+                  </span>
                 </span>
                 <span className="min-w-0 truncate font-display text-[12px] font-bold">
                   {tool.label}

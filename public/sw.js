@@ -1,81 +1,42 @@
-const CACHE = 'qitt-v1'
+/*
+ * KILL-SWITCH service worker.
+ *
+ * The previous sw.js used a cache-first strategy for /_next/static/ and /fonts/. In
+ * dev those paths are stable but their contents change on every edit, so it pinned the
+ * first version it cached and served stale CSS/JS/fonts forever — which looked like
+ * "my changes don't apply" (gray text that was actually black on the server, fonts
+ * rendering old glyphs, files appearing to revert).
+ *
+ * Nothing in the app registers a service worker anymore, so this one is orphaned. This
+ * replacement exists only to evict the old one from browsers that still have it: on
+ * activate it deletes every cache, unregisters itself, and reloads open tabs. After it
+ * runs once, the app is served straight from the network with no SW in the way.
+ *
+ * If a PWA is wanted later, add a fresh worker that only cache-first's CONTENT-HASHED
+ * assets, and bump a versioned cache name on every deploy.
+ */
+self.addEventListener("install", () => self.skipWaiting());
 
-const PRECACHE = [
-  '/',
-  '/student/home',
-  '/student/chat',
-  '/student/login',
-]
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE)
-      .then(c => c.addAll(PRECACHE).catch(() => {}))
-      .then(() => self.skipWaiting())
-  )
-})
+      await self.registration.unregister();
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  )
-})
+      // Reload every open tab this worker controls, so they pick up fresh assets now.
+      const clients = await self.clients.matchAll({ type: "window" });
+      for (const client of clients) {
+        try {
+          client.navigate(client.url);
+        } catch {
+          /* some clients can't be navigated; ignore */
+        }
+      }
+    })()
+  );
+});
 
-self.addEventListener('notificationclick', e => {
-  e.notification.close()
-  const url = (e.notification.data && e.notification.data.url) || '/student/home'
-  const target = new URL(url, self.location.origin).href
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      const existing = list.find(c => c.url.startsWith(self.location.origin))
-      if (existing) return existing.focus().then(c => c.navigate(target))
-      return clients.openWindow(target)
-    })
-  )
-})
-
-self.addEventListener('fetch', e => {
-  const { request } = e
-  const url = new URL(request.url)
-
-  // Never intercept API calls or cross-origin requests
-  if (url.pathname.startsWith('/api/') || url.origin !== location.origin) return
-
-  // Static assets (JS, CSS, images, fonts) — cache-first
-  if (
-    url.pathname.startsWith('/_next/static/') ||
-    url.pathname.startsWith('/fonts/') ||
-    /\.(png|jpg|jpeg|svg|ico|woff2?)$/.test(url.pathname)
-  ) {
-    e.respondWith(
-      caches.match(request).then(cached => {
-        if (cached) return cached
-        return fetch(request).then(res => {
-          if (res.ok) {
-            const clone = res.clone()
-            caches.open(CACHE).then(c => c.put(request, clone))
-          }
-          return res
-        })
-      })
-    )
-    return
-  }
-
-  // HTML navigation — network-first, fall back to cache
-  if (request.mode === 'navigate') {
-    e.respondWith(
-      fetch(request)
-        .then(res => {
-          if (res.ok) {
-            const clone = res.clone()
-            caches.open(CACHE).then(c => c.put(request, clone))
-          }
-          return res
-        })
-        .catch(() => caches.match(request) || caches.match('/student/home') || caches.match('/'))
-    )
-  }
-})
+// Pass everything straight through to the network while this worker is still alive.
+self.addEventListener("fetch", () => {});

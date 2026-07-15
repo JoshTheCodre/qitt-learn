@@ -183,10 +183,8 @@ export default function PracticeToolPage() {
       </main>
 
       {/* Opaque, so scrolling content is hidden rather than sliding visibly under the
-          button. Softly tinted rather than pure white, and the fade strip above it lets
-          content dissolve into the bar instead of being cut by a hard edge. */}
+          button. Softly tinted rather than pure white. */}
       <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-[430px] -translate-x-1/2 bg-[#e9f2ee] px-gutter pb-5 pt-3">
-        <div className="pointer-events-none absolute inset-x-0 bottom-full h-10 bg-gradient-to-t from-[#e9f2ee] to-transparent" />
         {/* The sweeping border is the reward for a complete setup — it only runs
             once the button is actually armed, so it reads as "ready", not decoration. */}
         <div
@@ -208,7 +206,7 @@ export default function PracticeToolPage() {
               });
               router.push(`/study/quiz?${q}`);
             }}
-            className={`flex w-full items-center justify-center gap-2 bg-emerald-800 py-4 font-display text-sm font-semibold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] transition-opacity disabled:opacity-40 disabled:shadow-none squishy-press ${
+            className={`flex w-full items-center justify-center gap-2 bg-emerald-800 py-4 font-display text-sm font-semibold text-white transition-opacity disabled:opacity-40 squishy-press ${
               canStart ? "rounded-[15px]" : "rounded-2xl"
             }`}
           >
