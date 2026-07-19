@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import BottomNav from "@/components/dashboard/BottomNav";
 import CourseSearch from "@/components/CourseSearch";
 import type { CatalogCourse } from "@/lib/catalog";
+import { formatCourseCode } from "@/lib/courses";
 import {
   getCurrentUser,
   updateCurrentUser,
@@ -45,6 +46,13 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
   const [addingCO, setAddingCO] = useState(false);
+  // A confirm step in front of both add and remove — carryovers are a bit of a
+  // commitment either way, so neither should happen on a single stray tap.
+  const [pending, setPending] = useState<{
+    kind: "add" | "remove";
+    label: string;
+    run: () => void;
+  } | null>(null);
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -70,6 +78,23 @@ export default function ProfilePage() {
     const next = carryover.filter((c) => c.course_code !== code);
     setCarryover(next);
     updateCurrentUser({ carryover: next });
+  }
+
+  // Route both actions through the confirm modal.
+  function requestAdd(course: CatalogCourse) {
+    setPending({
+      kind: "add",
+      label: formatCourseCode(course.code),
+      run: () => addCarryover(course),
+    });
+  }
+
+  function requestRemove(c: CarryoverCourse) {
+    setPending({
+      kind: "remove",
+      label: formatCourseCode(c.course_code),
+      run: () => removeCarryover(c.course_code),
+    });
   }
 
   function signOut() {
@@ -197,7 +222,9 @@ export default function ProfilePage() {
               }`}
             >
               <div>
-                <p className="font-display text-[13px] font-semibold text-on-surface">{c.course_code}</p>
+                <p className="font-display text-[13px] font-semibold text-on-surface">
+                  {formatCourseCode(c.course_code)}
+                </p>
                 {c.course_title && (
                   <p className="font-display text-[11px] text-on-surface-variant mt-0.5">
                     {c.course_title}
@@ -207,7 +234,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 aria-label="Remove course"
-                onClick={() => removeCarryover(c.course_code)}
+                onClick={() => requestRemove(c)}
                 className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant hover:text-error hover:bg-error-container transition-colors squishy-press"
               >
                 <span className="material-symbols-outlined text-[16px] leading-none">close</span>
@@ -219,7 +246,7 @@ export default function ProfilePage() {
             // course that doesn't exist, and gave the carryover no real title or units.
             <CourseSearch
               excludeCodes={carryover.map((c) => c.course_code)}
-              onSelect={addCarryover}
+              onSelect={requestAdd}
               onCancel={() => setAddingCO(false)}
             />
           ) : (
@@ -245,6 +272,43 @@ export default function ProfilePage() {
           Sign Out
         </button>
       </div>
+
+      {/* Add / remove carryover confirmation */}
+      {pending && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-6">
+          <div className="w-full max-w-[320px] rounded-2xl bg-surface-container-lowest p-5 text-center shadow-2xl">
+            <h3 className="font-display text-[17px] font-bold text-on-surface">
+              {pending.kind === "add" ? "Add carryover?" : "Remove carryover?"}
+            </h3>
+            <p className="mt-1.5 font-body text-[13px] leading-snug text-on-surface/60">
+              {pending.kind === "add"
+                ? `Add ${pending.label} to your carryover courses?`
+                : `Remove ${pending.label} from your carryover courses?`}
+            </p>
+            <div className="mt-5 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setPending(null)}
+                className="flex-1 rounded-xl bg-surface-container py-3 font-display text-sm font-semibold text-on-surface squishy-press"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  pending.run();
+                  setPending(null);
+                }}
+                className={`flex-1 rounded-xl py-3 font-display text-sm font-bold text-white squishy-press ${
+                  pending.kind === "add" ? "bg-primary" : "bg-rose-600"
+                }`}
+              >
+                {pending.kind === "add" ? "Add" : "Remove"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <BottomNav />
     </div>

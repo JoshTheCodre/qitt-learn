@@ -21,8 +21,11 @@ export const AVATAR_STYLES = [
 
 export type AvatarStyle = (typeof AVATAR_STYLES)[number];
 
-export function avatarUrl(style: AvatarStyle, seed: string) {
-  return `${API}/${style}/svg?seed=${encodeURIComponent(seed)}`;
+// `bg` is one or more hex colours WITHOUT the leading '#', comma-separated
+// (DiceBear's backgroundColor param). Omit for the style's default background.
+export function avatarUrl(style: AvatarStyle, seed: string, bg?: string) {
+  const base = `${API}/${style}/svg?seed=${encodeURIComponent(seed)}`;
+  return bg ? `${base}&backgroundColor=${bg}&backgroundType=solid` : base;
 }
 
 /**

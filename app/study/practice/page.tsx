@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
 import JungleBackdrop from "@/components/JungleBackdrop";
 import { SelectField } from "@/components/study/StudyFields";
-import { COURSES } from "@/lib/courses";
+import { COURSES, formatCourseCode } from "@/lib/courses";
+import { getUserCarryover, getUserCourses } from "@/lib/store";
 import { haptic } from "@/lib/haptics";
 import { startPracticeSession } from "@/lib/practice-session";
 
 const MODES = ["Past Question", "Lecture Notes"];
 const TIMES = ["No limit", "10", "20", "30"];
 const TYPES = ["MCQ", "Flashcards"];
-const COURSE_CODES = COURSES.map((c) => c.code);
 
 // Near-black rather than the muted on-surface-variant — the copy needs real weight
 // to sit cleanly over the foliage behind it.
@@ -68,6 +68,17 @@ export default function PracticeToolPage() {
   const [time, setTime] = useState(TIMES[0]);
   const [count, setCount] = useState(10);
   const [type, setType] = useState(TYPES[0]);
+  const [courseOptions, setCourseOptions] = useState<string[]>([]);
+
+  // The user's own registered courses plus carryovers — you practise what you're
+  // actually taking. Falls back to the sample catalog only if they have none yet
+  // (e.g. a guest session), so the picker is never empty.
+  useEffect(() => {
+    const mine = getUserCourses().map((c) => formatCourseCode(c.code));
+    const carry = getUserCarryover().map((c) => formatCourseCode(c.course_code));
+    const all = Array.from(new Set([...mine, ...carry]));
+    setCourseOptions(all.length ? all : COURSES.map((c) => formatCourseCode(c.code)));
+  }, []);
 
   const canStart = course && mode;
 
@@ -95,7 +106,7 @@ export default function PracticeToolPage() {
             label="Course"
             value={course}
             onChange={setCourse}
-            options={COURSE_CODES}
+            options={courseOptions}
             placeholder="Select course"
             glow
           />
