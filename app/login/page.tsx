@@ -4,9 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/store";
+import PatternBackdrop from "@/components/PatternBackdrop";
 
 const FIELD =
-  "w-full rounded-xl border border-outline-variant/50 bg-surface-container-lowest px-4 py-3 font-body text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary";
+  "w-full rounded-xl border border-[#1a1712]/12 bg-white px-4 py-3.5 font-body text-[#1a1712] placeholder:text-[#1a1712]/35 focus:outline-none focus:border-[#1a1712]/45 transition-colors";
+const LABEL =
+  "block font-display text-xs font-semibold uppercase tracking-wide text-[#1a1712]/65 mb-2";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,24 +31,28 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 flex flex-col px-6 pt-14 pb-8">
-      <span className="inline-flex w-12 h-12 rounded-2xl bg-white shadow-sm items-center justify-center overflow-hidden border border-outline-variant/30">
+    <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col bg-[#f4f0e8] px-6 pb-8 pt-14 text-[#1a1712] md:border-x md:border-[#1a1712]/10 md:shadow-[0_0_60px_rgba(0,0,0,0.08)]">
+      <PatternBackdrop variant="auth" />
+
+      <span className="relative z-10 inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/qitt-logo.png" alt="Qitt" className="w-full h-full object-cover" />
+        <img src="/qitt-logo.png" alt="Qitt" className="h-full w-full object-cover" />
       </span>
 
-      <h1 className="mt-6 font-display text-[26px] font-bold text-on-surface tracking-tight">
-        Welcome back
+      <h1 className="relative z-10 mt-7 font-display text-[32px] font-extrabold leading-tight tracking-tight">
+        Welcome{" "}
+        <span className="relative whitespace-nowrap">
+          back
+          <span className="absolute -bottom-1 left-0 h-2 w-full rounded-full bg-[#f4a9c4]" />
+        </span>
       </h1>
-      <p className="mt-1 font-body text-sm font-medium text-on-surface-variant">
-        Log in to continue to Qitt.
+      <p className="relative z-10 mt-2 font-body text-[14px] font-medium text-[#1a1712]/55">
+        Log in to pick up where you left off.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+      <form onSubmit={handleSubmit} className="relative z-10 mt-9 space-y-4">
         <div>
-          <label className="block font-display text-xs font-semibold uppercase tracking-wide text-on-surface-variant mb-2">
-            Email
-          </label>
+          <label className={LABEL}>Email</label>
           <input
             type="email"
             value={email}
@@ -56,11 +63,11 @@ export default function LoginPage() {
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="font-display text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+          <div className="mb-2 flex items-center justify-between">
+            <label className="font-display text-xs font-semibold uppercase tracking-wide text-[#1a1712]/65">
               Password
             </label>
-            <button type="button" className="font-display text-xs font-semibold text-primary">
+            <button type="button" className="font-display text-xs font-bold text-[#c9506a]">
               Forgot?
             </button>
           </div>
@@ -76,7 +83,7 @@ export default function LoginPage() {
               type="button"
               onClick={() => setShow((v) => !v)}
               aria-label={show ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1a1712]/50"
             >
               <span className="material-symbols-outlined text-[20px] leading-none">
                 {show ? "visibility_off" : "visibility"}
@@ -86,21 +93,21 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <p className="font-body text-[13px] font-medium text-error text-center">{error}</p>
+          <p className="text-center font-body text-[13px] font-medium text-error">{error}</p>
         )}
 
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-2 w-full py-4 rounded-2xl bg-primary text-on-primary font-display text-sm font-semibold disabled:opacity-40 squishy-press"
+          className="mt-2 w-full rounded-full bg-[#1a1712] py-4 font-display text-sm font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
         >
           Sign in
         </button>
       </form>
 
-      <p className="mt-auto pt-8 text-center font-body text-sm font-medium text-on-surface-variant">
+      <p className="relative z-10 mt-auto pt-8 text-center font-body text-sm font-medium text-[#1a1712]/55">
         New to Qitt?{" "}
-        <Link href="/register" className="font-semibold text-primary">
+        <Link href="/register" className="font-bold text-[#c9506a]">
           Create account
         </Link>
       </p>

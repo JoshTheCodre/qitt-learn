@@ -13,9 +13,9 @@ const LEVELS = ["100 Level", "200 Level", "300 Level", "400 Level", "500 Level"]
 const FACULTY_NAMES = FACULTIES.map((f) => f.faculty);
 
 const FIELD =
-  "w-full rounded-xl border border-outline-variant/50 bg-surface-container-lowest px-4 py-3 font-body text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary";
+  "w-full rounded-xl border border-[#1a1712]/12 bg-white px-4 py-3.5 font-body text-[#1a1712] placeholder:text-[#1a1712]/35 focus:outline-none focus:border-[#1a1712]/45 transition-colors";
 const LABEL =
-  "block font-display text-xs font-semibold uppercase tracking-wide text-on-surface-variant mb-2";
+  "block font-display text-xs font-semibold uppercase tracking-wide text-[#1a1712]/65 mb-2";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -56,27 +56,30 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 px-6 pt-6 pb-8">
-      {/* Abstract tile, not the study one — signing up shouldn't already feel like
-          being inside the app. */}
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-[#f4f0e8] text-[#1a1712] relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-[#1a1712]/10 px-6 pt-6 pb-8">
+      {/* Abstract tile — signing up shouldn't already feel like being inside the app. */}
       <PatternBackdrop variant="auth" />
 
       <button
         type="button"
         aria-label="Go back"
         onClick={() => router.push("/landing")}
-        className="relative z-10 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center squishy-press"
+        className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white ring-1 ring-black/5 squishy-press"
       >
-        <span className="material-symbols-outlined text-[20px] text-on-surface-variant leading-none">
+        <span className="material-symbols-outlined text-[20px] leading-none text-[#1a1712]/70">
           arrow_back
         </span>
       </button>
 
-      <h1 className="relative z-10 mt-5 font-display text-[26px] font-bold text-on-surface tracking-tight">
-        Create account
+      <h1 className="relative z-10 mt-6 font-display text-[32px] font-extrabold tracking-tight leading-tight">
+        Create{" "}
+        <span className="relative whitespace-nowrap">
+          account
+          <span className="absolute -bottom-1 left-0 h-2 w-full rounded-full bg-[#f4a9c4]" />
+        </span>
       </h1>
-      <p className="relative z-10 mt-1 font-body text-sm font-medium text-on-surface-variant">
-        Join Qitt and start studying smarter.
+      <p className="relative z-10 mt-2 font-body text-[14px] font-medium text-[#1a1712]/55">
+        Join Qitt and get ahead of every exam.
       </p>
 
       <form onSubmit={handleSubmit} className="relative z-10 mt-7 space-y-4">
@@ -169,15 +172,15 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-2 w-full py-4 rounded-2xl bg-primary text-on-primary font-display text-sm font-semibold disabled:opacity-40 squishy-press"
+          className="mt-2 w-full rounded-full bg-[#1a1712] py-4 font-display text-sm font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
         >
           {busy ? "Creating account…" : "Create account"}
         </button>
       </form>
 
-      <p className="mt-6 text-center font-body text-sm font-medium text-on-surface-variant">
+      <p className="mt-6 text-center font-body text-sm font-medium text-[#1a1712]/55">
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-primary">
+        <Link href="/login" className="font-bold text-[#c9506a]">
           Log in
         </Link>
       </p>
