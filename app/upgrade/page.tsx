@@ -71,55 +71,27 @@ export default function UpgradePage() {
       </div>
 
       <main className="relative z-10 px-gutter pb-36 pt-1">
-        {/* The pitch */}
-        <section className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-[#4d80bd] via-[#36669c] to-[#22406a] p-5 text-white shadow-[0_18px_40px_-16px_rgba(34,64,106,0.65)] ring-1 ring-inset ring-white/[0.14]">
-          <svg
-            className="pointer-events-none absolute inset-0 h-full w-full text-white"
-            viewBox="0 0 400 200"
-            preserveAspectRatio="xMidYMid slice"
-            fill="none"
-            aria-hidden="true"
-          >
-            <defs>
-              <radialGradient id="up-mint" cx="20" cy="200" r="230" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#3ec995" stopOpacity="0.5" />
-                <stop offset="1" stopColor="#3ec995" stopOpacity="0" />
-              </radialGradient>
-              <pattern
-                id="up-lines"
-                width="10"
-                height="10"
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(45)"
-              >
-                <line x1="0" y1="0" x2="0" y2="10" stroke="currentColor" strokeWidth="1" strokeOpacity="0.05" />
-              </pattern>
-            </defs>
-            <rect width="400" height="200" fill="url(#up-mint)" />
-            <rect width="400" height="200" fill="url(#up-lines)" />
-          </svg>
+        {/* The pitch — one clean gradient panel, a single soft glow, no busy texture */}
+        <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#4d80bd] via-[#36669c] to-[#22406a] p-6 text-white shadow-[0_20px_44px_-20px_rgba(34,64,106,0.55)]">
+          <div className="pointer-events-none absolute -bottom-16 -left-12 h-52 w-52 rounded-full bg-[#3ec995]/25 blur-3xl" />
 
-          <div className="relative z-10">
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.14] px-2.5 py-1 ring-1 ring-inset ring-white/15">
-              <span className="material-symbols-outlined icon-filled text-[13px] leading-none text-[#3ec995]">
-                bolt
-              </span>
-              <span className="font-display text-[10px] font-bold uppercase tracking-[0.1em]">
-                Qitt Pro
-              </span>
-            </span>
-
-            <h2 className="mt-3 font-display text-[24px] font-bold leading-tight">
+          <div className="relative">
+            <h2 className="font-display text-[25px] font-bold leading-tight">
               Stop guessing what&apos;s on the exam.
             </h2>
-            <p className="mt-2 font-body text-[13px] font-medium leading-snug text-white/75">
-              One semester of everything Qitt has — past questions, unlimited quizzes and
-              your real performance — for less than a plate of rice.
+            <p className="mt-2 font-body text-[13px] font-medium leading-relaxed text-white/75">
+              Everything Qitt has — past questions, unlimited quizzes and your real
+              performance — for less than a plate of rice.
             </p>
 
-            <div className="mt-4 flex items-baseline gap-1.5">
-              <span className="font-display text-[32px] font-bold leading-none">{PRICE_LABEL}</span>
-              <span className="font-body text-[12px] font-medium text-white/60">/ semester</span>
+            <div className="mt-6 flex items-end justify-between border-t border-white/15 pt-4">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-display text-[34px] font-bold leading-none">{PRICE_LABEL}</span>
+                <span className="font-body text-[12px] font-medium text-white/60">/ semester</span>
+              </div>
+              <span className="rounded-full bg-white/15 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wide text-white/90">
+                One-time
+              </span>
             </div>
           </div>
         </section>
@@ -205,11 +177,8 @@ export default function UpgradePage() {
           type="button"
           onClick={pay}
           disabled={status === "pending"}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-[#4d80bd] to-[#22406a] py-4 font-display text-sm font-bold text-white shadow-[0_10px_26px_-10px_rgba(34,64,106,0.8)] ring-1 ring-inset ring-white/15 transition-opacity disabled:opacity-60 squishy-press"
+          className="flex w-full items-center justify-center rounded-2xl bg-[#22406a] py-4 font-display text-sm font-bold text-white shadow-[0_10px_24px_-12px_rgba(34,64,106,0.7)] transition-opacity hover:bg-[#1b3357] disabled:opacity-60 squishy-press"
         >
-          <span className="material-symbols-outlined icon-filled text-[18px] leading-none text-[#3ec995]">
-            bolt
-          </span>
           {status === "pending" ? "Starting…" : `Pay ${PRICE_LABEL}`}
         </button>
 

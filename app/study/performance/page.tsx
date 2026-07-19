@@ -1,69 +1,94 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import BackHeader from "@/components/BackHeader";
 import PatternBackdrop from "@/components/PatternBackdrop";
+import { getResults, percent, type PracticeResult } from "@/lib/results";
 
-const RANGES = ["All Time", "This Month", "This Week"];
+// Which relative-date group a session falls into.
+function bucketOf(iso: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  const startOfDay = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const days = Math.floor((startOfDay(now) - startOfDay(d)) / 86_400_000);
+  if (days <= 0) return "Today";
+  if (days === 1) return "Yesterday";
+  if (days < 7) return "This Week";
+  return "Earlier";
+}
 
-const SCORES = [55, 68, 60, 82, 74, 90, 78];
-
-const SESSIONS = [
-  { id: "1", group: "Yesterday", course: "CSC 202.2", type: "Past Question", score: "18 / 20" },
-  { id: "2", group: "Yesterday", course: "MTH 201.1", type: "MCQ", score: "12 / 15" },
-  { id: "3", group: "This Week", course: "CSC 204.1", type: "Theory", score: "8 / 10" },
-];
+const GROUP_ORDER = ["Today", "Yesterday", "This Week", "Earlier"];
 
 function buildChart(scores: number[]) {
   const W = 300;
   const H = 110;
   const pad = 12;
-  const max = 100;
-  const stepX = (W - pad * 2) / (scores.length - 1);
-  const pts = scores.map((s, i) => {
-    const x = pad + i * stepX;
-    const y = H - pad - (s / max) * (H - pad * 2);
-    return { x, y };
-  });
+  const stepX = (W - pad * 2) / Math.max(scores.length - 1, 1);
+  const pts = scores.map((s, i) => ({
+    x: pad + i * stepX,
+    y: H - pad - (s / 100) * (H - pad * 2),
+  }));
   const line = pts.map((p) => `${p.x},${p.y}`).join(" ");
-  const area = `M ${pts[0].x},${H - pad} ${pts
-    .map((p) => `L ${p.x},${p.y}`)
-    .join(" ")} L ${pts[pts.length - 1].x},${H - pad} Z`;
+  const area = `M ${pts[0].x},${H - pad} ${pts.map((p) => `L ${p.x},${p.y}`).join(" ")} L ${
+    pts[pts.length - 1].x
+  },${H - pad} Z`;
   const peak = pts.reduce((a, b) => (b.y < a.y ? b : a), pts[0]);
   return { line, area, peak, W, H };
 }
 
 export default function PerformancePage() {
-  const [range, setRange] = useState(RANGES[0]);
-  const { line, area, peak, W, H } = buildChart(SCORES);
+  const [results, setResults] = useState<PracticeResult[]>([]);
+  const [course, setCourse] = useState("All Courses");
 
-  const avg = Math.round(SCORES.reduce((a, b) => a + b, 0) / SCORES.length);
-  const best = Math.max(...SCORES);
+  useEffect(() => {
+    setResults(getResults());
+  }, []);
+
+  const courseOptions = useMemo(
+    () => ["All Courses", ...Array.from(new Set(results.map((r) => r.course)))],
+    [results]
+  );
+
+  const filtered = useMemo(
+    () => results.filter((r) => course === "All Courses" || r.course === course),
+    [results, course]
+  );
+
+  // Chart + stats from the filtered set, oldest → newest, last 8 points.
+  const scores = filtered.map((r) => percent(r)).reverse().slice(-8);
+  const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+  const best = scores.length ? Math.max(...scores) : 0;
+  const chart = scores.length >= 2 ? buildChart(scores) : null;
+
+  const groups = GROUP_ORDER.map((g) => ({
+    group: g,
+    items: filtered.filter((r) => bucketOf(r.takenAt) === g),
+  })).filter((g) => g.items.length > 0);
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       <PatternBackdrop />
 
-      {/* z-10 lifts the page above the absolutely-positioned backdrop */}
       <div className="relative z-10">
         <BackHeader title="Performance" transparent />
       </div>
 
       <main className="relative z-10 px-gutter pt-2 pb-28">
-        {/* Filters */}
+        {/* Sort by course */}
         <div className="flex items-center justify-between gap-3 mb-4">
-          <span className="rounded-full bg-primary/5 text-primary px-3 py-1.5 font-display text-xs font-semibold">
-            All Courses
+          <span className="font-display text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+            Sort by course
           </span>
           <div className="relative">
             <select
-              value={range}
-              onChange={(e) => setRange(e.target.value)}
+              value={course}
+              onChange={(e) => setCourse(e.target.value)}
               className="appearance-none rounded-full border border-outline-variant/50 bg-surface-container-lowest pl-4 pr-9 py-1.5 font-display text-xs font-semibold text-on-surface focus:outline-none focus:border-primary"
             >
-              {RANGES.map((r) => (
-                <option key={r} value={r}>
-                  {r}
+              {courseOptions.map((c) => (
+                <option key={c} value={c}>
+                  {c}
                 </option>
               ))}
             </select>
@@ -73,88 +98,129 @@ export default function PerformancePage() {
           </div>
         </div>
 
-        {/* Chart */}
-        <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-[0_8px_30px_rgba(0,0,0,0.04)] p-4">
-          <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="perfFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgb(37 99 235)" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="rgb(37 99 235)" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <path d={area} fill="url(#perfFill)" />
-            <polyline
-              points={line}
-              fill="none"
-              stroke="rgb(37 99 235)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <circle cx={peak.x} cy={peak.y} r="4" fill="rgb(37 99 235)" />
-            <circle cx={peak.x} cy={peak.y} r="8" fill="rgb(37 99 235)" fillOpacity="0.15" />
-          </svg>
-        </div>
-
-        {/* Summary stats */}
-        <div className="mt-4 grid grid-cols-3 gap-3">
-          {[
-            { label: "Avg score", value: `${avg}%` },
-            { label: "Best", value: `${best}%` },
-            { label: "Sessions", value: `${SESSIONS.length}` },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 px-3 py-3 text-center"
+        {results.length === 0 ? (
+          <div className="mt-10 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest px-6 py-12 text-center">
+            <span className="material-symbols-outlined text-[40px] text-on-surface/25">insights</span>
+            <p className="mt-2 font-display text-sm font-bold text-on-surface">No results yet</p>
+            <p className="mt-1 font-body text-[12px] text-on-surface/55">
+              Finish a practice session and your scores will show up here.
+            </p>
+            <Link
+              href="/study/practice"
+              className="mt-5 inline-block rounded-full bg-emerald-800 px-5 py-2.5 font-display text-[13px] font-bold text-white squishy-press"
             >
-              <p className="font-display text-[20px] font-bold text-on-surface leading-none">
-                {s.value}
-              </p>
-              <p className="mt-1 font-display text-[11px] font-medium text-on-surface-variant">
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Recent sessions */}
-        <h3 className="mt-8 mb-3 font-display text-[18px] font-bold text-on-surface">Recent</h3>
-        <div className="space-y-4">
-          {["Yesterday", "This Week"].map((group) => {
-            const groupItems = SESSIONS.filter((s) => s.group === group);
-            if (!groupItems.length) return null;
-            return (
-              <div key={group}>
-                <p className="mb-2 font-display text-xs font-semibold text-on-surface-variant">
-                  {group}
-                </p>
-                <div className="space-y-2.5">
-                  {groupItems.map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      className="w-full flex items-center gap-3 rounded-2xl p-4 text-left bg-surface-container-lowest border border-outline-variant/30 shadow-[0_8px_30px_rgba(0,0,0,0.04)] bento-card-hover squishy-press"
-                    >
-                      <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-primary/10 text-primary">
-                        <span className="material-symbols-outlined text-[22px] leading-none">quiz</span>
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-display text-sm font-semibold text-on-surface">{s.course}</p>
-                        <p className="mt-0.5 font-display text-xs font-medium text-on-surface-variant">
-                          {s.type}
-                        </p>
-                      </div>
-                      <span className="font-display text-sm font-bold text-primary">{s.score}</span>
-                      <span className="material-symbols-outlined text-[20px] text-on-surface-variant leading-none">
-                        chevron_right
-                      </span>
-                    </button>
-                  ))}
-                </div>
+              Start practising
+            </Link>
+          </div>
+        ) : (
+          <>
+            {/* Chart */}
+            {chart && (
+              <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-[0_8px_30px_rgba(0,0,0,0.04)] p-4">
+                <svg
+                  viewBox={`0 0 ${chart.W} ${chart.H}`}
+                  className="w-full h-auto"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="perfFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="rgb(37 99 235)" stopOpacity="0.18" />
+                      <stop offset="100%" stopColor="rgb(37 99 235)" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d={chart.area} fill="url(#perfFill)" />
+                  <polyline
+                    points={chart.line}
+                    fill="none"
+                    stroke="rgb(37 99 235)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx={chart.peak.x} cy={chart.peak.y} r="4" fill="rgb(37 99 235)" />
+                  <circle cx={chart.peak.x} cy={chart.peak.y} r="8" fill="rgb(37 99 235)" fillOpacity="0.15" />
+                </svg>
               </div>
-            );
-          })}
-        </div>
+            )}
+
+            {/* Summary stats */}
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              {[
+                { label: "Avg score", value: `${avg}%` },
+                { label: "Best", value: `${best}%` },
+                { label: "Sessions", value: `${filtered.length}` },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 px-3 py-3 text-center"
+                >
+                  <p className="font-display text-[20px] font-bold text-on-surface leading-none">
+                    {s.value}
+                  </p>
+                  <p className="mt-1 font-display text-[11px] font-medium text-on-surface-variant">
+                    {s.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Recent sessions */}
+            <h3 className="mt-8 mb-3 font-display text-[18px] font-bold text-on-surface">Recent</h3>
+            {groups.length === 0 && (
+              <p className="rounded-2xl border border-outline-variant/30 bg-surface-container-lowest px-4 py-8 text-center font-display text-xs text-on-surface-variant">
+                No sessions for {course} yet.
+              </p>
+            )}
+            <div className="space-y-4">
+              {groups.map(({ group, items }) => (
+                <div key={group}>
+                  <p className="mb-2 font-display text-xs font-semibold text-on-surface-variant">
+                    {group}
+                  </p>
+                  <div className="space-y-2.5">
+                    {items.map((r) => {
+                      const pct = percent(r);
+                      const pass = pct >= 50;
+                      return (
+                        <Link
+                          key={r.id}
+                          href={`/study/performance/${r.id}`}
+                          className="w-full flex items-center gap-3 rounded-2xl p-4 text-left bg-surface-container-lowest border border-outline-variant/30 shadow-[0_8px_30px_rgba(0,0,0,0.04)] bento-card-hover squishy-press"
+                        >
+                          <span
+                            className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                              pass ? "bg-emerald-500/10 text-emerald-600" : "bg-rose-500/10 text-rose-500"
+                            }`}
+                          >
+                            <span className="material-symbols-outlined text-[22px] leading-none">quiz</span>
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-display text-sm font-semibold text-on-surface">
+                              {r.course}
+                            </p>
+                            <p className="mt-0.5 font-display text-xs font-medium text-on-surface-variant">
+                              {r.type} · {pct}%
+                            </p>
+                          </div>
+                          <span
+                            className={`font-display text-sm font-bold ${
+                              pass ? "text-emerald-600" : "text-rose-500"
+                            }`}
+                          >
+                            {r.score} / {r.total}
+                          </span>
+                          <span className="material-symbols-outlined text-[20px] text-on-surface-variant leading-none">
+                            chevron_right
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </main>
     </div>
   );

@@ -78,23 +78,14 @@ export default function Header({
           )}
         </div>
         {showUpgrade && (
-          // Quiet by design: the moving gradient IS the border, so the pill itself stays
-          // a plain surface. It's a standing offer, not a call to action.
-          <div className="animated-ring shrink-0 rounded-full p-px">
-            <Link
-              href="/upgrade"
-              // Opaque fill — a translucent one would let the conic gradient show through
-              // the middle instead of only the 1px ring.
-              className="flex items-center gap-1 rounded-full bg-background px-2.5 py-1.5 transition-colors hover:bg-surface-container squishy-press"
-            >
-              {/* Filled, and in the accent rather than the label's blue — one spot of
-                  colour is what makes a quiet pill still catch the eye. */}
-              <span className="material-symbols-outlined icon-filled text-[14px] leading-none text-accent">
-                bolt
-              </span>
-              <span className="font-display text-[12px] font-semibold text-brand">Upgrade</span>
-            </Link>
-          </div>
+          // Quiet outlined pill — a standing offer, not a call to action. No fill, no
+          // icon, so it doesn't compete with the page content.
+          <Link
+            href="/upgrade"
+            className="flex shrink-0 items-center rounded-full border border-brand/25 px-3.5 py-1.5 font-display text-[12px] font-semibold text-brand transition-colors hover:bg-brand/[0.06] squishy-press"
+          >
+            Upgrade
+          </Link>
         )}
       </div>
     </header>
