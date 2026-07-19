@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
 import PatternBackdrop from "@/components/PatternBackdrop";
 import { getResult, percent, type PracticeResult } from "@/lib/results";
+import { formatCourseCode } from "@/lib/courses";
 
 const LETTERS = ["a", "b", "c", "d", "e", "f"];
 
@@ -68,7 +69,7 @@ export default function ResultPage() {
           <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#3ec995]/25 blur-3xl" />
           <div className="relative">
             <p className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
-              {result.course} · {result.type}
+              {formatCourseCode(result.course)} · {result.type}
             </p>
             <p className="mt-2 font-display text-[42px] font-bold leading-none">
               {result.score}

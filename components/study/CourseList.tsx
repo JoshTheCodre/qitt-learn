@@ -9,7 +9,7 @@ import {
   type CarryoverCourse,
   type StoredCourse,
 } from "@/lib/store";
-import { COURSES as SAMPLE } from "@/lib/courses";
+import { COURSES as SAMPLE, formatCourseCode } from "@/lib/courses";
 
 const SAMPLE_COURSES: StoredCourse[] = SAMPLE.map((c) => ({
   slug: c.slug,
@@ -101,7 +101,7 @@ export default function CourseList({
                 {course.title}
               </p>
               <div className="mt-1.5 flex items-center gap-2 font-body text-[12px] font-medium text-on-surface-variant">
-                <span>{course.code}</span>
+                <span>{formatCourseCode(course.code)}</span>
                 <span className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ${accent}`}>
                   {course.units}
                 </span>
@@ -137,7 +137,7 @@ export default function CourseList({
                   {c.course_title || c.course_code}
                 </p>
                 <div className="mt-1.5 flex items-center gap-2 font-body text-[12px] font-medium text-on-surface-variant">
-                  <span>{c.course_code}</span>
+                  <span>{formatCourseCode(c.course_code)}</span>
                   <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
                     Carryover
                   </span>

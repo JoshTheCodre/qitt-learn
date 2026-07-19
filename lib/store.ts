@@ -1,5 +1,5 @@
 // Client-side data store backed by localStorage (prototype auth + profile + courses).
-import { COURSES as STATIC_COURSES, type ClassSession } from "./courses";
+import { COURSES as STATIC_COURSES, formatCourseCode, type ClassSession } from "./courses";
 
 export interface UserProfile {
   name: string;
@@ -108,7 +108,7 @@ async function deriveCourses(department: string, levelNum: number): Promise<Stor
       seen.add(c.code);
       courses.push({
         slug: slugify(c.code),
-        code: c.code,
+        code: formatCourseCode(c.code),
         units: `${c.unit} units`,
         title: titleCase(c.title),
       });

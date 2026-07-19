@@ -5,6 +5,7 @@ import Link from "next/link";
 import BackHeader from "@/components/BackHeader";
 import PatternBackdrop from "@/components/PatternBackdrop";
 import { getResults, percent, type PracticeResult } from "@/lib/results";
+import { formatCourseCode } from "@/lib/courses";
 
 // Which relative-date group a session falls into.
 function bucketOf(iso: string): string {
@@ -196,7 +197,7 @@ export default function PerformancePage() {
                           </span>
                           <div className="min-w-0 flex-1">
                             <p className="font-display text-sm font-semibold text-on-surface">
-                              {r.course}
+                              {formatCourseCode(r.course)}
                             </p>
                             <p className="mt-0.5 font-display text-xs font-medium text-on-surface-variant">
                               {r.type} · {pct}%

@@ -4,6 +4,8 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { haptic } from "@/lib/haptics";
 import { makeResultId, percent, saveResult, type ResultQuestion } from "@/lib/results";
+import { endPracticeSession, hasPracticeSession } from "@/lib/practice-session";
+import { formatCourseCode } from "@/lib/courses";
 
 type Question = {
   q: string;
@@ -30,7 +32,7 @@ function QuizSession() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const course = params.get("course") || "Practice";
+  const course = formatCourseCode(params.get("course") || "Practice");
   const requested = Number(params.get("count")) || 10;
   const timeParam = params.get("time") || "No limit";
   const typeLabel = params.get("mode") || params.get("type") || "Practice";
@@ -45,11 +47,39 @@ function QuizSession() {
   const [submitted, setSubmitted] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [showLeave, setShowLeave] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
   const [resultId, setResultId] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
   const submittedRef = useRef(false);
+  const guardRef = useRef(true);
+  const pushedRef = useRef(false);
 
   const answered = Object.keys(answers).length;
   const score = questions.reduce((n, q, i) => (answers[i] === q.answer ? n + 1 : n), 0);
+
+  // Mirror state into refs so the once-bound history/popstate handlers always read the
+  // current values without being re-bound on every answer.
+  const answeredRef = useRef(0);
+  answeredRef.current = answered;
+
+  // Leave for good: drop the active-session flag and REPLACE history, so the quiz can
+  // never be resumed by pressing Back — and even if its URL is reached again, the
+  // mount-time validation below bounces it to setup.
+  const leaveTo = (dest: string) => {
+    guardRef.current = false;
+    endPracticeSession();
+    router.replace(dest);
+  };
+
+  // What "leave" means from the current state:
+  //  - already submitted → nothing to lose, straight to Performance
+  //  - answered something → confirm first
+  //  - untouched         → just leave
+  const requestLeave = () => {
+    if (submittedRef.current) leaveTo("/study/performance");
+    else if (answeredRef.current > 0) setShowLeave(true);
+    else leaveTo("/study/practice");
+  };
 
   function submit() {
     if (submittedRef.current) return;
@@ -80,17 +110,42 @@ function QuizSession() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Back is guarded mid-session: leaving would throw away the attempt, so confirm and,
-  // on confirm, end the session and show the result rather than just discarding it.
-  function handleBack() {
-    if (submitted) {
-      router.back();
-    } else if (answered > 0) {
-      setShowLeave(true);
-    } else {
-      router.back(); // nothing answered yet — nothing to lose, just leave
+  // Session validation + browser Back interception. Runs once on mount.
+  useEffect(() => {
+    if (!hasPracticeSession()) {
+      // No active session (Back after exit, bookmark, hand-typed URL): this page must
+      // not be reachable. Bounce to setup before anything renders.
+      router.replace("/study/practice");
+      return;
     }
-  }
+    setReady(true);
+
+    // Push a sentinel entry so the first Back press pops to here (same URL) and fires
+    // popstate instead of actually leaving; we re-push to hold position, then confirm.
+    if (!pushedRef.current) {
+      window.history.pushState(null, "", window.location.href);
+      pushedRef.current = true;
+    }
+    const onPop = () => {
+      if (!guardRef.current) return; // we're intentionally navigating away
+      window.history.pushState(null, "", window.location.href);
+      requestLeave();
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Native prompt on hard exits (refresh, tab close, external nav) while unsaved.
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (submittedRef.current || answeredRef.current === 0) return;
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, []);
 
   // Countdown. Auto-submits at zero so the time limit actually means something.
   useEffect(() => {
@@ -111,6 +166,12 @@ function QuizSession() {
 
   const low = remaining !== null && remaining <= 60;
 
+  // Hold the render until the session is validated, so an invalid entry redirects
+  // without flashing the quiz.
+  if (!ready) {
+    return <div className="mx-auto min-h-screen w-full max-w-[430px] bg-background" />;
+  }
+
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       {/* Exam header — sticky, so the clock and score never scroll away */}
@@ -119,7 +180,7 @@ function QuizSession() {
           <button
             type="button"
             aria-label="Leave session"
-            onClick={handleBack}
+            onClick={requestLeave}
             className="-ml-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white/90 hover:bg-white/10 squishy-press"
           >
             <span className="material-symbols-outlined text-[24px] leading-none">arrow_back</span>
@@ -228,7 +289,7 @@ function QuizSession() {
           <div className={`rounded-2xl ${answered === total ? "animated-border p-[1.5px]" : ""}`}>
             <button
               type="button"
-              onClick={submit}
+              onClick={() => setShowSubmit(true)}
               disabled={answered === 0}
               className={`w-full bg-emerald-800 py-4 font-display text-sm font-bold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] transition-opacity disabled:opacity-40 disabled:shadow-none squishy-press ${
                 answered === total ? "rounded-[15px]" : "rounded-2xl"
@@ -240,32 +301,64 @@ function QuizSession() {
         )}
       </div>
 
-      {/* Leave confirmation — ending is not the same as discarding: on confirm we submit,
-          so the attempt is scored and saved rather than thrown away. */}
+      {/* Submit confirmation — answers lock after this, so make it deliberate. */}
+      {showSubmit && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-6">
+          <div className="w-full max-w-[320px] rounded-2xl bg-surface-container-lowest p-5 text-center shadow-2xl">
+            <h3 className="font-display text-[17px] font-bold text-on-surface">Submit practice?</h3>
+            <p className="mt-1.5 font-body text-[13px] leading-snug text-on-surface/60">
+              {answered < total
+                ? `You've answered ${answered} of ${total}. Unanswered questions are marked wrong. Submit anyway?`
+                : "You won't be able to change your answers after this."}
+            </p>
+            <div className="mt-5 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowSubmit(false)}
+                className="flex-1 rounded-xl bg-surface-container py-3 font-display text-sm font-semibold text-on-surface squishy-press"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSubmit(false);
+                  submit();
+                }}
+                className="flex-1 rounded-xl bg-emerald-800 py-3 font-display text-sm font-bold text-white squishy-press"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Leave confirmation — guards the Back button and the Exit control alike. */}
       {showLeave && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-6">
           <div className="w-full max-w-[320px] rounded-2xl bg-surface-container-lowest p-5 text-center shadow-2xl">
-            <h3 className="font-display text-[17px] font-bold text-on-surface">End this session?</h3>
+            <h3 className="font-display text-[17px] font-bold text-on-surface">Leave Practice?</h3>
             <p className="mt-1.5 font-body text-[13px] leading-snug text-on-surface/60">
-              You&apos;ve answered {answered} of {total}. End now and see your result?
+              Your progress may be lost. Are you sure you want to leave?
             </p>
-            <div className="mt-5 space-y-2">
+            <div className="mt-5 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowLeave(false)}
+                className="flex-1 rounded-xl bg-surface-container py-3 font-display text-sm font-semibold text-on-surface squishy-press"
+              >
+                Stay
+              </button>
               <button
                 type="button"
                 onClick={() => {
                   setShowLeave(false);
-                  submit();
+                  leaveTo("/study/practice");
                 }}
-                className="w-full rounded-xl bg-emerald-800 py-3 font-display text-sm font-bold text-white squishy-press"
+                className="flex-1 rounded-xl bg-rose-600 py-3 font-display text-sm font-bold text-white squishy-press"
               >
-                End &amp; see result
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowLeave(false)}
-                className="w-full rounded-xl bg-surface-container py-3 font-display text-sm font-semibold text-on-surface-variant squishy-press"
-              >
-                Keep practising
+                Leave
               </button>
             </div>
           </div>
@@ -350,7 +443,7 @@ function QuizSession() {
             <div className="shrink-0 space-y-2 border-t border-outline-variant/30 px-5 pb-6 pt-3">
               <button
                 type="button"
-                onClick={() => resultId && router.push(`/study/performance/${resultId}`)}
+                onClick={() => leaveTo(resultId ? `/study/performance/${resultId}` : "/study/performance")}
                 className="w-full rounded-2xl bg-emerald-800 py-3.5 font-display text-sm font-bold text-white squishy-press"
               >
                 See full result

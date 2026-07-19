@@ -7,6 +7,7 @@ import JungleBackdrop from "@/components/JungleBackdrop";
 import { SelectField } from "@/components/study/StudyFields";
 import { COURSES } from "@/lib/courses";
 import { haptic } from "@/lib/haptics";
+import { startPracticeSession } from "@/lib/practice-session";
 
 const MODES = ["Past Question", "Lecture Notes"];
 const TIMES = ["No limit", "10", "20", "30"];
@@ -81,11 +82,11 @@ export default function PracticeToolPage() {
       <main className="relative z-10 px-gutter pt-2 pb-28">
         <section className="mb-7 rounded-2xl border border-emerald-700/15 bg-emerald-600/[0.05] p-4">
           <h2 className="font-display text-[17px] font-bold leading-tight text-on-surface">
-            Revise. Understand. Ace.
+            Prepare ahead. Stay ahead.
           </h2>
           <p className="mt-1 font-body text-[12px] font-medium text-on-surface/75">
-            Turn your notes and past questions into a quiz, and walk into the
-            exam hall ready.
+            Turn your notes and past questions into quizzes, so you walk into every
+            exam better prepared than the rest.
           </p>
         </section>
 
@@ -204,7 +205,10 @@ export default function PracticeToolPage() {
                 count: String(count),
                 time,
               });
-              router.push(`/study/quiz?${q}`);
+              // Mark the session active, then REPLACE so Setup drops out of history —
+              // pressing Back from the quiz can never land back on this page.
+              startPracticeSession();
+              router.replace(`/study/quiz?${q}`);
             }}
             className={`flex w-full items-center justify-center gap-2 bg-emerald-800 py-4 font-display text-sm font-semibold text-white transition-opacity disabled:opacity-40 squishy-press ${
               canStart ? "rounded-[15px]" : "rounded-2xl"

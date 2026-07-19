@@ -6,6 +6,8 @@
  * only the carryover picker needs it. The promise itself is cached, so concurrent
  * callers share one request rather than racing.
  */
+import { formatCourseCode } from "./courses";
+
 export type CatalogCourse = {
   code: string;
   title: string;
@@ -27,7 +29,7 @@ export function loadCatalog(): Promise<CatalogCourse[]> {
       const seen = new Map<string, CatalogCourse>();
       for (const rows of Object.values(byDept)) {
         for (const r of rows) {
-          const code = r.code.trim();
+          const code = formatCourseCode(r.code.trim());
           if (!code || seen.has(code)) continue;
           seen.set(code, { code, title: r.title.trim(), unit: r.unit, level: r.level });
         }

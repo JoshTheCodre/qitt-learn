@@ -5,6 +5,14 @@ export type ClassSession = {
   accent: "primary" | "tertiary";
 };
 
+/**
+ * Display a course code with a space between the department letters and the number:
+ * "FAC202.2" → "FAC 202.2". Codes that are already spaced pass through unchanged.
+ */
+export function formatCourseCode(code: string): string {
+  return code.replace(/^([A-Za-z]+)\s*(\d)/, "$1 $2").trim();
+}
+
 export type Course = {
   slug: string;
   code: string;
