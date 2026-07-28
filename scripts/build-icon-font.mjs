@@ -16,7 +16,7 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const ROOTS = ["app", "components"];
+const ROOTS = ["app", "components", "lib"];
 const OUT = "public/fonts/material-symbols-outlined.woff2";
 
 async function walk(dir) {

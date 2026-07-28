@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BottomNav from "@/components/dashboard/BottomNav";
 import CourseSearch from "@/components/CourseSearch";
+import EditAvatarModal from "@/components/EditAvatarModal";
 import type { CatalogCourse } from "@/lib/catalog";
 import { formatCourseCode } from "@/lib/courses";
+import { randomAvatarUrl } from "@/lib/avatars";
 import {
   getCurrentUser,
   updateCurrentUser,
+  updateProfile,
   logout,
   type UserProfile,
   type CarryoverCourse,
@@ -46,6 +49,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
   const [addingCO, setAddingCO] = useState(false);
+  const [editingAvatar, setEditingAvatar] = useState(false);
   // A confirm step in front of both add and remove — carryovers are a bit of a
   // commitment either way, so neither should happen on a single stray tap.
   const [pending, setPending] = useState<{
@@ -60,9 +64,21 @@ export default function ProfilePage() {
       router.replace("/login");
       return;
     }
-    setProfile(user.profile);
+    // Backfill a face for accounts created before avatars were auto-assigned: seed a
+    // stable avatar from their email and persist it so it's the same everywhere.
+    if (!user.profile.picture_url) {
+      const picture_url = randomAvatarUrl(user.profile.email);
+      setProfile(updateProfile({ picture_url }) ?? { ...user.profile, picture_url });
+    } else {
+      setProfile(user.profile);
+    }
     setCarryover(user.carryover);
   }, [router]);
+
+  function saveAvatar(url: string | null) {
+    const next = updateProfile({ picture_url: url });
+    if (next) setProfile(next);
+  }
 
   function addCarryover(course: CatalogCourse) {
     const next: CarryoverCourse[] = [
@@ -128,7 +144,8 @@ export default function ProfilePage() {
       <div className="relative h-32 bg-gradient-to-tr from-primary via-blue-600 to-cyan-400">
         <button
           type="button"
-          aria-label="Edit profile"
+          aria-label="Change profile picture"
+          onClick={() => setEditingAvatar(true)}
           className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white squishy-press"
         >
           <span className="material-symbols-outlined text-[18px] leading-none">edit</span>
@@ -137,19 +154,29 @@ export default function ProfilePage() {
 
       {/* Identity */}
       <div className="relative z-10 px-gutter -mt-12">
-        <div className="w-20 h-20 overflow-hidden rounded-full ring-4 ring-background flex items-center justify-center text-white text-[24px] font-bold shadow-lg bg-gradient-to-br from-violet-500 via-primary to-sky-500">
-          {profile.picture_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={profile.picture_url}
-              alt=""
-              className="h-full w-full object-cover"
-              draggable={false}
-            />
-          ) : (
-            initials
-          )}
-        </div>
+        <button
+          type="button"
+          aria-label="Change profile picture"
+          onClick={() => setEditingAvatar(true)}
+          className="relative block w-20 h-20 squishy-press"
+        >
+          <span className="flex w-20 h-20 overflow-hidden rounded-full ring-4 ring-background items-center justify-center text-white text-[24px] font-bold shadow-lg bg-gradient-to-br from-violet-500 via-primary to-sky-500">
+            {profile.picture_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={profile.picture_url}
+                alt=""
+                className="h-full w-full object-cover"
+                draggable={false}
+              />
+            ) : (
+              initials
+            )}
+          </span>
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-on-primary ring-2 ring-background shadow-md">
+            <span className="material-symbols-outlined text-[15px] leading-none">photo_camera</span>
+          </span>
+        </button>
 
         <div className="mt-3 flex items-center gap-2 flex-wrap">
           <h2 className="font-display text-[22px] font-bold text-on-surface">{profile.name}</h2>
@@ -308,6 +335,15 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+      )}
+
+      {editingAvatar && (
+        <EditAvatarModal
+          value={profile.picture_url}
+          name={profile.name}
+          onSave={saveAvatar}
+          onClose={() => setEditingAvatar(false)}
+        />
       )}
 
       <BottomNav />

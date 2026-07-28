@@ -29,6 +29,19 @@ export function avatarUrl(style: AvatarStyle, seed: string, bg?: string) {
 }
 
 /**
+ * A stable avatar derived from a seed (e.g. the user's email). Used to give every
+ * account a real face even when they skipped the picker at signup — the same seed
+ * always resolves to the same style + avatar, so it never changes under them.
+ */
+export function randomAvatarUrl(seed: string) {
+  const s = seed || "qitt";
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) >>> 0;
+  const style = AVATAR_STYLES[h % AVATAR_STYLES.length];
+  return avatarUrl(style, s);
+}
+
+/**
  * A deterministic page of options. Deterministic matters: a random set would differ
  * between the server render and the client hydration, and React would throw a
  * mismatch. New sets come from bumping `page` on a click, not from Math.random().

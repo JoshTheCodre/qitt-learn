@@ -1,5 +1,6 @@
 // Client-side data store backed by localStorage (prototype auth + profile + courses).
 import { COURSES as STATIC_COURSES, formatCourseCode, type ClassSession } from "./courses";
+import { randomAvatarUrl } from "./avatars";
 
 export interface UserProfile {
   name: string;
@@ -36,27 +37,36 @@ export interface CarryoverCourse {
 }
 
 export interface UserRecord {
-  password: string;
   profile: UserProfile;
   courses: StoredCourse[];
   carryover: CarryoverCourse[];
   notifOn: boolean;
 }
 
-const USERS_KEY = "qitt_users";
-const SESSION_KEY = "qitt_session";
+// The authoritative store is Postgres (via /api/auth/* and /api/me). This localStorage
+// entry is only a per-device cache of the signed-in user, so the app's many synchronous
+// reads (getUserCourses, getCurrentUser, …) stay instant. It's written on login/register
+// and updated alongside every server write.
+const CACHE_KEY = "qitt_current";
 
-function readUsers(): Record<string, UserRecord> {
-  if (typeof window === "undefined") return {};
+interface CachedUser extends UserRecord {
+  email: string;
+}
+
+function readCache(): CachedUser | null {
+  if (typeof window === "undefined") return null;
   try {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "{}");
+    const raw = localStorage.getItem(CACHE_KEY);
+    return raw ? (JSON.parse(raw) as CachedUser) : null;
   } catch {
-    return {};
+    return null;
   }
 }
 
-function writeUsers(users: Record<string, UserRecord>) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+function writeCache(user: CachedUser | null) {
+  if (typeof window === "undefined") return;
+  if (user) localStorage.setItem(CACHE_KEY, JSON.stringify(user));
+  else localStorage.removeItem(CACHE_KEY);
 }
 
 export function titleCase(s: string): string {
@@ -96,11 +106,16 @@ export interface RegisterInput {
 async function deriveCourses(department: string, levelNum: number): Promise<StoredCourse[]> {
   try {
     const res = await fetch("/uniport_dept_courses.json");
-    const data: Record<string, { code: string; title: string; unit: number; level: number; semester: string }[]> =
-      await res.json();
+    const data: Record<
+      string,
+      { code: string; title: string; unit: number; level: number; semester: string; category: string }[]
+    > = await res.json();
     const list = data[department] || [];
-    let picked = list.filter((c) => c.level === levelNum && c.semester === "SECOND");
-    if (picked.length === 0) picked = list.filter((c) => c.level === levelNum);
+    // Only COMPULSORY courses are auto-added — students add their electives themselves
+    // via Edit Courses, so we never assume an elective they didn't pick.
+    const compulsory = (c: { category: string }) => c.category === "COMPULSORY";
+    let picked = list.filter((c) => c.level === levelNum && c.semester === "SECOND" && compulsory(c));
+    if (picked.length === 0) picked = list.filter((c) => c.level === levelNum && compulsory(c));
     const seen = new Set<string>();
     const courses: StoredCourse[] = [];
     for (const c of picked) {
@@ -119,8 +134,9 @@ async function deriveCourses(department: string, levelNum: number): Promise<Stor
   }
 }
 
-export async function registerUser(input: RegisterInput): Promise<void> {
-  const users = readUsers();
+export async function registerUser(
+  input: RegisterInput,
+): Promise<{ ok: boolean; error?: string }> {
   const email = input.email.trim().toLowerCase();
   const levelNum = parseInt(input.level.replace(/\D/g, ""), 10) || 100;
   const now = new Date();
@@ -136,48 +152,127 @@ export async function registerUser(input: RegisterInput): Promise<void> {
     session: "2025 / 2026",
     student_code: genStudentCode(input.faculty, now),
     reg_number: input.regNumber?.trim() || null,
-    picture_url: input.pictureUrl || null,
+    // Everyone gets a face: fall back to a stable avatar seeded from their email so
+    // accounts that skipped the picker still show a real avatar everywhere.
+    picture_url: input.pictureUrl || randomAvatarUrl(email),
     created_at: now.toISOString(),
   };
   const courses = await deriveCourses(input.department, levelNum);
-  users[email] = { password: input.password, profile, courses, carryover: [], notifOn: false };
-  writeUsers(users);
-  localStorage.setItem(SESSION_KEY, email);
+
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password: input.password, profile, courses }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) {
+      return { ok: false, error: data.error || "Registration failed. Please try again." };
+    }
+    writeCache({ email, profile, courses, carryover: [], notifOn: false });
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Network error. Please try again." };
+  }
 }
 
-export function loginUser(email: string, password: string): boolean {
-  const users = readUsers();
+export async function loginUser(email: string, password: string): Promise<boolean> {
   const key = email.trim().toLowerCase();
-  const rec = users[key];
-  if (!rec || rec.password !== password) return false;
-  localStorage.setItem(SESSION_KEY, key);
-  return true;
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: key, password }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) return false;
+    writeCache({ email: key, ...(data.user as UserRecord) });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function getSessionEmail(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(SESSION_KEY);
+  return readCache()?.email ?? null;
 }
 
 export function getCurrentUser(): UserRecord | null {
-  const email = getSessionEmail();
-  if (!email) return null;
-  return readUsers()[email] ?? null;
+  return readCache();
+}
+
+// Pull the authoritative record from the server into the cache — call on app load so a
+// fresh device (or cleared cache) rehydrates from Postgres if the session cookie is valid.
+export async function refreshCurrentUser(): Promise<UserRecord | null> {
+  try {
+    const res = await fetch("/api/me");
+    if (!res.ok) {
+      if (res.status === 401) writeCache(null);
+      return null;
+    }
+    const data = await res.json().catch(() => ({}));
+    if (!data.ok) return null;
+    const email = readCache()?.email ?? String(data.user.profile.email || "").toLowerCase();
+    writeCache({ email, ...(data.user as UserRecord) });
+    return data.user as UserRecord;
+  } catch {
+    return null;
+  }
 }
 
 export function logout() {
-  if (typeof window !== "undefined") localStorage.removeItem(SESSION_KEY);
+  writeCache(null);
+  if (typeof window !== "undefined") {
+    fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+  }
+}
+
+// Re-derive the signed-in user's course list to their department's COMPULSORY courses
+// only. Used to fix accounts created before the compulsory-only filter existed — and any
+// time a student wants to start from a clean required-courses list.
+export async function resyncCompulsoryCourses(): Promise<StoredCourse[]> {
+  const cur = readCache();
+  if (!cur) return [];
+  const levelNum = parseInt(String(cur.profile.level).replace(/\D/g, ""), 10) || 100;
+  // Catalog keys are the raw uppercase department names; the profile stores a Title-Cased
+  // copy, so uppercasing it back matches the key exactly.
+  const courses = await deriveCourses(cur.profile.department.toUpperCase(), levelNum);
+  writeCache({ ...cur, courses });
+  fetch("/api/me", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ courses }),
+  }).catch(() => {});
+  return courses;
 }
 
 export function updateCurrentUser(
   patch: Partial<Pick<UserRecord, "carryover" | "notifOn" | "courses">>,
 ) {
-  const email = getSessionEmail();
-  if (!email) return;
-  const users = readUsers();
-  if (!users[email]) return;
-  users[email] = { ...users[email], ...patch };
-  writeUsers(users);
+  const cur = readCache();
+  if (!cur) return;
+  writeCache({ ...cur, ...patch });
+  // Persist to Postgres in the background; the cache is already updated for instant UI.
+  fetch("/api/me", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(patch),
+  }).catch(() => {});
+}
+
+// Merge a patch into the signed-in user's profile (e.g. a new picture_url), update the
+// cache for instant UI, and persist the full merged profile to Postgres in the background.
+export function updateProfile(patch: Partial<UserProfile>): UserProfile | null {
+  const cur = readCache();
+  if (!cur) return null;
+  const profile = { ...cur.profile, ...patch };
+  writeCache({ ...cur, profile });
+  fetch("/api/me", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ profile }),
+  }).catch(() => {});
+  return profile;
 }
 
 export function getUserCourses(): StoredCourse[] {

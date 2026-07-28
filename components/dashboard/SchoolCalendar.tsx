@@ -1,8 +1,20 @@
 import Link from "next/link";
-import { TERM } from "@/lib/term";
+import { getTerm } from "@/lib/term";
 
 export default function SchoolCalendar() {
-  const weeksLeft = Math.max(TERM.totalWeeks - TERM.week, 0);
+  const term = getTerm();
+  const title =
+    term.phase === "during"
+      ? `Week ${term.week} of ${term.totalWeeks}`
+      : term.phase === "before"
+        ? "Starting soon"
+        : "Teaching done";
+  const subtitle =
+    term.phase === "during"
+      ? `${term.label} · ${term.weeksLeft} week${term.weeksLeft === 1 ? "" : "s"} to go`
+      : term.phase === "before"
+        ? `${term.label} · begins soon`
+        : `${term.label} · exams ahead`;
 
   return (
     <section className="mt-4">
@@ -20,10 +32,10 @@ export default function SchoolCalendar() {
 
         <div className="min-w-0 flex-1">
           <p className="font-display text-[15px] font-bold leading-tight text-brand">
-            Week {TERM.week} of {TERM.totalWeeks}
+            {title}
           </p>
           <p className="mt-0.5 truncate font-body text-[12px] font-medium leading-tight text-on-surface/55">
-            {TERM.label} · {weeksLeft} week{weeksLeft === 1 ? "" : "s"} to go
+            {subtitle}
           </p>
         </div>
 

@@ -30,6 +30,7 @@ export default function RegisterPage() {
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   const departmentOptions = FACULTIES.find((f) => f.faculty === faculty)?.departments ?? [];
 
@@ -40,7 +41,8 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!canSubmit) return;
     setBusy(true);
-    await registerUser({
+    setError("");
+    const result = await registerUser({
       name,
       email,
       phone,
@@ -52,7 +54,12 @@ export default function RegisterPage() {
       department,
       level,
     });
-    router.push("/dashboard");
+    if (result.ok) {
+      router.push("/dashboard");
+    } else {
+      setError(result.error || "Registration failed.");
+      setBusy(false);
+    }
   }
 
   return (
@@ -168,6 +175,10 @@ export default function RegisterPage() {
           options={LEVELS}
           placeholder="Select level"
         />
+
+        {error && (
+          <p className="text-center font-body text-[13px] font-medium text-error">{error}</p>
+        )}
 
         <button
           type="submit"

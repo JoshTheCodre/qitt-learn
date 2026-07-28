@@ -17,16 +17,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  const canSubmit = email.trim() && password.trim();
+  const canSubmit = email.trim() && password.trim() && !busy;
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
-    if (loginUser(email, password)) {
+    setBusy(true);
+    setError("");
+    if (await loginUser(email, password)) {
       router.push("/dashboard");
     } else {
       setError("Incorrect email or password.");
+      setBusy(false);
     }
   }
 
@@ -101,7 +105,7 @@ export default function LoginPage() {
           disabled={!canSubmit}
           className="mt-2 w-full rounded-full bg-[#1a1712] py-4 font-display text-sm font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
         >
-          Sign in
+          {busy ? "Signing in…" : "Sign in"}
         </button>
       </form>
 

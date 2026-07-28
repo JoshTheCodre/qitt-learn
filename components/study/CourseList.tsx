@@ -34,6 +34,12 @@ function accentFor(code: string) {
   return ACCENTS[prefix] ?? DEFAULT_ACCENT;
 }
 
+// GES ("General Studies") courses are sat as computer-based tests — they get a badge and
+// float to the top of the list so students see their exam-day courses first.
+function isCbt(code: string) {
+  return /ges/i.test(code);
+}
+
 export default function CourseList({
   topClass = "mt-12",
   showStats = false,
@@ -55,6 +61,9 @@ export default function CourseList({
   // contribute to the total — and the course count stays the count of THIS semester's
   // courses. Overstating either would be a lie about the workload.
   const totalUnits = courses.reduce((sum, c) => sum + (parseInt(c.units, 10) || 0), 0);
+
+  // CBT (GES) courses lead the list; a stable sort keeps everything else in place.
+  const ordered = [...courses].sort((a, b) => Number(isCbt(b.code)) - Number(isCbt(a.code)));
 
   return (
     <section className={`space-y-4 ${topClass}`}>
@@ -100,18 +109,31 @@ export default function CourseList({
         )}
       </div>
 
-      {courses.map((course) => {
+      {ordered.map((course) => {
         const accent = accentFor(course.code);
+        const cbt = isCbt(course.code);
         return (
           <Link
             key={course.slug}
             href={`/study/${course.slug}`}
-            className="w-full flex items-center justify-between gap-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] hover:border-brand/30 transition-all squishy-press"
+            className={`w-full flex items-center justify-between gap-3 rounded-xl border p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] transition-all squishy-press ${
+              cbt
+                ? "border-violet-200/60 bg-surface-container-lowest hover:border-violet-300"
+                : "border-outline-variant/40 bg-surface-container-lowest hover:border-brand/30"
+            }`}
           >
             <div className="min-w-0">
-              <p className="font-body text-[15px] font-semibold text-on-surface truncate">
-                {course.title}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="font-body text-[15px] font-semibold text-on-surface truncate">
+                  {course.title}
+                </p>
+                {cbt && (
+                  <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full border border-violet-200 bg-violet-100 py-0.5 pl-1 pr-1.5 font-display text-[9px] font-bold uppercase tracking-[0.1em] text-violet-700">
+                    <span className="material-symbols-outlined text-[12px] leading-none">desktop_windows</span>
+                    CBT
+                  </span>
+                )}
+              </div>
               <div className="mt-1.5 flex items-center gap-2 font-body text-[12px] font-medium text-on-surface-variant">
                 <span>{formatCourseCode(course.code)}</span>
                 <span className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ${accent}`}>
@@ -162,6 +184,18 @@ export default function CourseList({
           ))}
         </>
       )}
+
+      <button
+        type="button"
+        onClick={() => setEditing(true)}
+        className="flex w-full items-center justify-center gap-1.5 pt-2 text-center font-body text-[12px] font-medium text-on-surface-variant/70"
+      >
+        Missing a course? Tap
+        <span className="material-symbols-outlined text-[15px] leading-none text-blue-400">
+          edit_square
+        </span>
+        to add it.
+      </button>
 
       {editing && (
         <EditCoursesModal

@@ -1,12 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { updateCurrentUser, slugify, type StoredCourse } from "@/lib/store";
+import {
+  updateCurrentUser,
+  resyncCompulsoryCourses,
+  slugify,
+  type StoredCourse,
+} from "@/lib/store";
 import { formatCourseCode } from "@/lib/courses";
 import CourseSearch from "@/components/CourseSearch";
 import type { CatalogCourse } from "@/lib/catalog";
 
-type Pending = { kind: "add" | "remove"; label: string; apply: () => void };
+type Pending = {
+  kind: "add" | "remove" | "reset";
+  label: string;
+  apply: () => void | Promise<void>;
+};
 
 export default function EditCoursesModal({
   courses,
@@ -44,6 +53,18 @@ export default function EditCoursesModal({
       kind: "remove",
       label: formatCourseCode(c.code),
       apply: () => persist(list.filter((x) => x.slug !== c.slug)),
+    });
+  }
+
+  function requestReset() {
+    setPending({
+      kind: "reset",
+      label: "",
+      apply: async () => {
+        const next = await resyncCompulsoryCourses();
+        setList(next);
+        onChange(next);
+      },
     });
   }
 
@@ -108,8 +129,17 @@ export default function EditCoursesModal({
 
         <button
           type="button"
+          onClick={requestReset}
+          className="mt-4 flex w-full items-center justify-center gap-1.5 py-2.5 font-display text-[13px] font-semibold text-brand squishy-press"
+        >
+          <span className="material-symbols-outlined text-[16px] leading-none">refresh</span>
+          Reset to compulsory courses
+        </button>
+
+        <button
+          type="button"
           onClick={onClose}
-          className="mt-5 w-full py-3.5 rounded-2xl bg-surface-container text-on-surface font-display text-sm font-semibold squishy-press"
+          className="mt-2 w-full py-3.5 rounded-2xl bg-surface-container text-on-surface font-display text-sm font-semibold squishy-press"
         >
           Done
         </button>
@@ -120,12 +150,18 @@ export default function EditCoursesModal({
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-6">
           <div className="w-full max-w-[320px] rounded-2xl bg-surface-container-lowest p-5 text-center shadow-2xl">
             <h3 className="font-display text-[17px] font-bold text-on-surface">
-              {pending.kind === "add" ? "Add course?" : "Remove course?"}
+              {pending.kind === "add"
+                ? "Add course?"
+                : pending.kind === "remove"
+                  ? "Remove course?"
+                  : "Reset courses?"}
             </h3>
             <p className="mt-1.5 font-body text-[13px] leading-snug text-on-surface/60">
               {pending.kind === "add"
                 ? `Add ${pending.label} to your courses?`
-                : `Remove ${pending.label} from your courses?`}
+                : pending.kind === "remove"
+                  ? `Remove ${pending.label} from your courses?`
+                  : "This replaces your list with your department's compulsory courses. Electives you added will be removed."}
             </p>
             <div className="mt-5 flex gap-2">
               <button
@@ -145,7 +181,7 @@ export default function EditCoursesModal({
                   pending.kind === "remove" ? "bg-error" : "bg-brand"
                 }`}
               >
-                {pending.kind === "add" ? "Add" : "Remove"}
+                {pending.kind === "add" ? "Add" : pending.kind === "remove" ? "Remove" : "Reset"}
               </button>
             </div>
           </div>
