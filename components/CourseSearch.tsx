@@ -12,7 +12,9 @@ export default function CourseSearch({
   /** Codes already added — shown as disabled, so you can't add the same course twice. */
   excludeCodes: string[];
   onSelect: (course: CatalogCourse) => void;
-  onCancel: () => void;
+  /** When provided, a Cancel button is shown (used by the collapsible profile picker).
+   *  Omit it for an always-open search, e.g. at the top of a modal. */
+  onCancel?: () => void;
 }) {
   const [all, setAll] = useState<CatalogCourse[] | null>(null);
   const [error, setError] = useState(false);
@@ -98,13 +100,15 @@ export default function CourseSearch({
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={onCancel}
-        className="mt-2 w-full rounded-xl bg-surface-container py-2.5 font-display text-[13px] font-semibold text-on-surface-variant squishy-press"
-      >
-        Cancel
-      </button>
+      {onCancel && (
+        <button
+          type="button"
+          onClick={onCancel}
+          className="mt-2 w-full rounded-xl bg-surface-container py-2.5 font-display text-[13px] font-semibold text-on-surface-variant squishy-press"
+        >
+          Cancel
+        </button>
+      )}
     </div>
   );
 }

@@ -1,20 +1,20 @@
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
 
-// Reference-style colored circular badges — one solid colour each, clean and flat.
+// Two home quick-actions. Colour lives only in the circular badge.
 const ACTIONS: ActionCardProps[] = [
   {
-    label: "Request",
-    caption: "Ask for material",
-    icon: "download",
+    label: "Request & Contribute",
+    caption: "Ask for or share material",
+    icon: "swap_horiz",
     href: "/request",
-    color: "#16b364", // green
+    color: "#f59e0b", // amber
   },
   {
-    label: "Contribute",
-    caption: "Share your notes",
-    icon: "cloud_upload",
-    href: "/contribute",
-    color: "#2e7df1", // blue
+    label: "CGPA Calc",
+    caption: "Estimate your CGPA",
+    icon: "calculate",
+    href: "/cgpa",
+    color: "#16b364", // green
   },
 ];
 

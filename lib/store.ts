@@ -169,7 +169,9 @@ export function logout() {
   if (typeof window !== "undefined") localStorage.removeItem(SESSION_KEY);
 }
 
-export function updateCurrentUser(patch: Partial<Pick<UserRecord, "carryover" | "notifOn">>) {
+export function updateCurrentUser(
+  patch: Partial<Pick<UserRecord, "carryover" | "notifOn" | "courses">>,
+) {
   const email = getSessionEmail();
   if (!email) return;
   const users = readUsers();

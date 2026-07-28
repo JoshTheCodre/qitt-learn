@@ -10,6 +10,7 @@ import {
   type StoredCourse,
 } from "@/lib/store";
 import { COURSES as SAMPLE, formatCourseCode } from "@/lib/courses";
+import EditCoursesModal from "@/components/study/EditCoursesModal";
 
 const SAMPLE_COURSES: StoredCourse[] = SAMPLE.map((c) => ({
   slug: c.slug,
@@ -42,6 +43,7 @@ export default function CourseList({
 }) {
   const [courses, setCourses] = useState<StoredCourse[]>([]);
   const [carryover, setCarryover] = useState<CarryoverCourse[]>([]);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const user = getUserCourses();
@@ -59,6 +61,16 @@ export default function CourseList({
       <div className="flex items-center justify-between mb-3 ml-1">
         <div className="flex items-center gap-2">
           <h3 className="font-display text-[17px] font-semibold text-on-surface">Courses</h3>
+          <button
+            type="button"
+            aria-label="Edit courses"
+            onClick={() => setEditing(true)}
+            className="flex items-center justify-center squishy-press"
+          >
+            <span className="material-symbols-outlined text-[19px] leading-none text-blue-400">
+              edit_square
+            </span>
+          </button>
           {!showStats && (
             <span className="rounded-full bg-brand/5 text-brand px-2 py-0.5 font-display text-[11px] font-semibold">
               {courses.length}
@@ -149,6 +161,14 @@ export default function CourseList({
             </Link>
           ))}
         </>
+      )}
+
+      {editing && (
+        <EditCoursesModal
+          courses={courses}
+          onChange={setCourses}
+          onClose={() => setEditing(false)}
+        />
       )}
     </section>
   );
