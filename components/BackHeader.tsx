@@ -28,7 +28,7 @@ export default function BackHeader({
           aria-label={home ? "Go to dashboard" : "Go back"}
           onClick={() => {
             haptic("select");
-            if (home) router.push("/");
+            if (home) router.push("/dashboard");
             else router.back();
           }}
           className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center shrink-0 squishy-press"

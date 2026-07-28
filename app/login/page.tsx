@@ -24,7 +24,7 @@ export default function LoginPage() {
     e.preventDefault();
     if (!canSubmit) return;
     if (loginUser(email, password)) {
-      router.push("/");
+      router.push("/dashboard");
     } else {
       setError("Incorrect email or password.");
     }

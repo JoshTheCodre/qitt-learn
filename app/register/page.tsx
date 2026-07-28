@@ -52,7 +52,7 @@ export default function RegisterPage() {
       department,
       level,
     });
-    router.push("/");
+    router.push("/dashboard");
   }
 
   return (
@@ -63,7 +63,7 @@ export default function RegisterPage() {
       <button
         type="button"
         aria-label="Go back"
-        onClick={() => router.push("/landing")}
+        onClick={() => router.push("/")}
         className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white ring-1 ring-black/5 squishy-press"
       >
         <span className="material-symbols-outlined text-[20px] leading-none text-[#1a1712]/70">

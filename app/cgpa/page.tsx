@@ -73,7 +73,7 @@ export default function CgpaPage() {
               your CGPA.
             </p>
             <Link
-              href="/"
+              href="/dashboard"
               className="mt-2 rounded-full bg-brand px-5 py-2.5 font-display text-sm font-semibold text-on-primary squishy-press"
             >
               Go to courses

@@ -152,7 +152,7 @@ export default function TimetablePage() {
         <button
           type="button"
           aria-label="Go back"
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/dashboard")}
           className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center shrink-0 squishy-press"
         >
           <span className="material-symbols-outlined text-[20px] text-on-surface-variant leading-none">

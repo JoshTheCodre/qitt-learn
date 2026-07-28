@@ -42,7 +42,7 @@ export default function ContributeForm() {
           </button>
           <button
             type="button"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/dashboard")}
             className="w-full py-3.5 rounded-2xl bg-surface-container text-on-surface font-display text-sm font-semibold squishy-press"
           >
             Back to Home

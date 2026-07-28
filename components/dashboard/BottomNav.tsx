@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ITEMS = [
-  { label: "Home", icon: "home", href: "/" },
+  { label: "Home", icon: "home", href: "/dashboard" },
   { label: "Timetable", icon: "calendar_today", href: "/timetable" },
   { label: "Profile", icon: "person", href: "/profile" },
 ];
