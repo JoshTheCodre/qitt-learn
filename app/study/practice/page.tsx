@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
 import JungleBackdrop from "@/components/JungleBackdrop";
@@ -9,10 +9,11 @@ import { COURSES, formatCourseCode } from "@/lib/courses";
 import { getUserCarryover, getUserCourses } from "@/lib/store";
 import { haptic } from "@/lib/haptics";
 import { startPracticeSession } from "@/lib/practice-session";
+import type { PracticeAvailability } from "@/lib/practice";
 
-const MODES = ["Past Question", "Lecture Notes"];
 const TIMES = ["No limit", "10", "20", "30"];
-const TYPES = ["MCQ", "Flashcards"];
+const TYPES = ["Objective", "Theory"];
+const THEORY_MAX = 10; // AI grades each answer; keep a theory session short
 
 // Near-black rather than the muted on-surface-variant — the copy needs real weight
 // to sit cleanly over the foliage behind it.
@@ -45,7 +46,7 @@ function Segmented({
                 haptic("select");
                 onChange(o);
               }}
-              className={`flex-1 rounded-lg py-2 font-display text-[13px] font-semibold transition-colors ${
+              className={`flex-1 rounded-lg py-2 font-display text-[13px] font-bold transition-colors ${
                 active
                   ? "bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.1)]"
                   : "text-black"
@@ -64,23 +65,66 @@ function Segmented({
 export default function PracticeToolPage() {
   const router = useRouter();
   const [course, setCourse] = useState("");
-  const [mode, setMode] = useState("");
   const [time, setTime] = useState(TIMES[0]);
   const [count, setCount] = useState(10);
-  const [type, setType] = useState(TYPES[0]);
-  const [courseOptions, setCourseOptions] = useState<string[]>([]);
+  const [type, setType] = useState<string>(TYPES[0]);
+  const [allCodes, setAllCodes] = useState<string[]>([]);
+  const [avail, setAvail] = useState<Record<string, PracticeAvailability>>({});
+  const [availLoading, setAvailLoading] = useState(true);
 
   // The user's own registered courses plus carryovers — you practise what you're
   // actually taking. Falls back to the sample catalog only if they have none yet
-  // (e.g. a guest session), so the picker is never empty.
+  // (e.g. a guest session). We then ask the bank which of those actually have questions;
+  // only those make it into the picker.
   useEffect(() => {
     const mine = getUserCourses().map((c) => formatCourseCode(c.code));
     const carry = getUserCarryover().map((c) => formatCourseCode(c.course_code));
     const all = Array.from(new Set([...mine, ...carry]));
-    setCourseOptions(all.length ? all : COURSES.map((c) => formatCourseCode(c.code)));
+    const opts = all.length ? all : COURSES.map((c) => formatCourseCode(c.code));
+    setAllCodes(opts);
+
+    let alive = true;
+    fetch(`/api/practice?codes=${encodeURIComponent(opts.join(","))}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!alive || !d.ok) return;
+        const map: Record<string, PracticeAvailability> = {};
+        for (const it of d.items as PracticeAvailability[]) map[it.code] = it;
+        setAvail(map);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (alive) setAvailLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
   }, []);
 
-  const canStart = course && mode;
+  // Only courses that have practice questions (objective or theory) are offered.
+  const courseOptions = useMemo(
+    () => allCodes.filter((c) => avail[c]?.available),
+    [allCodes, avail],
+  );
+
+  const chosen = course ? avail[course] : undefined;
+  const isTheory = type === "Theory";
+  const maxCount = isTheory ? THEORY_MAX : 50;
+  // How many questions the selected TYPE has for the chosen course.
+  const forType = isTheory ? chosen?.theory ?? 0 : chosen?.gradable ?? 0;
+  const knownUnavailable = !!chosen && forType === 0;
+  // A brand-new pick is allowed until the bank tells us otherwise; a known-empty course
+  // is blocked so the quiz never opens on nothing.
+  const canStart = !!course && !knownUnavailable;
+  const startCount = forType > 0 ? Math.min(count, maxCount, forType) : Math.min(count, maxCount);
+
+  // Keep the type selector on something the chosen course actually has.
+  useEffect(() => {
+    if (!chosen) return;
+    if (type === "Theory" && chosen.theory === 0 && chosen.gradable > 0) setType("Objective");
+    else if (type === "Objective" && chosen.gradable === 0 && chosen.theory > 0) setType("Theory");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chosen]);
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
@@ -102,42 +146,59 @@ export default function PracticeToolPage() {
         </section>
 
         <div className="space-y-6">
-          <SelectField
-            label="Course"
-            value={course}
-            onChange={setCourse}
-            options={courseOptions}
-            placeholder="Select course"
-            glow
-          />
-
-          {/* Mode — chips, because it's a one-of-four pick with wordy labels */}
           <div>
-            <label className={LABEL}>Mode</label>
+            <SelectField
+              label="Course"
+              value={course}
+              onChange={setCourse}
+              options={courseOptions}
+              placeholder={
+                availLoading
+                  ? "Checking your courses…"
+                  : courseOptions.length === 0
+                    ? "No practice courses yet"
+                    : "Select course"
+              }
+              glow
+            />
+          </div>
+
+          {/* Question type — Objective (auto-graded MCQs) or Theory (AI-graded) */}
+          <div>
+            <label className={LABEL}>Question type</label>
             <div className="flex flex-wrap gap-2">
-              {MODES.map((m) => {
-                const active = m === mode;
+              {TYPES.map((t) => {
+                const active = t === type;
+                const n = chosen ? (t === "Theory" ? chosen.theory : chosen.gradable) : null;
+                const disabled = chosen ? n === 0 : false;
                 return (
                   <button
-                    key={m}
+                    key={t}
                     type="button"
+                    disabled={disabled}
                     onClick={() => {
                       if (active) return;
                       haptic("select");
-                      setMode(m);
+                      setType(t);
+                      if (t === "Theory" && count > THEORY_MAX) setCount(THEORY_MAX);
                     }}
                     aria-pressed={active}
-                    className={`rounded-full px-3.5 py-2 font-display text-[13px] font-semibold transition-colors squishy-press ${
+                    className={`rounded-full px-3.5 py-2 font-display text-[13px] font-semibold transition-colors squishy-press disabled:opacity-35 ${
                       active
                         ? "bg-emerald-700 text-white"
                         : "border border-outline-variant/50 bg-surface-container-lowest text-on-surface/70"
                     }`}
                   >
-                    {m}
+                    {t}
                   </button>
                 );
               })}
             </div>
+            {isTheory && (
+              <p className="mt-2 font-body text-[11px] font-medium text-on-surface/55">
+                Theory answers are graded by AI when you submit.
+              </p>
+            )}
           </div>
 
           {/* Questions — a slider, because it's a magnitude, not a category */}
@@ -154,9 +215,9 @@ export default function PracticeToolPage() {
               id="count"
               type="range"
               min={5}
-              max={50}
+              max={maxCount}
               step={5}
-              value={count}
+              value={Math.min(count, maxCount)}
               onChange={(e) => {
                 const next = Number(e.target.value);
                 if (next === count) return;
@@ -167,14 +228,14 @@ export default function PracticeToolPage() {
             />
             <div className="mt-1.5 flex justify-between font-body text-[10px] font-medium text-on-surface/65">
               <span>5</span>
-              <span>50</span>
+              <span>{maxCount}</span>
             </div>
           </div>
 
           {/* Time — segmented, because the options are short and mutually exclusive */}
           <div>
             {/* Pure black label, not the shared LABEL's text-on-surface gray */}
-            <label className="mb-2 block font-display text-xs font-semibold uppercase tracking-wide text-black">
+            <label className="mb-2 block font-display text-xs font-bold uppercase tracking-wide text-black">
               Time limit
             </label>
             <Segmented
@@ -185,12 +246,6 @@ export default function PracticeToolPage() {
             />
           </div>
 
-          <div>
-            <label className="mb-2 block font-display text-xs font-semibold uppercase tracking-wide text-black">
-              Type
-            </label>
-            <Segmented value={type} onChange={setType} options={TYPES} />
-          </div>
         </div>
       </main>
 
@@ -211,9 +266,8 @@ export default function PracticeToolPage() {
               // instead of ignoring it.
               const q = new URLSearchParams({
                 course,
-                mode,
                 type,
-                count: String(count),
+                count: String(startCount),
                 time,
               });
               // Mark the session active, then REPLACE so Setup drops out of history —
@@ -228,7 +282,7 @@ export default function PracticeToolPage() {
             <span className="material-symbols-outlined text-[18px] leading-none">
               bolt
             </span>
-            {canStart ? `Start ${count} questions` : "Start Practice"}
+            {canStart ? `Start ${startCount} questions` : "Start Practice"}
           </button>
         </div>
       </div>

@@ -3,8 +3,8 @@ import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionC
 // Two home quick-actions. Colour lives only in the circular badge.
 const ACTIONS: ActionCardProps[] = [
   {
-    label: "Request & Contribute",
-    caption: "Ask for or share material",
+    label: "Share Materials",
+    caption: "Ask for it or share yours",
     icon: "swap_horiz",
     href: "/request",
     color: "#f59e0b", // amber

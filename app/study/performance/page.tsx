@@ -25,8 +25,12 @@ function buildChart(scores: number[]) {
   const W = 300;
   const H = 110;
   const pad = 12;
-  const stepX = (W - pad * 2) / Math.max(scores.length - 1, 1);
-  const pts = scores.map((s, i) => ({
+  // A single session has no line to draw between points, so span it flat across the width
+  // (duplicate the point) and center the marker — the graph still reads as a graph.
+  const single = scores.length === 1;
+  const data = single ? [scores[0], scores[0]] : scores;
+  const stepX = (W - pad * 2) / Math.max(data.length - 1, 1);
+  const pts = data.map((s, i) => ({
     x: pad + i * stepX,
     y: H - pad - (s / 100) * (H - pad * 2),
   }));
@@ -34,7 +38,9 @@ function buildChart(scores: number[]) {
   const area = `M ${pts[0].x},${H - pad} ${pts.map((p) => `L ${p.x},${p.y}`).join(" ")} L ${
     pts[pts.length - 1].x
   },${H - pad} Z`;
-  const peak = pts.reduce((a, b) => (b.y < a.y ? b : a), pts[0]);
+  const peak = single
+    ? { x: W / 2, y: pts[0].y }
+    : pts.reduce((a, b) => (b.y < a.y ? b : a), pts[0]);
   return { line, area, peak, W, H };
 }
 
@@ -60,7 +66,7 @@ export default function PerformancePage() {
   const scores = filtered.map((r) => percent(r)).reverse().slice(-8);
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
   const best = scores.length ? Math.max(...scores) : 0;
-  const chart = scores.length >= 2 ? buildChart(scores) : null;
+  const chart = scores.length >= 1 ? buildChart(scores) : null;
 
   const groups = GROUP_ORDER.map((g) => ({
     group: g,

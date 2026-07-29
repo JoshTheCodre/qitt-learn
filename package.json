@@ -14,7 +14,9 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1086.0",
     "@aws-sdk/s3-request-presigner": "^3.1086.0",
+    "@types/katex": "^0.16.8",
     "@types/pg": "^8.20.0",
+    "katex": "^0.18.1",
     "next": "^14.2.35",
     "pg": "^8.22.0",
     "react": "^18.3.1",

@@ -60,12 +60,20 @@ export default function LandingPage() {
           <Link href="/register" className="transition-colors hover:text-[#1a1712]">Courses</Link>
           <Link href="/register" className="transition-colors hover:text-[#1a1712]">Performance</Link>
         </nav>
-        <Link
-          href="/register"
-          className="rounded-full bg-[#1a1712] px-5 py-2.5 font-display text-[13px] font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px squishy-press"
-        >
-          Create account
-        </Link>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/login"
+            className="rounded-full px-4 py-2.5 font-display text-[13px] font-bold text-[#1a1712] transition-colors hover:bg-[#1a1712]/[0.06] squishy-press"
+          >
+            Log in
+          </Link>
+          <Link
+            href="/register"
+            className="rounded-full bg-[#1a1712] px-5 py-2.5 font-display text-[13px] font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px squishy-press"
+          >
+            Create account
+          </Link>
+        </div>
       </header>
 
       {/* Hero */}

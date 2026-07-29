@@ -8,42 +8,34 @@ import { PRICE_LABEL, startCheckout } from "@/lib/billing";
 
 const BENEFITS = [
   {
-    title: "Every past question, unlocked",
-    body: "Years of real papers for your courses — not a sample, the whole archive.",
+    icon: "auto_awesome",
+    title: "AI-graded theory answers",
+    body: "Write full answers and get them marked instantly, with feedback on what you missed.",
   },
   {
-    title: "Unlimited practice quizzes",
-    body: "Generate as many as you want from your own notes and past questions.",
+    icon: "history_edu",
+    title: "Every past paper, every year",
+    body: "Practise a course by its exact session — the whole archive, not just a sample.",
   },
   {
-    title: "Know where you actually stand",
-    body: "Track your scores per course and see what to fix before the exam, not after.",
+    icon: "bolt",
+    title: "Unlimited practice & mock exams",
+    body: "No daily limit, plus timed mocks that mirror the real thing.",
   },
   {
-    title: "Material the day it drops",
-    body: "Lecturer slides and notes, uploaded by your course reps and verified.",
-  },
-];
-
-/*
- * PLACEHOLDER — replace before launch.
- *
- * These must be real quotes from real people who have SEEN this page and agreed to
- * appear on it. Inventing endorsements from "lecturers" and "course reps" is a
- * fabricated testimonial: it misleads students into paying and it exposes you if a
- * named lecturer ever sees it. The brackets are deliberate, so this cannot be shipped
- * by accident looking legitimate.
- */
-const ENDORSEMENTS = [
-  {
-    name: "[Lecturer's name]",
-    role: "Lecturer · [Department]",
-    quote: "[Their own words, quoted with their permission.]",
+    icon: "forum",
+    title: "Ask AI anything",
+    body: "Get any answer explained, or ask a tutor about your course materials.",
   },
   {
-    name: "[Course rep's name]",
-    role: "Course Rep · [Course code]",
-    quote: "[Their own words, quoted with their permission.]",
+    icon: "insights",
+    title: "Know your exam readiness",
+    body: "See your weak topics and a readiness score per course before exam day.",
+  },
+  {
+    icon: "library_books",
+    title: "Unlimited materials",
+    body: "View and download every material, and jump the queue on your requests.",
   },
 ];
 
@@ -80,8 +72,8 @@ export default function UpgradePage() {
               Stop guessing what&apos;s on the exam.
             </h2>
             <p className="mt-2 font-body text-[13px] font-medium leading-relaxed text-white/75">
-              Everything Qitt has — past questions, unlimited quizzes and your real
-              performance — for less than a plate of rice.
+              Every past paper, unlimited practice, AI-marked theory answers and an AI
+              tutor — for less than a plate of rice.
             </p>
 
             <div className="mt-6 flex items-end justify-between border-t border-white/15 pt-4">
@@ -106,9 +98,9 @@ export default function UpgradePage() {
               key={b.title}
               className="flex gap-3 rounded-2xl bg-surface-container-lowest p-3.5 ring-1 ring-inset ring-black/[0.06] shadow-[0_8px_20px_-14px_rgba(16,24,40,0.2)]"
             >
-              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#3ec995]/15">
-                <span className="material-symbols-outlined icon-filled text-[15px] leading-none text-[#0f9b6c]">
-                  task_alt
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3ec995]/15">
+                <span className="material-symbols-outlined icon-filled text-[16px] leading-none text-[#0f9b6c]">
+                  {b.icon}
                 </span>
               </span>
               <div className="min-w-0">
@@ -123,34 +115,21 @@ export default function UpgradePage() {
           ))}
         </div>
 
-        {/* Endorsements */}
-        <h3 className="mb-3 mt-7 font-display text-[15px] font-bold text-on-surface">
-          Endorsed on your campus
-        </h3>
-        <div className="space-y-2.5">
-          {ENDORSEMENTS.map((e) => (
-            <figure
-              key={e.role}
-              className="rounded-2xl bg-surface-container-lowest p-3.5 ring-1 ring-inset ring-black/[0.06] shadow-[0_8px_20px_-14px_rgba(16,24,40,0.2)]"
-            >
-              <blockquote className="font-body text-[12px] font-medium leading-snug text-on-surface/80">
-                &ldquo;{e.quote}&rdquo;
-              </blockquote>
-              <figcaption className="mt-3 flex items-center gap-2.5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand/10 font-display text-[11px] font-bold text-brand">
-                  —
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate font-display text-[12px] font-bold text-on-surface">
-                    {e.name}
-                  </span>
-                  <span className="block truncate font-body text-[10px] font-medium text-on-surface/55">
-                    {e.role}
-                  </span>
-                </span>
-              </figcaption>
-            </figure>
-          ))}
+        {/* Value statement — the app's own voice, no fabricated testimonials */}
+        <div className="mt-7 rounded-2xl bg-[#22406a]/[0.06] p-5 ring-1 ring-inset ring-[#22406a]/10">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#22406a]/10">
+            <span className="material-symbols-outlined icon-filled text-[19px] leading-none text-[#22406a]">
+              school
+            </span>
+          </span>
+          <p className="mt-3 font-display text-[16px] font-bold leading-snug text-on-surface">
+            Built around your exact courses.
+          </p>
+          <p className="mt-1.5 font-body text-[12px] font-medium leading-relaxed text-on-surface/65">
+            Not a generic question bank — every past question, material and quiz matches the
+            courses you&apos;re actually taking this semester. So every minute you spend is on
+            what will really be on your paper.
+          </p>
         </div>
 
         <div className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-brand/[0.06] px-3 py-3">
