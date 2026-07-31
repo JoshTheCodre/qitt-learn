@@ -57,9 +57,36 @@ const materialSymbols = localFont({
   adjustFontFallback: false,
 });
 
+// Absolute base for OG/canonical URLs. Set NEXT_PUBLIC_SITE_URL to your real domain in
+// production; on Vercel we fall back to the deployment URL, and to localhost in dev.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+const TITLE = "Qitt — Exam prep for Uniport students";
+const DESCRIPTION =
+  "The study app for Uniport students: 20,000+ real past questions, AI-graded practice, course materials, timetable, academic calendar and a CGPA calculator — everything you need to walk into every exam prepared.";
+
 export const metadata: Metadata = {
-  title: "Qitt",
-  description: "Your AI-powered academic assistant.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: TITLE,
+    template: "%s · Qitt",
+  },
+  description: DESCRIPTION,
+  applicationName: "Qitt",
+  keywords: [
+    "Qitt",
+    "Uniport",
+    "University of Port Harcourt",
+    "past questions",
+    "practice questions",
+    "CGPA calculator",
+    "course materials",
+    "exam preparation",
+    "student study app",
+  ],
+  authors: [{ name: "Qitt" }],
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -68,6 +95,23 @@ export const metadata: Metadata = {
     ],
     apple: "/favicon_io/apple-touch-icon.png",
     shortcut: "/favicon_io/favicon.ico",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Qitt",
+    title: TITLE,
+    description:
+      "20,000+ real past questions, AI-graded practice, course materials and a CGPA calculator — built for Uniport students.",
+    url: siteUrl,
+    locale: "en_NG",
+    images: [{ url: "/qitt-logo.png", alt: "Qitt" }],
+  },
+  twitter: {
+    card: "summary",
+    title: TITLE,
+    description:
+      "20,000+ real past questions, AI-graded practice, course materials and a CGPA calculator — built for Uniport students.",
+    images: ["/qitt-logo.png"],
   },
 };
 
