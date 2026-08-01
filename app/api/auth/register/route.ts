@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { query, hashPassword, USERS_TABLE } from "@/lib/db";
 import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS, makeSessionValue } from "@/lib/session";
+import { firebaseSignUp, isFirebaseUnavailable, FIREBASE_MANAGED } from "@/lib/firebaseAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -33,12 +34,41 @@ export async function POST(req: Request) {
       );
     }
 
+    // Create the account in Firebase first. What we store in the local `password` column
+    // depends on the outcome:
+    //  - success            -> FIREBASE_MANAGED sentinel (Firebase owns the password)
+    //  - provider off / net -> scrypt hash, so signup still works today and the user gets
+    //                          lazily migrated on their next login once Firebase is live
+    //  - EMAIL_EXISTS       -> the email is taken in Firebase; refuse (409)
+    //  - WEAK_PASSWORD      -> surface it, so every account stays Firebase-compatible
+    const signUp = await firebaseSignUp(key, String(password));
+    let storedPassword: string;
+    if (signUp.ok) {
+      storedPassword = FIREBASE_MANAGED;
+    } else if (signUp.code === "EMAIL_EXISTS") {
+      return NextResponse.json(
+        { ok: false, error: "An account with this email already exists." },
+        { status: 409 },
+      );
+    } else if (signUp.code === "WEAK_PASSWORD") {
+      return NextResponse.json(
+        { ok: false, error: "Password must be at least 6 characters." },
+        { status: 400 },
+      );
+    } else if (isFirebaseUnavailable(signUp.code)) {
+      storedPassword = hashPassword(String(password));
+    } else {
+      // Unknown Firebase error — don't block the signup; store a real hash so login keeps
+      // working via the legacy path, and let lazy migration retry Firebase later.
+      storedPassword = hashPassword(String(password));
+    }
+
     await query(
       `INSERT INTO ${USERS_TABLE} (email, password, profile, courses, carryover, notif_on)
        VALUES ($1, $2, $3, $4, $5, $6)`,
       [
         key,
-        hashPassword(String(password)),
+        storedPassword,
         JSON.stringify(profile),
         JSON.stringify(courses),
         JSON.stringify(carryover),

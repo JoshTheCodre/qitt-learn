@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import FeedbackButton from "@/components/FeedbackButton";
 
 // Chillax (Fontshare) — one family across the whole platform, driving both the
 // display and body variables. Replaces the Atyp TRIAL cuts, which were not
@@ -131,6 +132,7 @@ export default function RootLayout({
     >
       <body className="bg-background text-on-surface font-body text-base min-h-screen">
         {children}
+        <FeedbackButton />
       </body>
     </html>
   );
