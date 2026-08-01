@@ -37,6 +37,16 @@ export async function GET() {
        LIMIT 15`,
     );
 
+    // Pricing is a conversion page, so surface its views as a first-class metric.
+    const pricingRes = await query<{ today: number; last30: number }>(
+      `SELECT
+         COALESCE(SUM(views) FILTER (WHERE day = CURRENT_DATE), 0)::int AS today,
+         COALESCE(SUM(views) FILTER (WHERE day >= CURRENT_DATE - INTERVAL '29 days'), 0)::int AS last30
+       FROM ${PAGEVIEWS_TABLE}
+       WHERE path = '/pricing'`,
+    );
+    const pricing = pricingRes.rows[0] ?? { today: 0, last30: 0 };
+
     // Pre-seed 30 day buckets so quiet days render as zero bars.
     const buckets = new Map<string, number>();
     const now = Date.now();
@@ -55,6 +65,7 @@ export async function GET() {
     return NextResponse.json({
       ok: true,
       totals: { last30, today },
+      pricing: { today: Number(pricing.today) || 0, last30: Number(pricing.last30) || 0 },
       viewsByDay,
       topPages: top.rows.map((r) => ({ path: r.path, views: Number(r.views) || 0 })),
     });

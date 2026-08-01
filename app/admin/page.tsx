@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AdminNav } from "@/components/admin/AdminKit";
+import { AdminNav, AdminAuthPrompt } from "@/components/admin/AdminKit";
 
 const KINDS = ["notes", "past-questions", "slides", "recordings", "other"] as const;
 type Kind = (typeof KINDS)[number];
@@ -38,6 +38,7 @@ export default function AdminPage() {
   const [kind, setKind] = useState<Kind>("past-questions");
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [needsAuth, setNeedsAuth] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [dragging, setDragging] = useState(false);
 
@@ -49,11 +50,16 @@ export default function AdminPage() {
 
   const refresh = useCallback(async () => {
     const res = await fetch("/api/admin/materials");
+    if (res.status === 401) {
+      setNeedsAuth(true);
+      return;
+    }
     const data = await res.json();
     if (!data.ok) {
       setLoadError(data.error);
       return;
     }
+    setNeedsAuth(false);
     setLoadError(null);
     setMaterials(data.materials);
   }, []);
@@ -153,6 +159,8 @@ export default function AdminPage() {
     );
   });
   const totalBytes = materials.reduce((n, m) => n + m.size, 0);
+
+  if (needsAuth) return <AdminAuthPrompt onUnlock={refresh} />;
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-4xl px-5 py-8">

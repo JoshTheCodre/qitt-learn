@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server";
 import { KINDS, buildKey, presignUpload, PUBLIC_URL, type MaterialKind } from "@/lib/r2";
+import { isAdmin } from "@/lib/admin-auth";
 
 // 200MB. A cap belongs here as well as in the UI — the client check is a courtesy,
 // this one is the actual limit.
 const MAX_BYTES = 200 * 1024 * 1024;
 
-// NOTE: unauthenticated — see the note in app/api/admin/materials/route.ts.
 export async function POST(req: Request) {
+  if (!process.env.ADMIN_PASSWORD) {
+    return NextResponse.json(
+      { ok: false, error: "ADMIN_PASSWORD is not set — add it to .env.local to use the admin dashboard." },
+      { status: 500 },
+    );
+  }
+  if (!isAdmin()) {
+    return NextResponse.json({ ok: false, error: "Not authorized" }, { status: 401 });
+  }
+
   const body = (await req.json().catch(() => ({}))) as {
     filename?: string;
     contentType?: string;

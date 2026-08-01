@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AdminNav, AdminAuthPrompt, DailyBarChart } from "@/components/admin/AdminKit";
+import { AdminNav, AdminAuthPrompt, DailyBarChart, Stat } from "@/components/admin/AdminKit";
 
 type Traffic = {
   totals: { last30: number; today: number };
+  pricing: { today: number; last30: number };
   viewsByDay: { date: string; count: number }[];
   topPages: { path: string; views: number }[];
 };
@@ -77,6 +78,16 @@ export default function AdminTrafficPage() {
 
       {traffic && (
         <>
+          <section className="mt-6 grid grid-cols-2 gap-3 sm:max-w-md">
+            <Stat
+              label="Pricing views · 30d"
+              value={traffic.pricing.last30}
+              hint="Visits to /pricing"
+              accent
+            />
+            <Stat label="Pricing views · today" value={traffic.pricing.today} />
+          </section>
+
           <DailyBarChart title="Page views · last 30 days" data={traffic.viewsByDay} />
           <TopPages topPages={traffic.topPages} />
         </>
