@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { query, verifyPassword, USERS_TABLE } from "@/lib/db";
+import { query, verifyPassword, touchLastSeen, USERS_TABLE } from "@/lib/db";
 import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS, makeSessionValue } from "@/lib/session";
 import { firebaseSignIn, firebaseSignUp, FIREBASE_MANAGED } from "@/lib/firebaseAuth";
 
@@ -36,6 +36,7 @@ export async function POST(req: Request) {
       // Authenticated by Firebase but we have no local profile — shouldn't happen since
       // registration always writes Postgres too, but fail clearly rather than guess.
       if (!row) return NextResponse.json({ ok: false, error: "Profile not found." }, { status: 404 });
+      await touchLastSeen(key);
       return sessionResponse(key, row);
     }
 
@@ -58,6 +59,7 @@ export async function POST(req: Request) {
         key,
       ]);
     }
+    await touchLastSeen(key);
     return sessionResponse(key, row);
   } catch (err) {
     return NextResponse.json(

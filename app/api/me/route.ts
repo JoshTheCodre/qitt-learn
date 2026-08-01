@@ -14,8 +14,11 @@ export async function GET() {
   if (!email) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
 
   try {
+    // This GET is the app's "user is here" heartbeat (called on load), so stamp last_seen
+    // and read the profile in one round trip via UPDATE ... RETURNING.
     const r = await query(
-      `SELECT profile, courses, carryover, notif_on FROM ${USERS_TABLE} WHERE email = $1`,
+      `UPDATE ${USERS_TABLE} SET last_seen = now() WHERE email = $1
+       RETURNING profile, courses, carryover, notif_on`,
       [email],
     );
     if (!r.rowCount) {
