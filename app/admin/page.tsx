@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { AdminNav } from "@/components/admin/AdminKit";
 
 const KINDS = ["notes", "past-questions", "slides", "recordings", "other"] as const;
 type Kind = (typeof KINDS)[number];
@@ -156,16 +156,12 @@ export default function AdminPage() {
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-4xl px-5 py-8">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-display text-[26px] font-bold text-on-surface">Material uploads</h1>
-          <p className="mt-0.5 font-body text-[13px] text-on-surface/55">
-            {materials.length} file{materials.length === 1 ? "" : "s"} · {human(totalBytes)} in R2
-          </p>
-        </div>
-        <Link href="/admin/users" className="font-display text-[13px] font-semibold text-primary">
-          Users &amp; retention →
-        </Link>
+      <AdminNav />
+      <header className="mt-5">
+        <h1 className="font-display text-[26px] font-bold text-on-surface">Material uploads</h1>
+        <p className="mt-0.5 font-body text-[13px] text-on-surface/55">
+          {materials.length} file{materials.length === 1 ? "" : "s"} · {human(totalBytes)} in R2
+        </p>
       </header>
 
       {/* Tabs */}
