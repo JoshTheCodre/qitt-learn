@@ -23,7 +23,7 @@ type DbRow = {
   course_count: number;
 };
 
-export async function GET() {
+export async function GET(req: Request) {
   if (!process.env.ADMIN_PASSWORD) {
     return NextResponse.json(
       { ok: false, error: "ADMIN_PASSWORD is not set — add it to .env.local to use this dashboard." },
@@ -33,6 +33,10 @@ export async function GET() {
   if (!isAdmin()) {
     return NextResponse.json({ ok: false, error: "Not authorized" }, { status: 401 });
   }
+
+  // ?email=... returns one user's full record for the detail modal; otherwise the list.
+  const detailEmail = new URL(req.url).searchParams.get("email");
+  if (detailEmail) return userDetail(detailEmail);
 
   try {
     const r = await query<DbRow>(
@@ -112,6 +116,50 @@ export async function GET() {
   } catch (err) {
     return NextResponse.json(
       { ok: false, error: err instanceof Error ? err.message : "Failed to load users" },
+      { status: 500 },
+    );
+  }
+}
+
+type DetailRow = {
+  email: string;
+  profile: unknown;
+  courses: unknown;
+  carryover: unknown;
+  notif_on: boolean;
+  created_at: string | Date;
+  last_seen: string | Date | null;
+};
+
+// Full record for a single user — the whole profile blob plus courses/carryover — used by
+// the row-click detail modal. Assumes the caller already passed the admin gate above.
+async function userDetail(rawEmail: string) {
+  const email = rawEmail.trim().toLowerCase();
+  try {
+    const r = await query<DetailRow>(
+      `SELECT email, profile, courses, carryover, notif_on, created_at, last_seen
+       FROM ${USERS_TABLE} WHERE email = $1`,
+      [email],
+    );
+    if (!r.rowCount) {
+      return NextResponse.json({ ok: false, error: "User not found" }, { status: 404 });
+    }
+    const row = r.rows[0];
+    return NextResponse.json({
+      ok: true,
+      user: {
+        email: row.email,
+        profile: row.profile,
+        courses: Array.isArray(row.courses) ? row.courses : [],
+        carryover: Array.isArray(row.carryover) ? row.carryover : [],
+        notifOn: row.notif_on,
+        createdAt: new Date(row.created_at).toISOString(),
+        lastSeen: row.last_seen ? new Date(row.last_seen).toISOString() : null,
+      },
+    });
+  } catch (err) {
+    return NextResponse.json(
+      { ok: false, error: err instanceof Error ? err.message : "Failed to load user" },
       { status: 500 },
     );
   }
