@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BottomNav from "@/components/dashboard/BottomNav";
 import CourseSearch from "@/components/CourseSearch";
@@ -298,6 +299,15 @@ export default function ProfilePage() {
           <span className="material-symbols-outlined text-[18px] leading-none">logout</span>
           Sign Out
         </button>
+
+        <p className="mt-5 text-center">
+          <Link
+            href="/copyright"
+            className="font-display text-[12px] font-semibold text-on-surface-variant underline underline-offset-4 hover:text-primary"
+          >
+            Copyright &amp; Content Policy
+          </Link>
+        </p>
       </div>
 
       {/* Add / remove carryover confirmation */}

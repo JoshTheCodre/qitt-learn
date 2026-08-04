@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function ContributeForm() {
@@ -104,6 +105,14 @@ export default function ContributeForm() {
         <span className="material-symbols-outlined text-[18px] leading-none">cloud_upload</span>
         Upload Material
       </button>
+
+      <p className="mt-4 text-center font-display text-[11px] leading-relaxed text-on-surface-variant">
+        By uploading, you confirm you have the right to share this material and agree to our{" "}
+        <Link href="/copyright#contributions" className="font-semibold text-primary underline underline-offset-2">
+          Contribution Rules &amp; Copyright Policy
+        </Link>
+        .
+      </p>
     </form>
   );
 }

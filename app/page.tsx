@@ -342,6 +342,12 @@ export default function LandingPage() {
             >
               Pricing
             </Link>
+            <Link
+              href="/copyright"
+              className="font-display text-[13px] font-semibold text-[#1a1712]/60 transition-colors hover:text-[#1a1712]"
+            >
+              Copyright
+            </Link>
           </div>
 
           <a

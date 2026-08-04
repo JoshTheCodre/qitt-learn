@@ -27,7 +27,11 @@ export default function LoginPage() {
     setBusy(true);
     setError("");
     if (await loginUser(email, password)) {
-      router.push("/dashboard");
+      // Return to the page they were sent here from (middleware adds ?next=…), guarding
+      // against open redirects by only allowing internal paths.
+      const next = new URLSearchParams(window.location.search).get("next");
+      const dest = next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+      router.replace(dest);
     } else {
       setError("Incorrect email or password.");
       setBusy(false);
