@@ -166,7 +166,7 @@ export default function PricingPage() {
           </Link>
 
           <a
-            href="https://wa.me/2349034954069"
+            href="https://wa.me/2348078350344"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded-full bg-[#25D366]/12 px-4 py-2 font-display text-[13px] font-bold text-[#0f7a3d] transition-colors hover:bg-[#25D366]/20"

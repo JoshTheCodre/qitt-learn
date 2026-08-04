@@ -1,19 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Fill these in with your real details before launch.
-//   LEGAL_ENTITY — the registered company/business name once incorporated. Until
-//   then it falls back to the brand name.
-//   CONTACT_EMAIL — where copyright notices and takedown requests are received.
-// This page is a standard-form policy for a Nigeria-based, user-contributed content
-// platform. Have a Nigerian-qualified IP lawyer review it before you rely on it.
-// ─────────────────────────────────────────────────────────────────────────────
-const BRAND = "Qitt";
-const LEGAL_ENTITY = "Qitt"; // TODO: replace with the registered legal entity name.
-const CONTACT_EMAIL = "csfun100@gmail.com";
-const WHATSAPP_DISPLAY = "+234 903 495 4069";
-const LAST_UPDATED = "4 August 2026";
+import { BRAND, LEGAL_ENTITY, CONTACT_EMAIL, PHONE_E164, WHATSAPP_LINK, LAST_UPDATED } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Copyright & Content Policy — Qitt",
@@ -27,7 +14,7 @@ const TOC = [
   { href: "#takedown", label: "Reporting infringement (takedown)" },
   { href: "#counter", label: "Counter-notice" },
   { href: "#repeat", label: "Repeat infringers" },
-  { href: "#data", label: "Your data" },
+  { href: "#data", label: "Your data & privacy" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -188,11 +175,14 @@ export default function CopyrightPage() {
           </p>
         </Section>
 
-        <Section id="data" n="6" title="Your data">
+        <Section id="data" n="6" title="Your data & privacy">
           <p>
-            We handle personal data — such as your name and email — in line with Nigerian data
-            protection law, including the Nigeria Data Protection Act 2023. We use it to run your
-            account and the service, and we do not sell it.
+            How we collect, use and protect your personal data — and the rights you have over it
+            under the Nigeria Data Protection Act 2023 — is set out in our{" "}
+            <Link href="/privacy" className="font-semibold underline">
+              Privacy Policy
+            </Link>
+            . In short: we use your data to run your account and the service, and we do not sell it.
           </p>
         </Section>
 
@@ -206,7 +196,19 @@ export default function CopyrightPage() {
               </a>
             </li>
             <li>
-              Phone / WhatsApp: <span className="font-semibold">{WHATSAPP_DISPLAY}</span>
+              <a className="font-semibold underline" href={`tel:${PHONE_E164}`}>
+                Click to call
+              </a>
+            </li>
+            <li>
+              <a
+                className="font-semibold underline"
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Message on WhatsApp
+              </a>
             </li>
           </ul>
         </Section>

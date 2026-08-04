@@ -300,12 +300,13 @@ export default function ProfilePage() {
           Sign Out
         </button>
 
-        <p className="mt-5 text-center">
-          <Link
-            href="/copyright"
-            className="font-display text-[12px] font-semibold text-on-surface-variant underline underline-offset-4 hover:text-primary"
-          >
-            Copyright &amp; Content Policy
+        <p className="mt-5 text-center font-display text-[12px] font-semibold text-on-surface-variant">
+          <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">
+            Privacy Policy
+          </Link>
+          <span className="mx-2 text-on-surface-variant/40">·</span>
+          <Link href="/copyright" className="underline underline-offset-4 hover:text-primary">
+            Copyright
           </Link>
         </p>
       </div>

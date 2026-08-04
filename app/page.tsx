@@ -348,10 +348,16 @@ export default function LandingPage() {
             >
               Copyright
             </Link>
+            <Link
+              href="/privacy"
+              className="font-display text-[13px] font-semibold text-[#1a1712]/60 transition-colors hover:text-[#1a1712]"
+            >
+              Privacy
+            </Link>
           </div>
 
           <a
-            href="https://wa.me/2349034954069"
+            href="https://wa.me/2348078350344"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded-full bg-[#25D366]/12 px-4 py-2 font-display text-[13px] font-bold text-[#0f7a3d] transition-colors hover:bg-[#25D366]/20"
