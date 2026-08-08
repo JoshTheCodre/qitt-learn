@@ -22,6 +22,17 @@ export const USERS_TABLE = "qitt_learn_users";
 // event rows. See /api/pv for the write path.
 export const PAGEVIEWS_TABLE = "qitt_learn_pageviews";
 
+// Materials a student uploads for themselves (stored in R2 under user-materials/<email>/…).
+// Separate from the admin-curated course_materials library.
+export const USER_MATERIALS_TABLE = "qitt_learn_user_materials";
+
+// Assignments a student tracks (title, optional course, due date, done flag).
+export const ASSIGNMENTS_TABLE = "qitt_learn_assignments";
+
+// Class assignments sourced from group messages: an AI-extracted DRAFT an admin reviews,
+// then PUBLISHES for students to see. One table, `status` distinguishes the two stages.
+export const CLASS_ASSIGNMENTS_TABLE = "qitt_learn_class_assignments";
+
 let schemaPromise: Promise<unknown> | null = null;
 function ensureSchema() {
   if (!schemaPromise) {
@@ -45,6 +56,50 @@ function ensureSchema() {
         views INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (path, day)
       );
+
+      CREATE TABLE IF NOT EXISTS ${USER_MATERIALS_TABLE} (
+        id          BIGSERIAL PRIMARY KEY,
+        email       TEXT NOT NULL,
+        title       TEXT NOT NULL,
+        course_code TEXT,
+        file_key    TEXT NOT NULL,
+        file_url    TEXT NOT NULL,
+        file_ext    TEXT,
+        size_bytes  BIGINT,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
+      CREATE INDEX IF NOT EXISTS ${USER_MATERIALS_TABLE}_email_idx ON ${USER_MATERIALS_TABLE} (email);
+      -- Opt-in: a student can share an upload with everyone taking that course.
+      ALTER TABLE ${USER_MATERIALS_TABLE} ADD COLUMN IF NOT EXISTS shared BOOLEAN NOT NULL DEFAULT false;
+
+      CREATE TABLE IF NOT EXISTS ${ASSIGNMENTS_TABLE} (
+        id          BIGSERIAL PRIMARY KEY,
+        email       TEXT NOT NULL,
+        title       TEXT NOT NULL,
+        course_code TEXT,
+        due_date    DATE,
+        done        BOOLEAN NOT NULL DEFAULT false,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
+      CREATE INDEX IF NOT EXISTS ${ASSIGNMENTS_TABLE}_email_idx ON ${ASSIGNMENTS_TABLE} (email);
+
+      CREATE TABLE IF NOT EXISTS ${CLASS_ASSIGNMENTS_TABLE} (
+        id            BIGSERIAL PRIMARY KEY,
+        status        TEXT NOT NULL DEFAULT 'draft',   -- 'draft' | 'published'
+        title         TEXT NOT NULL DEFAULT '',
+        course_code   TEXT,
+        due_at        TIMESTAMPTZ,
+        due_text_raw  TEXT,
+        description   TEXT,
+        posted_by     TEXT,
+        source_sender TEXT,
+        source_text   TEXT,
+        source_ts     TIMESTAMPTZ,
+        confidence    REAL,
+        created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+        published_at  TIMESTAMPTZ
+      );
+      CREATE INDEX IF NOT EXISTS ${CLASS_ASSIGNMENTS_TABLE}_status_idx ON ${CLASS_ASSIGNMENTS_TABLE} (status);
     `);
   }
   return schemaPromise;

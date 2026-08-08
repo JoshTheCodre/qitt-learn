@@ -1,5 +1,6 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "crypto";
+import { cookies } from "next/headers";
 
 // A signed, httpOnly session cookie: "<email>|<hmac>". Not a full JWT — just enough
 // to stop the email being forged. Set SESSION_SECRET in the environment for production.
@@ -21,6 +22,11 @@ function sign(value: string): string {
 
 export function makeSessionValue(email: string): string {
   return `${email}|${sign(email)}`;
+}
+
+// Convenience for route handlers: the signed-in user's email from the request cookies.
+export function currentSessionEmail(): string | null {
+  return readSessionEmail(cookies().get(SESSION_COOKIE)?.value);
 }
 
 export function readSessionEmail(cookie: string | undefined | null): string | null {

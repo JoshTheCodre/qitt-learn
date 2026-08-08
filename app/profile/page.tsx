@@ -17,6 +17,7 @@ import {
   type UserProfile,
   type CarryoverCourse,
 } from "@/lib/store";
+import { getTheme, setTheme, type Theme } from "@/lib/theme";
 
 function InfoRow({
   icon,
@@ -58,6 +59,11 @@ export default function ProfilePage() {
     label: string;
     run: () => void;
   } | null>(null);
+  const [theme, setThemeState] = useState<Theme>("system");
+
+  useEffect(() => {
+    setThemeState(getTheme());
+  }, []);
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -286,6 +292,39 @@ export default function ProfilePage() {
               + Add carryover course
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Appearance */}
+      <div className="mx-gutter mt-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest px-4 py-4 shadow-sm">
+        <div className="mb-3 flex items-center gap-2">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50">
+            <span className="text-[18px] leading-none">🌗</span>
+          </div>
+          <p className="font-display text-sm font-semibold text-on-surface">Appearance</p>
+        </div>
+        <div className="flex rounded-full bg-surface-container p-1">
+          {([
+            ["light", "☀️ Light"],
+            ["dark", "🌙 Dark"],
+            ["system", "🖥️ System"],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => {
+                setTheme(value);
+                setThemeState(value);
+              }}
+              className={`flex-1 rounded-full py-2 font-display text-[12px] font-semibold transition-all squishy-press ${
+                theme === value
+                  ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
+                  : "text-on-surface-variant"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 

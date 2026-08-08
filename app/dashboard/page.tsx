@@ -1,5 +1,5 @@
 import Header from "@/components/dashboard/Header";
-import SchoolCalendar from "@/components/dashboard/SchoolCalendar";
+import HomeCarousel from "@/components/dashboard/HomeCarousel";
 import QuickActions from "@/components/dashboard/QuickActions";
 import OverviewHero from "@/components/dashboard/OverviewHero";
 import CourseList from "@/components/study/CourseList";
@@ -16,9 +16,13 @@ export default function DashboardPage() {
       <div className="relative z-10">
         <Header paddingX="px-2.5" transparent />
         <main className="px-2.5 pb-24">
-          <SchoolCalendar />
-          <QuickActions />
-          <OverviewHero />
+          <HomeCarousel />
+          {/* One shared card grid: study tools, assignments and quick actions pack
+              together, so a turned-off feature leaves no empty slot. */}
+          <section className="mt-4 grid grid-cols-2 gap-3">
+            <OverviewHero />
+            <QuickActions />
+          </section>
           <CourseList topClass="mt-6" showStats />
         </main>
       </div>

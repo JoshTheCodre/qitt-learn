@@ -4,6 +4,7 @@ import "./globals.css";
 import FeedbackButton from "@/components/FeedbackButton";
 import PageViewTracker from "@/components/PageViewTracker";
 import AuthHydrator from "@/components/AuthHydrator";
+import ThemeWatcher from "@/components/ThemeWatcher";
 
 // Chillax (Fontshare) — one family across the whole platform, driving both the
 // display and body variables. Replaces the Atyp TRIAL cuts, which were not
@@ -130,9 +131,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`light ${chillaxDisplay.variable} ${chillaxBody.variable} ${materialSymbols.variable}`}
+      className={`${chillaxDisplay.variable} ${chillaxBody.variable} ${materialSymbols.variable}`}
     >
       <body className="bg-background text-on-surface font-body text-base min-h-screen">
+        {/* Set the theme before paint to avoid a light-mode flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('qitt_theme');var m=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='dark'||((t===null||t==='system')&&m)){document.documentElement.classList.add('dark');}}catch(e){}})();",
+          }}
+        />
+        <ThemeWatcher />
         {children}
         <AuthHydrator />
         <FeedbackButton />

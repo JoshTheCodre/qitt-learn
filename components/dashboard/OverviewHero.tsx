@@ -1,4 +1,7 @@
+"use client";
+
 import ActionCard, { type ActionCardProps } from "@/components/dashboard/ActionCard";
+import AssignmentsCard from "@/components/dashboard/AssignmentsCard";
 
 // Same reference card style as QuickActions, so all four cards match.
 const TOOLS: ActionCardProps[] = [
@@ -6,26 +9,30 @@ const TOOLS: ActionCardProps[] = [
   // { label: "Study", caption: "Read your notes", icon: "menu_book", href: "/study/learn", color: "#f59e0b" },
   {
     label: "Practice",
-    caption: "Quiz yourself",
+    caption: "Quiz & track scores",
     icon: "quiz",
     href: "/study/practice",
     color: "#e9338a", // pink
   },
   {
-    label: "Performance",
-    caption: "Track your scores",
-    icon: "insights",
-    href: "/study/performance",
-    color: "#7c5ce0", // purple
+    label: "My Materials",
+    caption: "Upload, study & request",
+    icon: "library_books",
+    href: "/study/my-materials",
+    color: "#0ea5e9", // sky
   },
 ];
 
 export default function OverviewHero() {
+  // Returns bare cards (no grid of its own) so the dashboard can pack these together with
+  // the quick-action cards in a single grid.
   return (
-    <section className="mt-3 grid grid-cols-2 gap-3">
+    <>
       {TOOLS.map((tool) => (
         <ActionCard key={tool.label} {...tool} />
       ))}
-    </section>
+      {/* Live assignments card — renders itself null when the feature is off. */}
+      <AssignmentsCard />
+    </>
   );
 }

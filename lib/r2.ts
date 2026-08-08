@@ -110,6 +110,27 @@ export async function deleteMaterial(key: string) {
   await r2().send(new DeleteObjectCommand({ Bucket: BUCKET(), Key: key }));
 }
 
+// Student-uploaded materials live under a per-user prefix so one student can never name a
+// key that lands in another's space (or in the admin library).
+export function userMaterialPrefix(email: string): string {
+  const safe = email.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return `user-materials/${safe || "unknown"}/`;
+}
+
+export function buildUserMaterialKey(email: string, filename: string, now: number) {
+  const safeName = filename
+    .replace(/[/\\]/g, "-")
+    .replace(/[^a-zA-Z0-9._-]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120);
+  return `${userMaterialPrefix(email)}${now}-${safeName || "file"}`;
+}
+
+export async function deleteUserMaterial(key: string) {
+  if (!key.startsWith("user-materials/")) throw new Error("Refusing to delete outside user-materials/");
+  await r2().send(new DeleteObjectCommand({ Bucket: BUCKET(), Key: key }));
+}
+
 /**
  * Presigned PUT so the browser uploads straight to R2.
  *

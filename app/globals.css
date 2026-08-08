@@ -2,15 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Theme palettes ───────────────────────────────────────────────────────────
+   Semantic colours are CSS vars (space-separated RGB channels so Tailwind's
+   /opacity modifiers work). Light = the original values; `.dark` overrides them,
+   so a single class on <html> flips the whole app. */
 :root {
   color-scheme: light;
+
+  --page-rgb: 229 231 235; /* desktop backdrop behind the phone frame */
+
+  --background-rgb: 255 255 255;
+  --surface-rgb: 255 255 255;
+  --surface-container-lowest-rgb: 255 255 255;
+  --surface-container-low-rgb: 243 243 246;
+  --surface-container-rgb: 238 238 240;
+  --surface-container-high-rgb: 232 232 234;
+  --surface-container-highest-rgb: 226 226 229;
+  --surface-variant-rgb: 226 226 229;
+  --surface-dim-rgb: 218 218 220;
+  --surface-bright-rgb: 255 255 255;
+  --on-surface-rgb: 26 28 30;
+  --on-surface-variant-rgb: 68 70 86;
+  --on-background-rgb: 26 28 30;
+  --outline-rgb: 117 118 136;
+  --outline-variant-rgb: 197 197 217;
+  --primary-rgb: 37 99 235;
+  --on-primary-rgb: 255 255 255;
+  --primary-container-rgb: 29 78 216;
+  --error-rgb: 186 26 26;
+  --on-error-rgb: 255 255 255;
+  --error-container-rgb: 255 218 214;
+  --on-error-container-rgb: 147 0 10;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --page-rgb: 8 9 11;
+
+  --background-rgb: 18 19 22;
+  --surface-rgb: 18 19 22;
+  --surface-container-lowest-rgb: 30 32 36;
+  --surface-container-low-rgb: 26 28 31;
+  --surface-container-rgb: 33 35 39;
+  --surface-container-high-rgb: 43 45 50;
+  --surface-container-highest-rgb: 52 54 59;
+  --surface-variant-rgb: 68 70 78;
+  --surface-dim-rgb: 18 19 22;
+  --surface-bright-rgb: 56 58 62;
+  --on-surface-rgb: 227 226 230;
+  --on-surface-variant-rgb: 196 198 208;
+  --on-background-rgb: 227 226 230;
+  --outline-rgb: 142 144 154;
+  --outline-variant-rgb: 68 70 77;
+  --primary-rgb: 37 99 235;
+  --on-primary-rgb: 255 255 255;
+  --primary-container-rgb: 29 78 216;
+  --error-rgb: 242 84 77;
+  --on-error-rgb: 255 255 255;
+  --error-container-rgb: 93 0 10;
+  --on-error-container-rgb: 255 180 171;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Pure-white app; the phone frame sits on a gray backdrop on desktop */
-  background-color: #e5e7eb;
+  /* The phone frame sits on a backdrop on desktop; themed for dark mode. */
+  background-color: rgb(var(--page-rgb));
   min-height: max(884px, 100dvh);
 }
 

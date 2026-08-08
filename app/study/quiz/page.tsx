@@ -12,6 +12,7 @@ import {
   type Verdict,
 } from "@/lib/results";
 import { endPracticeSession, hasPracticeSession } from "@/lib/practice-session";
+import { getGeneratedQuiz } from "@/lib/generated-quiz";
 import { formatCourseCode } from "@/lib/courses";
 import { verdictScore, type PracticeQuestion, type PracticeTheoryQuestion } from "@/lib/practice";
 import MathText from "@/components/MathText";
@@ -70,6 +71,9 @@ function QuizSession() {
   const timeParam = params.get("time") || "No limit";
   const isTheory = (params.get("type") || "") === "Theory";
   const typeLabel = isTheory ? "Theory" : params.get("mode") || params.get("type") || "Objective";
+  // "material" → questions were AI-generated from the student's own upload and stashed in
+  // sessionStorage, rather than fetched by course code.
+  const source = params.get("source") || "";
 
   const [questions, setQuestions] = useState<Q[]>([]);
   const [qStatus, setQStatus] = useState<"loading" | "done" | "error">("loading");
@@ -264,6 +268,21 @@ function QuizSession() {
     if (!ready) return;
     let alive = true;
     setQStatus("loading");
+
+    // AI-generated-from-my-material quizzes come from sessionStorage, not the question bank.
+    if (source === "material") {
+      const gen = getGeneratedQuiz();
+      if (gen && gen.questions.length > 0) {
+        setQuestions(gen.questions.map((q) => ({ id: q.id, q: q.q, options: q.options, answer: q.answer })));
+        setQStatus("done");
+      } else {
+        setQStatus("error");
+      }
+      return () => {
+        alive = false;
+      };
+    }
+
     const kind = isTheory ? "theory" : "objective";
     fetch(`/api/practice/questions?code=${encodeURIComponent(rawCourse)}&count=${requested}&kind=${kind}`)
       .then((r) => r.json())
@@ -296,7 +315,7 @@ function QuizSession() {
     return () => {
       alive = false;
     };
-  }, [ready, rawCourse, requested, isTheory]);
+  }, [ready, rawCourse, requested, isTheory, source]);
 
   // Native prompt on hard exits while unsaved.
   useEffect(() => {

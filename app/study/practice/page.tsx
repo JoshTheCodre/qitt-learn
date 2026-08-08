@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import BackHeader from "@/components/BackHeader";
 import JungleBackdrop from "@/components/JungleBackdrop";
 import { SelectField } from "@/components/study/StudyFields";
+import PerformanceView from "@/components/study/PerformanceView";
 import { COURSES, formatCourseCode } from "@/lib/courses";
 import { getUserCarryover, getUserCourses } from "@/lib/store";
 import { haptic } from "@/lib/haptics";
@@ -64,6 +65,7 @@ function Segmented({
 
 export default function PracticeToolPage() {
   const router = useRouter();
+  const [tab, setTab] = useState<"practice" | "performance">("practice");
   const [course, setCourse] = useState("");
   const [time, setTime] = useState(TIMES[0]);
   const [count, setCount] = useState(10);
@@ -128,13 +130,35 @@ export default function PracticeToolPage() {
 
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
-      <JungleBackdrop />
+      {tab === "practice" && <JungleBackdrop />}
 
       <div className="relative z-10">
         <BackHeader title="Practice" transparent home />
       </div>
 
       <main className="relative z-10 px-gutter pt-2 pb-28">
+        {/* Practice / Performance segmented tabs */}
+        <div className="mb-5 flex rounded-full bg-surface-container p-1">
+          {(["practice", "performance"] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTab(t)}
+              className={`flex-1 rounded-full py-2 font-display text-[13px] font-semibold capitalize transition-all squishy-press ${
+                tab === t
+                  ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
+                  : "text-on-surface-variant"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+
+        {tab === "performance" ? (
+          <PerformanceView />
+        ) : (
+          <>
         <section className="mb-7 rounded-2xl border border-emerald-700/15 bg-emerald-600/[0.05] p-4">
           <h2 className="font-display text-[17px] font-bold leading-tight text-on-surface">
             Prepare ahead. Stay ahead.
@@ -247,10 +271,12 @@ export default function PracticeToolPage() {
           </div>
 
         </div>
+          </>
+        )}
       </main>
 
-      {/* Opaque, so scrolling content is hidden rather than sliding visibly under the
-          button. Softly tinted rather than pure white. */}
+      {/* Start button bar — Practice tab only. Opaque so scrolling content hides under it. */}
+      {tab === "practice" && (
       <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-[430px] -translate-x-1/2 bg-[#e9f2ee] px-gutter pb-5 pt-3">
         {/* The sweeping border is the reward for a complete setup — it only runs
             once the button is actually armed, so it reads as "ready", not decoration. */}
@@ -286,6 +312,7 @@ export default function PracticeToolPage() {
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }

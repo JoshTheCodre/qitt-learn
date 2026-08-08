@@ -16,6 +16,7 @@ const ENTRY_PAGES = new Set(["/", "/login", "/register"]);
 const PROTECTED_PREFIXES = [
   "/dashboard",
   "/study",
+  "/assignments",
   "/timetable",
   "/profile",
   "/notifications",
