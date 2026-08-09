@@ -3,16 +3,30 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getTerm } from "@/lib/term";
-import { TIMETABLE, todayDay, compactTime } from "@/lib/timetable";
+import { todayDay, compactTime, type TimetableEntry } from "@/lib/timetable";
+import { getUserTimetable } from "@/lib/user-timetable";
 
-// Today's classes summary → /timetable.
+// Today's classes summary → /timetable. Uses the student's own timetable; when they haven't
+// set one up, the slide invites them to.
 function TodayCard() {
+  const [entries, setEntries] = useState<TimetableEntry[] | null>(null);
+  useEffect(() => {
+    setEntries(getUserTimetable());
+  }, []);
+
   const today = todayDay();
-  const classes = TIMETABLE.filter((e) => e.day === today).sort((a, b) => a.start.localeCompare(b.start));
-  const subtitle =
-    classes.length === 0
-      ? "No classes today 🎉"
-      : `${classes.length} class${classes.length === 1 ? "" : "es"} · ${classes.map((c) => compactTime(c.start)).join(" · ")}`;
+  const classes = (entries ?? [])
+    .filter((e) => e.day === today)
+    .sort((a, b) => a.start.localeCompare(b.start));
+
+  let subtitle: string;
+  if (entries === null) subtitle = "Your class schedule";
+  else if (entries.length === 0) subtitle = "No timetable yet — tap to set it up";
+  else if (classes.length === 0) subtitle = "No classes today 🎉";
+  else
+    subtitle = `${classes.length} class${classes.length === 1 ? "" : "es"} · ${classes
+      .map((c) => compactTime(c.start))
+      .join(" · ")}`;
 
   return (
     <Link
