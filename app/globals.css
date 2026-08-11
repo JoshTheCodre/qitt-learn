@@ -62,6 +62,10 @@
   --on-error-rgb: 255 255 255;
   --error-container-rgb: 93 0 10;
   --on-error-container-rgb: 255 180 171;
+
+  /* Accents brighten in dark mode so they still pop against the dark surfaces. */
+  --brand-rgb: 96 165 250;
+  --accent-rgb: 52 211 153;
 }
 
 body {
@@ -148,6 +152,13 @@ textarea {
 .theme-home {
   --brand-rgb: 54 102 156; /* #36669c — deep steel blue */
   --accent-rgb: 62 201 149; /* #3ec995 — bright mint */
+}
+
+/* On dark, the deep steel blue goes muddy against the dark surfaces — lift it to a
+   brighter sky blue so the dashboard's brand accents (greeting, carousel, pills) shine. */
+.dark .theme-home {
+  --brand-rgb: 125 168 255; /* #7da8ff — bright sky blue */
+  --accent-rgb: 74 222 168; /* #4adea8 — vivid mint */
 }
 
 /* Material Symbols are outline-only by default, which is what made the homepage icons

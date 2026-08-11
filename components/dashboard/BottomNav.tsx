@@ -24,9 +24,7 @@ export default function BottomNav() {
               active ? "text-brand" : "text-on-surface-variant hover:text-brand"
             }`}
           >
-            <span
-              className={`material-symbols-outlined font-light ${active ? "active-nav-icon" : ""}`}
-            >
+            <span className={`material-symbols-outlined font-light ${active ? "active-nav-icon" : ""}`}>
               {item.icon}
             </span>
             <span className="font-display text-xs font-medium">{item.label}</span>

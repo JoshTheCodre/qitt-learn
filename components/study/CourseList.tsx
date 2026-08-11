@@ -116,29 +116,27 @@ export default function CourseList({
           <Link
             key={course.slug}
             href={`/study/${course.slug}`}
-            className={`w-full flex items-center justify-between gap-3 rounded-xl border p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] transition-all squishy-press ${
+            className={`relative w-full flex items-center justify-between gap-3 rounded-xl border p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] transition-all squishy-press ${
               cbt
                 ? "border-violet-200/60 bg-surface-container-lowest hover:border-violet-300"
                 : "border-outline-variant/40 bg-surface-container-lowest hover:border-brand/30"
             }`}
           >
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <p className="font-body text-[15px] font-semibold text-on-surface truncate">
-                  {course.title}
-                </p>
-                {cbt && (
-                  <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full border border-violet-200 bg-violet-100 py-0.5 pl-1 pr-1.5 font-display text-[9px] font-bold uppercase tracking-[0.1em] text-violet-700">
-                    <span className="material-symbols-outlined text-[12px] leading-none">desktop_windows</span>
-                    CBT
-                  </span>
-                )}
-              </div>
-              <div className="mt-1.5 flex items-center gap-2 font-body text-[12px] font-medium text-on-surface-variant">
+              <p className="font-body text-[15px] font-semibold text-on-surface truncate">
+                {course.title}
+              </p>
+              <div className="mt-1.5 flex items-center gap-1.5 font-body text-[12px] font-medium text-on-surface-variant">
                 <span>{formatCourseCode(course.code)}</span>
                 <span className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ${accent}`}>
                   {course.units}
                 </span>
+                {cbt && (
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-violet-500 ring-1 ring-inset ring-violet-100">
+                    <span className="material-symbols-outlined text-[11px] leading-none">desktop_windows</span>
+                    CBT
+                  </span>
+                )}
               </div>
             </div>
             <span className="material-symbols-outlined text-[20px] text-on-surface-variant shrink-0">

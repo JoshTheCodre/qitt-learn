@@ -42,7 +42,7 @@ export default function Header({
     <header
       className={`w-full top-0 z-40 transition-all ${
         scrolled
-          ? "shadow-sm bg-white/90 backdrop-blur-md"
+          ? "shadow-sm bg-background/85 backdrop-blur-md"
           : transparent
             ? "bg-transparent"
             : "bg-background"
@@ -54,14 +54,18 @@ export default function Header({
             <Link
               href="/profile"
               aria-label="Open profile"
-              className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant squishy-press"
+              className="shrink-0 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 p-[2.5px] squishy-press"
             >
-              {/* Only render once resolved — avoids a flash of a broken image before
-                  the client reads the cached profile. */}
-              {avatar && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img className="w-full h-full object-cover" alt="Student avatar" src={avatar} />
-              )}
+              {/* Instagram-story-style ring: gradient outer, a background-coloured gap, then
+                  the avatar. Rendered only once resolved to avoid a flash of a broken image. */}
+              <span className="block rounded-full bg-background p-[2px]">
+                <span className="block h-11 w-11 overflow-hidden rounded-full bg-surface-container-highest">
+                  {avatar && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className="h-full w-full object-cover" alt="Student avatar" src={avatar} />
+                  )}
+                </span>
+              </span>
             </Link>
           )}
           {title ? (

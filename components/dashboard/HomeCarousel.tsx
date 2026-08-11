@@ -31,13 +31,13 @@ function TodayCard() {
   return (
     <Link
       href="/timetable"
-      className="group flex items-center gap-3 rounded-2xl border border-emerald-600/15 bg-emerald-500/[0.07] px-4 py-3.5 transition-colors hover:bg-emerald-500/[0.11] squishy-press"
+      className="group flex items-center gap-3 rounded-2xl border border-emerald-600/15 bg-emerald-500/[0.07] px-4 py-3.5 transition-colors hover:bg-emerald-500/[0.11] dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:hover:bg-emerald-400/[0.16] squishy-press"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/[0.14]">
-        <span className="material-symbols-outlined icon-filled text-[24px] leading-none text-emerald-600">schedule</span>
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/[0.14] dark:bg-emerald-400/20">
+        <span className="material-symbols-outlined icon-filled text-[24px] leading-none text-emerald-600 dark:text-emerald-300">schedule</span>
       </div>
       <div className="min-w-0 flex-1">
-        <p className="font-display text-[15px] font-bold leading-tight text-emerald-700">Today&apos;s classes</p>
+        <p className="font-display text-[15px] font-bold leading-tight text-emerald-700 dark:text-emerald-300">Today&apos;s classes</p>
         <p className="mt-0.5 truncate font-body text-[12px] font-medium leading-tight text-on-surface/55">{subtitle}</p>
       </div>
       <span className="material-symbols-outlined shrink-0 text-[20px] leading-none text-on-surface/30 transition-transform group-hover:translate-x-0.5">
@@ -66,9 +66,9 @@ function TermCard() {
   return (
     <Link
       href="/calendar"
-      className="group flex items-center gap-3 rounded-2xl border border-brand/15 bg-brand/[0.06] px-4 py-3.5 transition-colors hover:bg-brand/[0.09] squishy-press"
+      className="group flex items-center gap-3 rounded-2xl border border-brand/15 bg-brand/[0.06] px-4 py-3.5 transition-colors hover:bg-brand/[0.09] dark:border-brand/25 dark:bg-brand/[0.12] dark:hover:bg-brand/[0.18] squishy-press"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/[0.12]">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/[0.12] dark:bg-brand/20">
         <span className="material-symbols-outlined icon-filled text-[24px] leading-none text-brand">calendar_month</span>
       </div>
       <div className="min-w-0 flex-1">
