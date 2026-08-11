@@ -20,14 +20,14 @@ const SAMPLE_COURSES: StoredCourse[] = SAMPLE.map((c) => ({
 }));
 
 const ACCENTS: Record<string, string> = {
-  CSC: "bg-blue-50 text-blue-600",
-  MTH: "bg-violet-50 text-violet-600",
-  GST: "bg-emerald-50 text-emerald-600",
-  GES: "bg-emerald-50 text-emerald-600",
-  PHY: "bg-rose-50 text-rose-600",
-  CHM: "bg-amber-50 text-amber-600",
+  CSC: "bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300",
+  MTH: "bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
+  GST: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
+  GES: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
+  PHY: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
+  CHM: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
 };
-const DEFAULT_ACCENT = "bg-brand/5 text-brand";
+const DEFAULT_ACCENT = "bg-brand/5 text-brand dark:bg-brand/15";
 
 function accentFor(code: string) {
   const prefix = code.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase();
@@ -118,7 +118,7 @@ export default function CourseList({
             href={`/study/${course.slug}`}
             className={`relative w-full flex items-center justify-between gap-3 rounded-xl border p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] transition-all squishy-press ${
               cbt
-                ? "border-violet-200/60 bg-surface-container-lowest hover:border-violet-300"
+                ? "border-violet-200/60 bg-surface-container-lowest hover:border-violet-300 dark:border-violet-500/30 dark:hover:border-violet-400/50"
                 : "border-outline-variant/40 bg-surface-container-lowest hover:border-brand/30"
             }`}
           >
@@ -132,7 +132,7 @@ export default function CourseList({
                   {course.units}
                 </span>
                 {cbt && (
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-violet-500 ring-1 ring-inset ring-violet-100">
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-violet-500 ring-1 ring-inset ring-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:ring-violet-500/30">
                     <span className="material-symbols-outlined text-[11px] leading-none">desktop_windows</span>
                     CBT
                   </span>
@@ -162,7 +162,7 @@ export default function CourseList({
             <Link
               key={c.course_code}
               href={`/study/${carryoverSlug(c.course_code)}`}
-              className="w-full flex items-center justify-between gap-3 rounded-xl border border-amber-300/50 bg-amber-50/40 p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] hover:border-amber-400 transition-all squishy-press"
+              className="w-full flex items-center justify-between gap-3 rounded-xl border border-amber-300/50 bg-amber-50/40 p-4 text-left shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] hover:border-amber-400 dark:border-amber-500/30 dark:bg-amber-500/10 dark:hover:border-amber-400/50 transition-all squishy-press"
             >
               <div className="min-w-0">
                 <p className="font-body text-[15px] font-semibold text-on-surface truncate">
@@ -170,7 +170,7 @@ export default function CourseList({
                 </p>
                 <div className="mt-1.5 flex items-center gap-2 font-body text-[12px] font-medium text-on-surface-variant">
                   <span>{formatCourseCode(c.course_code)}</span>
-                  <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                  <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
                     Carryover
                   </span>
                 </div>
