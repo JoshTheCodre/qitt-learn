@@ -23,6 +23,7 @@ export default function Header({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [avatar, setAvatar] = useState<string | null>(null);
+  const [who, setWho] = useState<{ first: string; department: string; level: string } | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -31,11 +32,18 @@ export default function Header({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // The avatar chosen at signup. If none was picked, fall back to a stable avatar
-  // seeded from the account's email so every student still shows a real face.
+  // The signed-in student's own details. The avatar falls back to a stable one seeded
+  // from the email if none was picked, so every account still shows a real face.
   useEffect(() => {
     const p = getCurrentUser()?.profile;
-    if (p) setAvatar(p.picture_url || randomAvatarUrl(p.email));
+    if (p) {
+      setAvatar(p.picture_url || randomAvatarUrl(p.email));
+      setWho({
+        first: p.name.trim().split(/\s+/)[0] || p.name.trim(),
+        department: p.department,
+        level: String(p.level).replace(/\D/g, ""),
+      });
+    }
   }, []);
 
   return (
@@ -75,13 +83,20 @@ export default function Header({
           ) : (
             <div>
               <h1 className="font-display text-[24px] leading-tight font-bold text-brand">
-                Hello, Joshua
+                {who ? `Hello, ${who.first}` : "Hello"}
               </h1>
-              <p className="font-display text-sm font-medium text-on-surface/70">
-                Computer Science{" "}
-                <span className="inline-block w-1 h-1 rounded-full bg-emerald-500 align-middle mx-0.5" />{" "}
-                200lvl
-              </p>
+              {who && (
+                <p className="font-display text-sm font-medium text-on-surface/70">
+                  {who.department}
+                  {who.level && (
+                    <>
+                      {" "}
+                      <span className="inline-block w-1 h-1 rounded-full bg-emerald-500 align-middle mx-0.5" />{" "}
+                      {who.level}lvl
+                    </>
+                  )}
+                </p>
+              )}
             </div>
           )}
         </div>
