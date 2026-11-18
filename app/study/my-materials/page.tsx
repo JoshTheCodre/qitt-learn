@@ -171,7 +171,7 @@ export default function MyMaterialsPage() {
 
       <main className="px-gutter pb-28 pt-2">
         {/* My files / Request / Contribute segmented tabs */}
-        <div className="mb-5 flex rounded-full bg-surface-container p-1">
+        <div className="mb-5 flex rounded-[2px] bg-surface-container p-1">
           {([
             ["mine", "Uploads"],
             ["request", "Request"],
@@ -181,7 +181,7 @@ export default function MyMaterialsPage() {
               key={key}
               type="button"
               onClick={() => setTab(key)}
-              className={`flex-1 rounded-full py-2 font-display text-[13px] font-semibold transition-all squishy-press ${
+              className={`flex-1 rounded-[2px] py-2 font-display text-[13px] font-semibold transition-all squishy-press ${
                 tab === key
                   ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
                   : "text-on-surface-variant"
@@ -264,8 +264,8 @@ export default function MyMaterialsPage() {
         </button>
 
         {upload && (
-          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-black/[0.07]">
-            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${upload.pct}%` }} />
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-[2px] bg-black/[0.07]">
+            <div className="h-full rounded-[2px] bg-primary transition-all" style={{ width: `${upload.pct}%` }} />
           </div>
         )}
 
@@ -311,7 +311,7 @@ export default function MyMaterialsPage() {
                               .join(" · ")}
                           </span>
                           {m.shared && (
-                            <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-100 px-1.5 py-0.5 font-semibold text-emerald-700">
+                            <span className="inline-flex items-center gap-0.5 rounded-[2px] bg-emerald-100 px-1.5 py-0.5 font-semibold text-emerald-700">
                               <span className="material-symbols-outlined text-[11px] leading-none">share</span>
                               Shared
                             </span>

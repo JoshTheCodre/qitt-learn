@@ -28,27 +28,27 @@ const TOC = [
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen w-full bg-[#f4f0e8] text-[#1a1712]">
+    <div className="min-h-screen w-full bg-[#f6f8ff] text-[#0a1245]">
       <header className="mx-auto flex max-w-3xl items-center justify-between px-5 py-5">
         <Link href="/" className="font-display text-[20px] font-extrabold tracking-tight">
           {BRAND}
         </Link>
         <Link
           href="/"
-          className="rounded-full px-4 py-2 font-display text-[13px] font-bold text-[#1a1712]/70 transition-colors hover:bg-[#1a1712]/[0.06]"
+          className="rounded-[2px] px-4 py-2 font-display text-[13px] font-bold text-[#0a1245]/70 transition-colors hover:bg-[#0b2be0]/[0.06]"
         >
           ← Back
         </Link>
       </header>
 
       <main className="mx-auto max-w-3xl px-5 pb-20 pt-4">
-        <p className="font-display text-[12px] font-bold uppercase tracking-[0.12em] text-[#c9506a]">
+        <p className="font-display text-[12px] font-bold uppercase tracking-[0.12em] text-[#0b2be0]">
           Legal
         </p>
         <h1 className="mt-2 font-display text-[34px] font-extrabold leading-[1.05] tracking-tight sm:text-[44px]">
           Privacy Policy
         </h1>
-        <p className="mt-4 font-body text-[15px] leading-relaxed text-[#1a1712]/70">
+        <p className="mt-4 font-body text-[15px] leading-relaxed text-[#0a1245]/70">
           This policy explains what personal data {BRAND} collects, how we use and protect it, and
           the rights you have over it. {BRAND} is a student study platform operated in Nigeria, and
           we handle personal data in line with the Nigeria Data Protection Act 2023 (NDPA), overseen
@@ -60,8 +60,8 @@ export default function PrivacyPage() {
           .
         </p>
 
-        <nav className="mt-8 rounded-2xl border border-[#1a1712]/10 bg-white/50 p-5">
-          <p className="font-display text-[12px] font-bold uppercase tracking-wide text-[#1a1712]/50">
+        <nav className="mt-8 rounded-2xl border border-[#0a1245]/10 bg-white/50 p-5">
+          <p className="font-display text-[12px] font-bold uppercase tracking-wide text-[#0a1245]/50">
             On this page
           </p>
           <ul className="mt-3 space-y-1.5">
@@ -69,7 +69,7 @@ export default function PrivacyPage() {
               <li key={t.href}>
                 <a
                   href={t.href}
-                  className="font-body text-[14px] font-medium text-[#1a1712]/80 underline decoration-[#f4a9c4] decoration-2 underline-offset-4 transition-colors hover:text-[#1a1712]"
+                  className="font-body text-[14px] font-medium text-[#0a1245]/80 underline decoration-[#ffb938] decoration-2 underline-offset-4 transition-colors hover:text-[#0a1245]"
                 >
                   {t.label}
                 </a>
@@ -213,7 +213,7 @@ export default function PrivacyPage() {
 
         <Section id="contact" n="10" title="Contact">
           <p>Questions about this policy, or to exercise your rights:</p>
-          <ul className="mt-3 space-y-1.5 font-body text-[14px] text-[#1a1712]/80">
+          <ul className="mt-3 space-y-1.5 font-body text-[14px] text-[#0a1245]/80">
             <li>
               Email:{" "}
               <a className="font-semibold underline" href={`mailto:${CONTACT_EMAIL}`}>
@@ -238,7 +238,7 @@ export default function PrivacyPage() {
           </ul>
         </Section>
 
-        <p className="mt-12 border-t border-[#1a1712]/10 pt-6 font-body text-[13px] text-[#1a1712]/50">
+        <p className="mt-12 border-t border-[#0a1245]/10 pt-6 font-body text-[13px] text-[#0a1245]/50">
           © {new Date().getFullYear().toString()} {LEGAL_ENTITY}. Operated in Nigeria. Last updated{" "}
           {LAST_UPDATED}.
         </p>
@@ -261,9 +261,9 @@ function Section({
   return (
     <section id={id} className="mt-10 scroll-mt-6">
       <h2 className="font-display text-[22px] font-extrabold leading-tight tracking-tight">
-        <span className="text-[#c9506a]">{n}.</span> {title}
+        <span className="text-[#0b2be0]">{n}.</span> {title}
       </h2>
-      <div className="mt-3 font-body text-[14px] leading-relaxed text-[#1a1712]/80 [&_strong]:text-[#1a1712]">
+      <div className="mt-3 font-body text-[14px] leading-relaxed text-[#0a1245]/80 [&_strong]:text-[#0a1245]">
         {children}
       </div>
     </section>
@@ -271,5 +271,5 @@ function Section({
 }
 
 function List({ children }: { children: React.ReactNode }) {
-  return <ul className="mt-2 list-disc space-y-1.5 pl-5 marker:text-[#f4a9c4]">{children}</ul>;
+  return <ul className="mt-2 list-disc space-y-1.5 pl-5 marker:text-[#ffb938]">{children}</ul>;
 }

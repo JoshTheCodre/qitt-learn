@@ -14,8 +14,8 @@ const config: Config = {
         // overrides the vars (`.theme-home`). That's what keeps the homepage palette
         // from leaking into the 15 other pages sharing Header/BottomNav/CourseList.
         // Channel triplets (not hex) so Tailwind's /opacity modifiers still work.
-        brand: "rgb(var(--brand-rgb, 37 99 235) / <alpha-value>)",
-        accent: "rgb(var(--accent-rgb, 16 185 129) / <alpha-value>)",
+        brand: "rgb(var(--brand-rgb, 11 43 224) / <alpha-value>)",
+        accent: "rgb(var(--accent-rgb, 255 185 56) / <alpha-value>)",
 
         // Themed via CSS vars (see globals.css) so a single `.dark` class flips the whole
         // app. Light values are unchanged from before, so light mode looks identical.
@@ -69,10 +69,16 @@ const config: Config = {
         "tertiary-container": "#424e4b",
         "tertiary-fixed-dim": "#bcc9c6",
       },
+      // Squared-off corners everywhere, matching the landing page. `full` is left
+      // alone: it is only used for things that are genuinely round (avatars, dots).
       borderRadius: {
-        DEFAULT: "0.25rem",
-        lg: "0.5rem",
-        xl: "0.75rem",
+        DEFAULT: "2px",
+        sm: "1px",
+        md: "2px",
+        lg: "2px",
+        xl: "2px",
+        "2xl": "2px",
+        "3xl": "2px",
         full: "9999px",
       },
       spacing: {

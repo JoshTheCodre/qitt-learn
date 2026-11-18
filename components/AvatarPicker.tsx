@@ -26,7 +26,7 @@ export default function AvatarPicker({
             haptic("select");
             setPage((p) => p + 1);
           }}
-          className="flex items-center gap-1 rounded-full px-2 py-1 font-display text-[11px] font-semibold text-brand active:opacity-70"
+          className="flex items-center gap-1 rounded-[2px] px-2 py-1 font-display text-[11px] font-semibold text-brand active:opacity-70"
         >
           <span className="material-symbols-outlined text-[14px] leading-none">refresh</span>
           Shuffle

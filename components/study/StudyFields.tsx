@@ -32,7 +32,7 @@ export function SelectField({
         className={`${FIELD} appearance-none pr-10 ${
           // The ring IS the border when glowing — keeping the grey one (or the blue
           // focus border inherited from FIELD) would fight it.
-          glow ? "rounded-[11px] border-transparent focus:border-transparent" : ""
+          glow ? "rounded-[2px] border-transparent focus:border-transparent" : ""
         }`}
       >
         {placeholder && <option value="">{placeholder}</option>}

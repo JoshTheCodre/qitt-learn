@@ -62,11 +62,11 @@ export default function Header({
             <Link
               href="/profile"
               aria-label="Open profile"
-              className="shrink-0 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 p-[2.5px] squishy-press"
+              className="shrink-0 rounded-[2px] bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 p-[2.5px] squishy-press"
             >
               {/* Instagram-story-style ring: gradient outer, a background-coloured gap, then
                   the avatar. Rendered only once resolved to avoid a flash of a broken image. */}
-              <span className="block rounded-full bg-background p-[2px]">
+              <span className="block rounded-[2px] bg-background p-[2px]">
                 <span className="block h-11 w-11 overflow-hidden rounded-full bg-surface-container-highest">
                   {avatar && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -105,7 +105,7 @@ export default function Header({
           // icon, so it doesn't compete with the page content.
           <Link
             href="/upgrade"
-            className="flex shrink-0 items-center rounded-full border border-brand/25 px-3.5 py-1.5 font-display text-[12px] font-semibold text-brand transition-colors hover:bg-brand/[0.06] squishy-press"
+            className="flex shrink-0 items-center rounded-[2px] border border-brand/25 px-3.5 py-1.5 font-display text-[12px] font-semibold text-brand transition-colors hover:bg-brand/[0.06] squishy-press"
           >
             Upgrade
           </Link>

@@ -107,7 +107,7 @@ export default function CourseMaterialsPage() {
         </div>
 
         {/* Community / User uploads tabs */}
-        <div className="mb-5 flex rounded-full bg-surface-container p-1">
+        <div className="mb-5 flex rounded-[2px] bg-surface-container p-1">
           {([
             ["community", "Community", materials.length],
             ["uploads", "User uploads", uploads.length],
@@ -116,7 +116,7 @@ export default function CourseMaterialsPage() {
               key={key}
               type="button"
               onClick={() => setTab(key)}
-              className={`flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 font-display text-[13px] font-semibold transition-all squishy-press ${
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-[2px] py-2 font-display text-[13px] font-semibold transition-all squishy-press ${
                 tab === key
                   ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
                   : "text-on-surface-variant"
@@ -184,7 +184,7 @@ function CommunityTab({
         </p>
         <Link
           href="/request"
-          className="mt-2 rounded-full bg-primary px-5 py-2.5 font-display text-[13px] font-semibold text-on-primary squishy-press"
+          className="mt-2 rounded-[2px] bg-primary px-5 py-2.5 font-display text-[13px] font-semibold text-on-primary squishy-press"
         >
           Request material
         </Link>
@@ -203,7 +203,7 @@ function CommunityTab({
                 <span className="material-symbols-outlined text-[16px] leading-none">{meta.icon}</span>
               </span>
               <h3 className="font-display text-[14px] font-bold text-on-surface">{meta.label}</h3>
-              <span className="rounded-full bg-surface-container px-2 py-0.5 font-display text-[11px] font-semibold text-on-surface-variant">
+              <span className="rounded-[2px] bg-surface-container px-2 py-0.5 font-display text-[11px] font-semibold text-on-surface-variant">
                 {items.length}
               </span>
             </div>
@@ -233,7 +233,7 @@ function UploadsTab({ status, uploads }: { status: Status; uploads: Upload[] }) 
         </p>
         <Link
           href="/study/my-materials"
-          className="mt-2 rounded-full bg-primary px-5 py-2.5 font-display text-[13px] font-semibold text-on-primary squishy-press"
+          className="mt-2 rounded-[2px] bg-primary px-5 py-2.5 font-display text-[13px] font-semibold text-on-primary squishy-press"
         >
           Share yours
         </Link>

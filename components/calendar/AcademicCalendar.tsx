@@ -43,7 +43,7 @@ function EventCard({ e, status }: { e: CalendarEvent; status: EventStatus }) {
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
           {isNow && (
-            <span className="rounded-full bg-brand px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-wide text-white">
+            <span className="rounded-[2px] bg-brand px-2 py-0.5 font-display text-[9px] font-bold uppercase tracking-wide text-white">
               Now
             </span>
           )}

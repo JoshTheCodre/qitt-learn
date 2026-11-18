@@ -35,7 +35,7 @@ function Segmented({
   return (
     <div className="animated-field rounded-xl p-px">
       {/* Gray track, pure-white selected pill, strong black text */}
-      <div className="flex gap-1 rounded-[11px] bg-surface-container p-1">
+      <div className="flex gap-1 rounded-[2px] bg-surface-container p-1">
         {options.map((o) => {
           const active = o === value;
           return (
@@ -138,13 +138,13 @@ export default function PracticeToolPage() {
 
       <main className="relative z-10 px-gutter pt-2 pb-28">
         {/* Practice / Performance segmented tabs */}
-        <div className="mb-5 flex rounded-full bg-surface-container p-1">
+        <div className="mb-5 flex rounded-[2px] bg-surface-container p-1">
           {(["practice", "performance"] as const).map((t) => (
             <button
               key={t}
               type="button"
               onClick={() => setTab(t)}
-              className={`flex-1 rounded-full py-2 font-display text-[13px] font-semibold capitalize transition-all squishy-press ${
+              className={`flex-1 rounded-[2px] py-2 font-display text-[13px] font-semibold capitalize transition-all squishy-press ${
                 tab === t
                   ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
                   : "text-on-surface-variant"
@@ -207,7 +207,7 @@ export default function PracticeToolPage() {
                       if (t === "Theory" && count > THEORY_MAX) setCount(THEORY_MAX);
                     }}
                     aria-pressed={active}
-                    className={`rounded-full px-3.5 py-2 font-display text-[13px] font-semibold transition-colors squishy-press disabled:opacity-35 ${
+                    className={`rounded-[2px] px-3.5 py-2 font-display text-[13px] font-semibold transition-colors squishy-press disabled:opacity-35 ${
                       active
                         ? "bg-emerald-700 text-white"
                         : "border border-outline-variant/50 bg-surface-container-lowest text-on-surface/70"
@@ -277,7 +277,7 @@ export default function PracticeToolPage() {
 
       {/* Start button bar — Practice tab only. Opaque so scrolling content hides under it. */}
       {tab === "practice" && (
-      <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-[430px] -translate-x-1/2 bg-[#e9f2ee] px-gutter pb-5 pt-3">
+      <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-[430px] -translate-x-1/2 bg-[#eaf0ff] px-gutter pb-5 pt-3">
         {/* The sweeping border is the reward for a complete setup — it only runs
             once the button is actually armed, so it reads as "ready", not decoration. */}
         <div
@@ -301,8 +301,8 @@ export default function PracticeToolPage() {
               startPracticeSession();
               router.replace(`/study/quiz?${q}`);
             }}
-            className={`flex w-full items-center justify-center gap-2 bg-emerald-800 py-4 font-display text-sm font-semibold text-white transition-opacity disabled:opacity-40 squishy-press ${
-              canStart ? "rounded-[15px]" : "rounded-2xl"
+            className={`flex w-full items-center justify-center gap-2 bg-[#0b2be0] py-4 font-display text-sm font-semibold text-white transition-opacity disabled:opacity-40 squishy-press ${
+              canStart ? "rounded-[2px]" : "rounded-2xl"
             }`}
           >
             <span className="material-symbols-outlined text-[18px] leading-none">

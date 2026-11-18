@@ -101,7 +101,7 @@ export default function CourseDetailPage() {
                   className="relative flex flex-col items-start gap-3 p-4 rounded-2xl bg-surface-container-lowest shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-transparent opacity-60"
                 >
                   {icon}
-                  <span className="absolute right-2.5 top-2.5 rounded-full bg-surface-container-highest px-1.5 py-px font-display text-[9px] font-semibold tracking-wide text-on-surface-variant">
+                  <span className="absolute right-2.5 top-2.5 rounded-[2px] bg-surface-container-highest px-1.5 py-px font-display text-[9px] font-semibold tracking-wide text-on-surface-variant">
                     Coming soon
                   </span>
                   <span className="font-display text-sm font-semibold text-on-surface text-left">
@@ -120,7 +120,7 @@ export default function CourseDetailPage() {
               >
                 {icon}
                 {showCount && (
-                  <span className="absolute right-3 top-3 min-w-[22px] rounded-full bg-primary/10 px-2 py-0.5 text-center font-display text-[11px] font-bold text-primary">
+                  <span className="absolute right-3 top-3 min-w-[22px] rounded-[2px] bg-primary/10 px-2 py-0.5 text-center font-display text-[11px] font-bold text-primary">
                     {materialCount}
                   </span>
                 )}

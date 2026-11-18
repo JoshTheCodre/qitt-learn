@@ -47,7 +47,7 @@ export default function AssignmentsCard() {
           edit_note
         </span>
         {overdue > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 font-display text-[10px] font-bold text-white">
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-[2px] bg-error px-1 font-display text-[10px] font-bold text-white">
             {overdue}
           </span>
         )}

@@ -16,7 +16,7 @@ export default function ForYouTabs() {
           <Link
             key={tab.label}
             href={tab.href}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-2 bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/20 transition-all squishy-press"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-[2px] px-3 py-2 bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/20 transition-all squishy-press"
           >
             <Icon3D name={tab.icon} size={22} />
             <span className="font-display text-xs font-semibold text-on-surface-variant">

@@ -7,9 +7,9 @@ import { loginUser } from "@/lib/store";
 import PatternBackdrop from "@/components/PatternBackdrop";
 
 const FIELD =
-  "w-full rounded-xl border border-[#1a1712]/12 bg-white px-4 py-3.5 font-body text-[#1a1712] placeholder:text-[#1a1712]/35 focus:outline-none focus:border-[#1a1712]/45 transition-colors";
+  "w-full rounded-xl border border-[#0a1245]/12 bg-white px-4 py-3.5 font-body text-[#0a1245] placeholder:text-[#0a1245]/35 focus:outline-none focus:border-[#0a1245]/45 transition-colors";
 const LABEL =
-  "block font-display text-xs font-semibold uppercase tracking-wide text-[#1a1712]/65 mb-2";
+  "block font-display text-xs font-semibold uppercase tracking-wide text-[#0a1245]/65 mb-2";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col bg-[#f4f0e8] px-6 pb-8 pt-14 text-[#1a1712] md:border-x md:border-[#1a1712]/10 md:shadow-[0_0_60px_rgba(0,0,0,0.08)]">
+    <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col bg-[#f6f8ff] px-6 pb-8 pt-14 text-[#0a1245] md:border-x md:border-[#0a1245]/10 md:shadow-[0_0_60px_rgba(0,0,0,0.08)]">
       <PatternBackdrop variant="auth" />
 
       <span className="relative z-10 inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
@@ -51,10 +51,10 @@ export default function LoginPage() {
         Welcome{" "}
         <span className="relative whitespace-nowrap">
           back
-          <span className="absolute -bottom-1 left-0 h-2 w-full rounded-full bg-[#f4a9c4]" />
+          <span className="absolute -bottom-1 left-0 h-2 w-full rounded-[2px] bg-[#ffb938]" />
         </span>
       </h1>
-      <p className="relative z-10 mt-2 font-body text-[14px] font-medium text-[#1a1712]/55">
+      <p className="relative z-10 mt-2 font-body text-[14px] font-medium text-[#0a1245]/55">
         Log in to pick up where you left off.
       </p>
 
@@ -72,10 +72,10 @@ export default function LoginPage() {
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <label className="font-display text-xs font-semibold uppercase tracking-wide text-[#1a1712]/65">
+            <label className="font-display text-xs font-semibold uppercase tracking-wide text-[#0a1245]/65">
               Password
             </label>
-            <button type="button" className="font-display text-xs font-bold text-[#c9506a]">
+            <button type="button" className="font-display text-xs font-bold text-[#0b2be0]">
               Forgot?
             </button>
           </div>
@@ -91,7 +91,7 @@ export default function LoginPage() {
               type="button"
               onClick={() => setShow((v) => !v)}
               aria-label={show ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1a1712]/50"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0a1245]/50"
             >
               <span className="material-symbols-outlined text-[20px] leading-none">
                 {show ? "visibility_off" : "visibility"}
@@ -107,15 +107,15 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-2 w-full rounded-full bg-[#1a1712] py-4 font-display text-sm font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
+          className="mt-2 w-full rounded-[2px] bg-[#0b2be0] py-4 font-display text-sm font-bold text-[#ffffff] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
         >
           {busy ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
-      <p className="relative z-10 mt-auto pt-8 text-center font-body text-sm font-medium text-[#1a1712]/55">
+      <p className="relative z-10 mt-auto pt-8 text-center font-body text-sm font-medium text-[#0a1245]/55">
         New to Qitt?{" "}
-        <Link href="/register" className="font-bold text-[#c9506a]">
+        <Link href="/register" className="font-bold text-[#0b2be0]">
           Create account
         </Link>
       </p>

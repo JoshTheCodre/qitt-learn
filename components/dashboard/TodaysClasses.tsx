@@ -73,13 +73,13 @@ export default function TodaysClasses() {
         {CLASSES.map((c) => (
           <div
             key={c.code}
-            className="min-w-[190px] sm:min-w-[210px] md:min-w-[240px] bg-white rounded-[20px] p-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-outline-variant/30 flex flex-col gap-2.5 bento-card-hover group"
+            className="min-w-[190px] sm:min-w-[210px] md:min-w-[240px] bg-white rounded-[2px] p-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-outline-variant/30 flex flex-col gap-2.5 bento-card-hover group"
           >
             <div className="flex items-center justify-between">
               <span className="font-display text-[15px] font-bold text-primary group-hover:text-primary-container transition-colors">
                 {c.code}
               </span>
-              <span className="px-2.5 py-0.5 rounded-full font-display text-[11px] font-semibold bg-primary/5 text-primary">
+              <span className="px-2.5 py-0.5 rounded-[2px] font-display text-[11px] font-semibold bg-primary/5 text-primary">
                 {c.kind}
               </span>
             </div>

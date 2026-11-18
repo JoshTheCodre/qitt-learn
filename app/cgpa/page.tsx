@@ -48,7 +48,7 @@ export default function CgpaPage() {
 
       <main className="px-gutter pt-2 pb-28">
         {/* Result card */}
-        <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-brand to-blue-700 p-5 text-white shadow-[0_10px_26px_rgba(37,99,235,0.22)]">
+        <div className="relative overflow-hidden rounded-[2px] bg-gradient-to-br from-brand to-blue-700 p-5 text-white shadow-[0_10px_26px_rgba(37,99,235,0.22)]">
           <p className="font-body text-[11px] font-semibold uppercase tracking-widest text-white/70">
             Your CGPA
           </p>
@@ -74,7 +74,7 @@ export default function CgpaPage() {
             </p>
             <Link
               href="/dashboard"
-              className="mt-2 rounded-full bg-brand px-5 py-2.5 font-display text-sm font-semibold text-on-primary squishy-press"
+              className="mt-2 rounded-[2px] bg-brand px-5 py-2.5 font-display text-sm font-semibold text-on-primary squishy-press"
             >
               Go to courses
             </Link>

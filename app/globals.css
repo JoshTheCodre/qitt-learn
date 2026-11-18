@@ -9,63 +9,68 @@
 :root {
   color-scheme: light;
 
-  --page-rgb: 229 231 235; /* desktop backdrop behind the phone frame */
+  /* Palette shared with the landing page (app/page.tsx): built outward from the logo
+     blue. Neutrals are blue-tinted rather than grey so nothing reads as dull. */
+  --page-rgb: 10 28 156; /* cobalt backdrop behind the phone frame on desktop */
 
   --background-rgb: 255 255 255;
   --surface-rgb: 255 255 255;
   --surface-container-lowest-rgb: 255 255 255;
-  --surface-container-low-rgb: 243 243 246;
-  --surface-container-rgb: 238 238 240;
-  --surface-container-high-rgb: 232 232 234;
-  --surface-container-highest-rgb: 226 226 229;
-  --surface-variant-rgb: 226 226 229;
-  --surface-dim-rgb: 218 218 220;
+  --surface-container-low-rgb: 246 248 255; /* paper */
+  --surface-container-rgb: 234 240 255; /* mist */
+  --surface-container-high-rgb: 222 231 255;
+  --surface-container-highest-rgb: 208 221 255;
+  --surface-variant-rgb: 222 231 255;
+  --surface-dim-rgb: 208 221 255;
   --surface-bright-rgb: 255 255 255;
-  --on-surface-rgb: 26 28 30;
-  --on-surface-variant-rgb: 68 70 86;
-  --on-background-rgb: 26 28 30;
-  --outline-rgb: 117 118 136;
-  --outline-variant-rgb: 197 197 217;
-  --primary-rgb: 37 99 235;
+  --on-surface-rgb: 10 18 69; /* ink */
+  --on-surface-variant-rgb: 52 64 128;
+  --on-background-rgb: 10 18 69;
+  --outline-rgb: 96 112 186;
+  --outline-variant-rgb: 186 201 246;
+  --primary-rgb: 11 43 224; /* royal — the Qitt logo blue */
   --on-primary-rgb: 255 255 255;
-  --primary-container-rgb: 29 78 216;
-  --error-rgb: 186 26 26;
+  --primary-container-rgb: 18 56 245; /* electric */
+  --error-rgb: 214 31 69;
   --on-error-rgb: 255 255 255;
-  --error-container-rgb: 255 218 214;
-  --on-error-container-rgb: 147 0 10;
+  --error-container-rgb: 255 221 228;
+  --on-error-container-rgb: 140 8 40;
+
+  --brand-rgb: 11 43 224; /* royal */
+  --accent-rgb: 255 185 56; /* amber */
 }
 
 .dark {
   color-scheme: dark;
 
-  --page-rgb: 8 9 11;
+  --page-rgb: 4 8 36;
 
-  --background-rgb: 18 19 22;
-  --surface-rgb: 18 19 22;
-  --surface-container-lowest-rgb: 30 32 36;
-  --surface-container-low-rgb: 26 28 31;
-  --surface-container-rgb: 33 35 39;
-  --surface-container-high-rgb: 43 45 50;
-  --surface-container-highest-rgb: 52 54 59;
-  --surface-variant-rgb: 68 70 78;
-  --surface-dim-rgb: 18 19 22;
-  --surface-bright-rgb: 56 58 62;
-  --on-surface-rgb: 227 226 230;
-  --on-surface-variant-rgb: 196 198 208;
-  --on-background-rgb: 227 226 230;
-  --outline-rgb: 142 144 154;
-  --outline-variant-rgb: 68 70 77;
-  --primary-rgb: 37 99 235;
+  /* Deep navy rather than neutral charcoal, so dark mode stays in the blue family. */
+  --background-rgb: 8 14 58;
+  --surface-rgb: 8 14 58;
+  --surface-container-lowest-rgb: 16 26 92;
+  --surface-container-low-rgb: 12 21 78;
+  --surface-container-rgb: 18 30 104;
+  --surface-container-high-rgb: 24 39 124;
+  --surface-container-highest-rgb: 31 48 144;
+  --surface-variant-rgb: 36 54 150;
+  --surface-dim-rgb: 8 14 58;
+  --surface-bright-rgb: 36 54 150;
+  --on-surface-rgb: 234 240 255;
+  --on-surface-variant-rgb: 176 195 252;
+  --on-background-rgb: 234 240 255;
+  --outline-rgb: 124 146 228;
+  --outline-variant-rgb: 44 63 158;
+  --primary-rgb: 47 91 255; /* bright — royal is too dark to read on navy */
   --on-primary-rgb: 255 255 255;
-  --primary-container-rgb: 29 78 216;
-  --error-rgb: 242 84 77;
+  --primary-container-rgb: 18 56 245;
+  --error-rgb: 255 107 138;
   --on-error-rgb: 255 255 255;
-  --error-container-rgb: 93 0 10;
-  --on-error-container-rgb: 255 180 171;
+  --error-container-rgb: 110 10 40;
+  --on-error-container-rgb: 255 196 208;
 
-  /* Accents brighten in dark mode so they still pop against the dark surfaces. */
-  --brand-rgb: 96 165 250;
-  --accent-rgb: 52 211 153;
+  --brand-rgb: 143 176 255; /* sky */
+  --accent-rgb: 255 185 56; /* amber */
 }
 
 body {
@@ -145,20 +150,17 @@ textarea {
 }
 
 /*
- * Homepage palette. Only this scope overrides the brand/accent slots, so shared
- * components (Header, BottomNav, CourseList) pick these up on the dashboard and stay
- * on the default blue everywhere else.
+ * Homepage scope. Kept as a hook so the dashboard can diverge again later; for now it
+ * uses the same royal/amber pair as the rest of the app.
  */
 .theme-home {
-  --brand-rgb: 54 102 156; /* #36669c — deep steel blue */
-  --accent-rgb: 62 201 149; /* #3ec995 — bright mint */
+  --brand-rgb: 11 43 224; /* royal */
+  --accent-rgb: 255 185 56; /* amber */
 }
 
-/* On dark, the deep steel blue goes muddy against the dark surfaces — lift it to a
-   brighter sky blue so the dashboard's brand accents (greeting, carousel, pills) shine. */
 .dark .theme-home {
-  --brand-rgb: 125 168 255; /* #7da8ff — bright sky blue */
-  --accent-rgb: 74 222 168; /* #4adea8 — vivid mint */
+  --brand-rgb: 143 176 255; /* sky */
+  --accent-rgb: 255 185 56; /* amber */
 }
 
 /* Material Symbols are outline-only by default, which is what made the homepage icons
@@ -201,39 +203,39 @@ textarea {
   }
 }
 
-/* Primary action: a bright green-dominated comet sweeping the ring. */
+/* Primary action: a bright amber comet with an aqua tail sweeping the ring. */
 .animated-border {
   /* Fallback first: browsers without @property keep a static gradient ring
      rather than dropping the background entirely. */
-  background: linear-gradient(100deg, #10b981, #34d399, #60a5fa);
+  background: linear-gradient(100deg, #ffb938, #45e3ff, #2f5bff);
   background: conic-gradient(
     from var(--border-angle),
-    rgba(16, 185, 129, 0) 0deg,
-    rgba(16, 185, 129, 0) 185deg,
-    #10b981 245deg,
-    #34d399 290deg,
-    #6ee7b7 320deg,
-    #60a5fa 342deg,
-    rgba(16, 185, 129, 0) 360deg
+    rgba(255, 185, 56, 0) 0deg,
+    rgba(255, 185, 56, 0) 185deg,
+    #ffb938 245deg,
+    #ffd27a 290deg,
+    #45e3ff 325deg,
+    #2f5bff 345deg,
+    rgba(255, 185, 56, 0) 360deg
   );
   animation: border-sweep 3.5s linear infinite;
 }
 
 /*
- * Inputs: the same idea, deliberately quieter — a full green ring that drifts
+ * Inputs: the same idea, deliberately quieter — a full blue ring that drifts
  * rather than a comet that races. Inputs sit under the primary action in the
  * hierarchy, so they must never out-shine it.
  */
 .animated-field {
-  background: linear-gradient(100deg, #34d399, #10b981);
+  background: linear-gradient(100deg, #2f5bff, #45e3ff);
   background: conic-gradient(
     from var(--border-angle),
-    #34d399 0deg,
-    #10b981 70deg,
-    #6ee7b7 140deg,
-    #059669 210deg,
-    #a7f3d0 280deg,
-    #34d399 360deg
+    #2f5bff 0deg,
+    #0b2be0 70deg,
+    #45e3ff 140deg,
+    #2f5bff 210deg,
+    #8fb0ff 280deg,
+    #2f5bff 360deg
   );
   animation: border-sweep 9s linear infinite;
   opacity: 0.55;
@@ -248,17 +250,17 @@ textarea {
 .animated-ring {
   background: linear-gradient(
     100deg,
-    rgb(var(--brand-rgb, 37 99 235)),
-    rgb(var(--accent-rgb, 16 185 129))
+    rgb(var(--brand-rgb, 11 43 224)),
+    rgb(var(--accent-rgb, 255 185 56))
   );
   background: conic-gradient(
     from var(--border-angle),
-    rgb(var(--brand-rgb, 37 99 235) / 0.15) 0deg,
-    rgb(var(--brand-rgb, 37 99 235) / 0.15) 200deg,
-    rgb(var(--brand-rgb, 37 99 235) / 0.9) 268deg,
-    rgb(var(--accent-rgb, 16 185 129)) 310deg,
-    rgb(var(--accent-rgb, 16 185 129) / 0.25) 338deg,
-    rgb(var(--brand-rgb, 37 99 235) / 0.15) 360deg
+    rgb(var(--brand-rgb, 11 43 224) / 0.15) 0deg,
+    rgb(var(--brand-rgb, 11 43 224) / 0.15) 200deg,
+    rgb(var(--brand-rgb, 11 43 224) / 0.9) 268deg,
+    rgb(var(--accent-rgb, 255 185 56)) 310deg,
+    rgb(var(--accent-rgb, 255 185 56) / 0.25) 338deg,
+    rgb(var(--brand-rgb, 11 43 224) / 0.15) 360deg
   );
   animation: border-sweep 6s linear infinite;
 }
@@ -271,18 +273,46 @@ textarea {
   }
 
   .animated-border {
-    background: linear-gradient(100deg, #10b981, #34d399, #60a5fa);
+    background: linear-gradient(100deg, #ffb938, #45e3ff, #2f5bff);
   }
 
   .animated-field {
-    background: linear-gradient(100deg, #34d399, #10b981);
+    background: linear-gradient(100deg, #2f5bff, #45e3ff);
   }
 
   .animated-ring {
     background: linear-gradient(
       100deg,
-      rgb(var(--brand-rgb, 37 99 235)),
-      rgb(var(--accent-rgb, 16 185 129))
+      rgb(var(--brand-rgb, 11 43 224)),
+      rgb(var(--accent-rgb, 255 185 56))
     );
+  }
+}
+
+/*
+ * Landing page field: a lively blue light-field with warm and cool glows. Used behind
+ * the hero, the product panel and the closing CTA.
+ */
+.landing-field {
+  background-color: #0b2be0;
+  background-image:
+    radial-gradient(55% 85% at 10% 12%, rgba(69, 227, 255, 0.55) 0%, rgba(69, 227, 255, 0) 60%),
+    radial-gradient(60% 90% at 58% 55%, rgba(47, 91, 255, 1) 0%, rgba(47, 91, 255, 0) 65%),
+    radial-gradient(45% 75% at 96% 6%, rgba(255, 122, 182, 0.5) 0%, rgba(255, 122, 182, 0) 62%),
+    radial-gradient(42% 60% at 34% 104%, rgba(255, 185, 56, 0.5) 0%, rgba(255, 185, 56, 0) 70%);
+}
+
+/* A large line grid laid over the field — deliberately almost invisible. */
+.landing-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.075) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.075) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: -1px -1px;
+}
+
+@media (min-width: 1024px) {
+  .landing-grid {
+    background-size: 120px 120px;
   }
 }

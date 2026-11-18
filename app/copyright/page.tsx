@@ -20,7 +20,7 @@ const TOC = [
 
 export default function CopyrightPage() {
   return (
-    <div className="min-h-screen w-full bg-[#f4f0e8] text-[#1a1712]">
+    <div className="min-h-screen w-full bg-[#f6f8ff] text-[#0a1245]">
       {/* Header */}
       <header className="mx-auto flex max-w-3xl items-center justify-between px-5 py-5">
         <Link href="/" className="font-display text-[20px] font-extrabold tracking-tight">
@@ -28,20 +28,20 @@ export default function CopyrightPage() {
         </Link>
         <Link
           href="/"
-          className="rounded-full px-4 py-2 font-display text-[13px] font-bold text-[#1a1712]/70 transition-colors hover:bg-[#1a1712]/[0.06]"
+          className="rounded-[2px] px-4 py-2 font-display text-[13px] font-bold text-[#0a1245]/70 transition-colors hover:bg-[#0b2be0]/[0.06]"
         >
           ← Back
         </Link>
       </header>
 
       <main className="mx-auto max-w-3xl px-5 pb-20 pt-4">
-        <p className="font-display text-[12px] font-bold uppercase tracking-[0.12em] text-[#c9506a]">
+        <p className="font-display text-[12px] font-bold uppercase tracking-[0.12em] text-[#0b2be0]">
           Legal
         </p>
         <h1 className="mt-2 font-display text-[34px] font-extrabold leading-[1.05] tracking-tight sm:text-[44px]">
           Copyright &amp; Content Policy
         </h1>
-        <p className="mt-4 font-body text-[15px] leading-relaxed text-[#1a1712]/70">
+        <p className="mt-4 font-body text-[15px] leading-relaxed text-[#0a1245]/70">
           {BRAND} is a student study platform operated in Nigeria. Much of the material on {BRAND} —
           notes, summaries, past questions and slides — is contributed by students. This policy sets
           out the rules for sharing material, how we respect copyright, and how rights holders can ask
@@ -51,8 +51,8 @@ export default function CopyrightPage() {
         </p>
 
         {/* Table of contents */}
-        <nav className="mt-8 rounded-2xl border border-[#1a1712]/10 bg-white/50 p-5">
-          <p className="font-display text-[12px] font-bold uppercase tracking-wide text-[#1a1712]/50">
+        <nav className="mt-8 rounded-2xl border border-[#0a1245]/10 bg-white/50 p-5">
+          <p className="font-display text-[12px] font-bold uppercase tracking-wide text-[#0a1245]/50">
             On this page
           </p>
           <ul className="mt-3 space-y-1.5">
@@ -60,7 +60,7 @@ export default function CopyrightPage() {
               <li key={t.href}>
                 <a
                   href={t.href}
-                  className="font-body text-[14px] font-medium text-[#1a1712]/80 underline decoration-[#f4a9c4] decoration-2 underline-offset-4 transition-colors hover:text-[#1a1712]"
+                  className="font-body text-[14px] font-medium text-[#0a1245]/80 underline decoration-[#ffb938] decoration-2 underline-offset-4 transition-colors hover:text-[#0a1245]"
                 >
                   {t.label}
                 </a>
@@ -135,7 +135,7 @@ export default function CopyrightPage() {
             </a>{" "}
             including:
           </p>
-          <ol className="mt-3 list-decimal space-y-1.5 pl-5 font-body text-[14px] leading-relaxed text-[#1a1712]/80">
+          <ol className="mt-3 list-decimal space-y-1.5 pl-5 font-body text-[14px] leading-relaxed text-[#0a1245]/80">
             <li>Your full name and contact details.</li>
             <li>A description of the copyrighted work you say is infringed.</li>
             <li>The exact material on {BRAND} (title and/or link) you want removed.</li>
@@ -188,7 +188,7 @@ export default function CopyrightPage() {
 
         <Section id="contact" n="7" title="Contact">
           <p>Questions about this policy, or a copyright or takedown request:</p>
-          <ul className="mt-3 space-y-1.5 font-body text-[14px] text-[#1a1712]/80">
+          <ul className="mt-3 space-y-1.5 font-body text-[14px] text-[#0a1245]/80">
             <li>
               Email:{" "}
               <a className="font-semibold underline" href={`mailto:${CONTACT_EMAIL}`}>
@@ -213,7 +213,7 @@ export default function CopyrightPage() {
           </ul>
         </Section>
 
-        <p className="mt-12 border-t border-[#1a1712]/10 pt-6 font-body text-[13px] text-[#1a1712]/50">
+        <p className="mt-12 border-t border-[#0a1245]/10 pt-6 font-body text-[13px] text-[#0a1245]/50">
           © {new Date().getFullYear().toString()} {LEGAL_ENTITY}. Operated in Nigeria. Last updated{" "}
           {LAST_UPDATED}.
         </p>
@@ -236,9 +236,9 @@ function Section({
   return (
     <section id={id} className="mt-10 scroll-mt-6">
       <h2 className="font-display text-[22px] font-extrabold leading-tight tracking-tight">
-        <span className="text-[#c9506a]">{n}.</span> {title}
+        <span className="text-[#0b2be0]">{n}.</span> {title}
       </h2>
-      <div className="mt-3 font-body text-[14px] leading-relaxed text-[#1a1712]/80 [&_strong]:text-[#1a1712]">
+      <div className="mt-3 font-body text-[14px] leading-relaxed text-[#0a1245]/80 [&_strong]:text-[#0a1245]">
         {children}
       </div>
     </section>
@@ -246,5 +246,5 @@ function Section({
 }
 
 function List({ children }: { children: React.ReactNode }) {
-  return <ul className="mt-2 list-disc space-y-1.5 pl-5 marker:text-[#f4a9c4]">{children}</ul>;
+  return <ul className="mt-2 list-disc space-y-1.5 pl-5 marker:text-[#ffb938]">{children}</ul>;
 }

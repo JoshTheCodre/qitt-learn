@@ -359,7 +359,7 @@ function QuizSession() {
   if (qStatus !== "done" || total === 0) {
     return (
       <div className={FRAME}>
-        <header className="sticky top-0 z-30 bg-gradient-to-br from-emerald-700 to-emerald-900 px-gutter py-4 text-white">
+        <header className="sticky top-0 z-30 bg-gradient-to-br from-[#2f5bff] to-[#0a1c9c] px-gutter py-4 text-white">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -388,7 +388,7 @@ function QuizSession() {
               <button
                 type="button"
                 onClick={backToSetup}
-                className="mt-1 rounded-full bg-emerald-800 px-5 py-2.5 font-display text-[13px] font-semibold text-white squishy-press"
+                className="mt-1 rounded-[2px] bg-[#0b2be0] px-5 py-2.5 font-display text-[13px] font-semibold text-white squishy-press"
               >
                 Back to setup
               </button>
@@ -402,7 +402,7 @@ function QuizSession() {
               <button
                 type="button"
                 onClick={backToSetup}
-                className="mt-1 rounded-full bg-emerald-800 px-5 py-2.5 font-display text-[13px] font-semibold text-white squishy-press"
+                className="mt-1 rounded-[2px] bg-[#0b2be0] px-5 py-2.5 font-display text-[13px] font-semibold text-white squishy-press"
               >
                 Pick another course
               </button>
@@ -416,7 +416,7 @@ function QuizSession() {
   return (
     <div className="mx-auto w-full max-w-[430px] min-h-screen bg-background relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20">
       {/* Exam header — sticky, so the clock and score never scroll away */}
-      <header className="sticky top-0 z-30 bg-gradient-to-br from-emerald-700 to-emerald-900 px-gutter py-4 text-white shadow-[0_8px_20px_-10px_rgba(6,78,59,0.6)]">
+      <header className="sticky top-0 z-30 bg-gradient-to-br from-[#2f5bff] to-[#0a1c9c] px-gutter py-4 text-white shadow-[0_8px_20px_-10px_rgba(6,78,59,0.6)]">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -527,7 +527,7 @@ function QuizSession() {
           <button
             type="button"
             onClick={() => setShowResult(true)}
-            className="w-full rounded-2xl bg-emerald-800 py-4 font-display text-sm font-bold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] squishy-press"
+            className="w-full rounded-2xl bg-[#0b2be0] py-4 font-display text-sm font-bold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] squishy-press"
           >
             See result
           </button>
@@ -537,8 +537,8 @@ function QuizSession() {
               type="button"
               onClick={() => setShowSubmit(true)}
               disabled={answered === 0}
-              className={`w-full bg-emerald-800 py-4 font-display text-sm font-bold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] transition-opacity disabled:opacity-40 disabled:shadow-none squishy-press ${
-                answered === total ? "rounded-[15px]" : "rounded-2xl"
+              className={`w-full bg-[#0b2be0] py-4 font-display text-sm font-bold text-white shadow-[0_8px_24px_rgba(6,78,59,0.28)] transition-opacity disabled:opacity-40 disabled:shadow-none squishy-press ${
+                answered === total ? "rounded-[2px]" : "rounded-2xl"
               }`}
             >
               {answered === total ? "Submit answers" : `Submit (${answered}/${total} answered)`}
@@ -586,7 +586,7 @@ function QuizSession() {
                   setShowSubmit(false);
                   submit();
                 }}
-                className="flex-1 rounded-xl bg-emerald-800 py-3 font-display text-sm font-bold text-white squishy-press"
+                className="flex-1 rounded-xl bg-[#0b2be0] py-3 font-display text-sm font-bold text-white squishy-press"
               >
                 Submit
               </button>
@@ -630,8 +630,8 @@ function QuizSession() {
       {showResult && (
         <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 sm:items-center">
           <div className="flex max-h-[88vh] w-full max-w-[430px] flex-col rounded-t-3xl bg-surface-container-lowest sm:rounded-3xl">
-            <div className="relative shrink-0 overflow-hidden rounded-t-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 px-5 pb-5 pt-6 text-center text-white">
-              <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#3ec995]/25 blur-3xl" />
+            <div className="relative shrink-0 overflow-hidden rounded-t-3xl bg-gradient-to-br from-[#2f5bff] to-[#0a1c9c] px-5 pb-5 pt-6 text-center text-white">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#ffb938]/25 blur-3xl" />
               <div className="relative">
                 <p className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
                   {course}
@@ -640,7 +640,7 @@ function QuizSession() {
                   {displayScore}
                   <span className="text-white/50">/{total}</span>
                 </p>
-                <p className="mt-1.5 font-display text-[13px] font-semibold text-[#8ff0cd]">
+                <p className="mt-1.5 font-display text-[13px] font-semibold text-[#ffd27a]">
                   {isTheory
                     ? `${percent({ score, total })}% · ${gradedByAI ? "AI-graded" : "self-marked"}`
                     : `${percent({ score, total })}% · ${objectiveScore} passed · ${total - objectiveScore} failed`}
@@ -743,7 +743,7 @@ function QuizSession() {
               <button
                 type="button"
                 onClick={() => leaveTo(resultId ? `/study/performance/${resultId}` : "/study/performance")}
-                className="w-full rounded-2xl bg-emerald-800 py-3.5 font-display text-sm font-bold text-white squishy-press"
+                className="w-full rounded-2xl bg-[#0b2be0] py-3.5 font-display text-sm font-bold text-white squishy-press"
               >
                 See full result
               </button>

@@ -109,7 +109,7 @@ export default function AdminUsersPage() {
         <button
           type="button"
           onClick={load}
-          className="rounded-full bg-surface-container px-3.5 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
+          className="rounded-[2px] bg-surface-container px-3.5 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
         >
           Refresh
         </button>
@@ -153,7 +153,7 @@ export default function AdminUsersPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search name, email, dept…"
-                className="min-w-[220px] flex-1 rounded-full border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2 font-body text-[13px] text-on-surface focus:border-primary focus:outline-none sm:max-w-xs sm:flex-none"
+                className="min-w-[220px] flex-1 rounded-[2px] border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2 font-body text-[13px] text-on-surface focus:border-primary focus:outline-none sm:max-w-xs sm:flex-none"
               />
             </div>
             <UsersTable users={data.users} search={search} onSelect={setSelectedEmail} />
@@ -344,7 +344,7 @@ function UserDetail({ user, onClose }: { user: FullUser; onClose: () => void }) 
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="shrink-0 rounded-full bg-surface-container px-2.5 py-1 font-display text-[12px] font-semibold text-on-surface-variant"
+          className="shrink-0 rounded-[2px] bg-surface-container px-2.5 py-1 font-display text-[12px] font-semibold text-on-surface-variant"
         >
           Close
         </button>

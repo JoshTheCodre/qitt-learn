@@ -42,7 +42,7 @@ function DuePill({ dueAt, dueTextRaw, now }: { dueAt: string | null; dueTextRaw:
   return (
     <span
       title={title}
-      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-body text-[11px] font-semibold ${TONE_CLASS[tone]}`}
+      className={`inline-flex items-center gap-1 rounded-[2px] px-2.5 py-1 font-body text-[11px] font-semibold ${TONE_CLASS[tone]}`}
     >
       {tone !== "unknown" && (
         <span className="material-symbols-outlined text-[13px] leading-none">{pillIcon(tone)}</span>
@@ -142,7 +142,7 @@ export default function AssignmentsPage() {
       <BackHeader title="Assignments" />
       <main className="px-gutter pb-28 pt-2">
         {/* Tabs */}
-        <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-full bg-surface-container p-1">
+        <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-[2px] bg-surface-container p-1">
           {TABS.map((t) => {
             const on = t.id === tab;
             return (
@@ -150,7 +150,7 @@ export default function AssignmentsPage() {
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
-                className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 font-display text-[13px] font-semibold transition-colors ${
+                className={`flex items-center gap-1.5 whitespace-nowrap rounded-[2px] px-3.5 py-1.5 font-display text-[13px] font-semibold transition-colors ${
                   on ? "bg-white text-on-surface shadow-[0_1px_2px_rgba(0,0,0,0.06)]" : "text-on-surface-variant"
                 }`}
               >

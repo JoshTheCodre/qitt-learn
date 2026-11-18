@@ -25,7 +25,7 @@ export default function JungleBackdrop() {
         draggable={false}
         className="absolute inset-x-0 top-0 w-full select-none"
       />
-      <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-emerald-700/[0.12] via-emerald-600/[0.05] to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#2f5bff]/[0.12] via-emerald-600/[0.05] to-transparent" />
     </div>
   );
 }

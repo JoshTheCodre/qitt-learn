@@ -81,7 +81,7 @@ export default function CourseList({
             </span>
           </button>
           {!showStats && (
-            <span className="rounded-full bg-brand/5 text-brand px-2 py-0.5 font-display text-[11px] font-semibold">
+            <span className="rounded-[2px] bg-brand/5 text-brand px-2 py-0.5 font-display text-[11px] font-semibold">
               {courses.length}
             </span>
           )}
@@ -132,7 +132,7 @@ export default function CourseList({
                   {course.units}
                 </span>
                 {cbt && (
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-violet-500 ring-1 ring-inset ring-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:ring-violet-500/30">
+                  <span className="inline-flex items-center gap-0.5 rounded-[2px] bg-violet-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-violet-500 ring-1 ring-inset ring-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:ring-violet-500/30">
                     <span className="material-symbols-outlined text-[11px] leading-none">desktop_windows</span>
                     CBT
                   </span>

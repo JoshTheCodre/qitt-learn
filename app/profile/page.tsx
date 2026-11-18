@@ -187,7 +187,7 @@ export default function ProfilePage() {
 
         <div className="mt-3 flex items-center gap-2 flex-wrap">
           <h2 className="font-display text-[22px] font-bold text-on-surface">{profile.name}</h2>
-          <span className="rounded-full bg-green-100 text-green-700 px-2.5 py-0.5 font-display text-xs font-semibold">
+          <span className="rounded-[2px] bg-green-100 text-green-700 px-2.5 py-0.5 font-display text-xs font-semibold">
             {profile.level} Level
           </span>
         </div>
@@ -198,11 +198,11 @@ export default function ProfilePage() {
 
         {/* Actions */}
         <div className="mt-4 flex items-center gap-2">
-          <button className="flex items-center gap-1.5 rounded-full bg-surface-container px-4 py-2 font-display text-sm font-semibold text-on-surface squishy-press">
+          <button className="flex items-center gap-1.5 rounded-[2px] bg-surface-container px-4 py-2 font-display text-sm font-semibold text-on-surface squishy-press">
             <span className="material-symbols-outlined text-[18px] leading-none">share</span>
             Share
           </button>
-          <button className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 font-display text-sm font-semibold text-on-primary squishy-press">
+          <button className="flex items-center gap-1.5 rounded-[2px] bg-primary px-4 py-2 font-display text-sm font-semibold text-on-primary squishy-press">
             Edit Profile
             <span className="material-symbols-outlined text-[18px] leading-none">arrow_forward</span>
           </button>
@@ -303,7 +303,7 @@ export default function ProfilePage() {
           </div>
           <p className="font-display text-sm font-semibold text-on-surface">Appearance</p>
         </div>
-        <div className="flex rounded-full bg-surface-container p-1">
+        <div className="flex rounded-[2px] bg-surface-container p-1">
           {([
             ["light", "☀️ Light"],
             ["dark", "🌙 Dark"],
@@ -316,7 +316,7 @@ export default function ProfilePage() {
                 setTheme(value);
                 setThemeState(value);
               }}
-              className={`flex-1 rounded-full py-2 font-display text-[12px] font-semibold transition-all squishy-press ${
+              className={`flex-1 rounded-[2px] py-2 font-display text-[12px] font-semibold transition-all squishy-press ${
                 theme === value
                   ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
                   : "text-on-surface-variant"

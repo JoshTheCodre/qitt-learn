@@ -17,14 +17,14 @@ const TABS = [
 export function AdminNav() {
   const pathname = usePathname();
   return (
-    <nav className="inline-flex flex-wrap gap-1 rounded-full bg-surface-container p-1">
+    <nav className="inline-flex flex-wrap gap-1 rounded-[2px] bg-surface-container p-1">
       {TABS.map((t) => {
         const active = pathname === t.href;
         return (
           <Link
             key={t.href}
             href={t.href}
-            className={`rounded-full px-4 py-1.5 font-display text-[13px] font-semibold transition-colors ${
+            className={`rounded-[2px] px-4 py-1.5 font-display text-[13px] font-semibold transition-colors ${
               active
                 ? "bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.1)]"
                 : "text-black/55 hover:text-black"

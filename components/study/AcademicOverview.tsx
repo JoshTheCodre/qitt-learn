@@ -9,7 +9,7 @@ const OVERVIEW = {
 export default function AcademicOverview() {
   return (
     <section className="mt-4">
-      <div className="relative overflow-hidden rounded-[24px] bg-primary p-6 text-white">
+      <div className="relative overflow-hidden rounded-[2px] bg-primary p-6 text-white">
         {/* Transparent decorative background */}
         <svg
           className="pointer-events-none absolute inset-0 h-full w-full text-white/10"

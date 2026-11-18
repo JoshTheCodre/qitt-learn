@@ -62,7 +62,7 @@ export default function StudyReadPage() {
         <button
           type="button"
           onClick={() => setEasy((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-full bg-primary/5 text-primary px-3 py-2 font-display text-xs font-semibold squishy-press"
+          className="inline-flex items-center gap-1.5 rounded-[2px] bg-primary/5 text-primary px-3 py-2 font-display text-xs font-semibold squishy-press"
         >
           <span className="material-symbols-outlined text-[16px] leading-none">
             {easy ? "subject" : "auto_stories"}

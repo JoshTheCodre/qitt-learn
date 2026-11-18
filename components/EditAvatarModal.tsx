@@ -31,7 +31,7 @@ export default function EditAvatarModal({
       <button aria-label="Close" className="absolute inset-0 bg-black/40" onClick={onClose} />
 
       <div className="relative w-full max-w-[430px] max-h-[85vh] overflow-y-auto no-scrollbar rounded-t-3xl bg-background px-5 pt-4 pb-8 shadow-[0_-8px_40px_rgba(0,0,0,0.15)]">
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-outline-variant/50" />
+        <div className="mx-auto mb-4 h-1 w-10 rounded-[2px] bg-outline-variant/50" />
 
         <h3 className="font-display text-[18px] font-bold text-on-surface">Profile picture</h3>
         <p className="mt-1 font-body text-[13px] text-on-surface/55">
@@ -57,7 +57,7 @@ export default function EditAvatarModal({
             // A brand-new random face on each tap — Math.random() is fine here (client only).
             setDraft(randomAvatarUrl(`${name}-${Math.random()}`));
           }}
-          className="mx-auto mt-3 flex items-center gap-1.5 rounded-full bg-surface-container px-4 py-2 font-display text-[13px] font-semibold text-on-surface squishy-press"
+          className="mx-auto mt-3 flex items-center gap-1.5 rounded-[2px] bg-surface-container px-4 py-2 font-display text-[13px] font-semibold text-on-surface squishy-press"
         >
           <span className="material-symbols-outlined text-[16px] leading-none">refresh</span>
           Surprise me

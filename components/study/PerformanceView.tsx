@@ -79,7 +79,7 @@ export default function PerformanceView() {
           <select
             value={course}
             onChange={(e) => setCourse(e.target.value)}
-            className="max-w-[170px] truncate appearance-none rounded-full border border-outline-variant/50 bg-surface-container-lowest pl-4 pr-9 py-1.5 font-display text-xs font-semibold text-on-surface focus:outline-none focus:border-primary"
+            className="max-w-[170px] truncate appearance-none rounded-[2px] border border-outline-variant/50 bg-surface-container-lowest pl-4 pr-9 py-1.5 font-display text-xs font-semibold text-on-surface focus:outline-none focus:border-primary"
           >
             {courseOptions.map((c) => (
               <option key={c} value={c}>

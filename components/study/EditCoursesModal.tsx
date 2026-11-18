@@ -73,7 +73,7 @@ export default function EditCoursesModal({
       <button aria-label="Close" className="absolute inset-0 bg-black/40" onClick={onClose} />
 
       <div className="relative w-full max-w-[430px] max-h-[85vh] overflow-y-auto no-scrollbar rounded-t-3xl bg-background px-5 pt-4 pb-8 shadow-[0_-8px_40px_rgba(0,0,0,0.15)]">
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-outline-variant/60" />
+        <div className="mx-auto mb-4 h-1 w-10 rounded-[2px] bg-outline-variant/60" />
 
         <div className="flex items-center justify-between">
           <h3 className="font-display text-[18px] font-bold text-on-surface">Edit Courses</h3>

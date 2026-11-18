@@ -86,7 +86,7 @@ function TheoryCard({ q, qi }: { q: ResultQuestion; qi: number }) {
           <span className="text-on-surface/40">Q{qi + 1}. </span>
           <MathText>{q.q}</MathText>
         </p>
-        <span className={`shrink-0 rounded-full px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-wide ${m.chip}`}>
+        <span className={`shrink-0 rounded-[2px] px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-wide ${m.chip}`}>
           {m.label}
         </span>
       </div>
@@ -155,7 +155,7 @@ export default function ResultPage() {
           </p>
           <Link
             href="/study/performance"
-            className="mt-5 inline-block rounded-full bg-emerald-800 px-5 py-2.5 font-display text-[13px] font-bold text-white squishy-press"
+            className="mt-5 inline-block rounded-[2px] bg-[#0b2be0] px-5 py-2.5 font-display text-[13px] font-bold text-white squishy-press"
           >
             Back to Performance
           </Link>
@@ -182,8 +182,8 @@ export default function ResultPage() {
 
       <main className="relative z-10 px-gutter pt-2 pb-12">
         {/* Score header */}
-        <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 p-5 text-white shadow-[0_16px_36px_-16px_rgba(6,78,59,0.55)]">
-          <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#3ec995]/25 blur-3xl" />
+        <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2f5bff] to-[#0a1c9c] p-5 text-white shadow-[0_16px_36px_-16px_rgba(6,78,59,0.55)]">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#ffb938]/25 blur-3xl" />
           <div className="relative">
             <p className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
               {formatCourseCode(result.course)} · {result.type}
@@ -192,7 +192,7 @@ export default function ResultPage() {
               {result.score}
               <span className="text-white/50">/{result.total}</span>
             </p>
-            <p className="mt-1.5 font-display text-[14px] font-semibold text-[#8ff0cd]">
+            <p className="mt-1.5 font-display text-[14px] font-semibold text-[#ffd27a]">
               {isTheory
                 ? `${pct}% · ${vcount("correct")} correct · ${vcount("partial")} partial · ${vcount("incorrect")} wrong`
                 : `${pct}% · ${result.score} passed · ${result.total - result.score} failed`}
@@ -217,7 +217,7 @@ export default function ResultPage() {
 
         <Link
           href="/study/practice"
-          className="mt-6 flex w-full items-center justify-center rounded-2xl bg-emerald-800 py-3.5 font-display text-sm font-bold text-white squishy-press"
+          className="mt-6 flex w-full items-center justify-center rounded-2xl bg-[#0b2be0] py-3.5 font-display text-sm font-bold text-white squishy-press"
         >
           Practise again
         </Link>

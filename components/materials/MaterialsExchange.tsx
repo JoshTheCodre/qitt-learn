@@ -21,7 +21,7 @@ export default function MaterialsExchange({ defaultTab = "request" }: { defaultT
 
       {/* Rounded, full-width, centered segmented tab */}
       <div className="px-gutter pt-1">
-        <div className="flex rounded-full bg-surface-container p-1">
+        <div className="flex rounded-[2px] bg-surface-container p-1">
           {TABS.map((t) => {
             const active = t.key === tab;
             return (
@@ -29,7 +29,7 @@ export default function MaterialsExchange({ defaultTab = "request" }: { defaultT
                 key={t.key}
                 type="button"
                 onClick={() => setTab(t.key)}
-                className={`flex-1 rounded-full py-2.5 font-display text-sm font-semibold transition-all squishy-press ${
+                className={`flex-1 rounded-[2px] py-2.5 font-display text-sm font-semibold transition-all squishy-press ${
                   active
                     ? "bg-surface-container-lowest text-on-surface shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
                     : "text-on-surface-variant"

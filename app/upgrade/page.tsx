@@ -64,8 +64,8 @@ export default function UpgradePage() {
 
       <main className="relative z-10 px-gutter pb-36 pt-1">
         {/* The pitch — one clean gradient panel, a single soft glow, no busy texture */}
-        <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#4d80bd] via-[#36669c] to-[#22406a] p-6 text-white shadow-[0_20px_44px_-20px_rgba(34,64,106,0.55)]">
-          <div className="pointer-events-none absolute -bottom-16 -left-12 h-52 w-52 rounded-full bg-[#3ec995]/25 blur-3xl" />
+        <section className="relative overflow-hidden rounded-[2px] bg-gradient-to-br from-[#2f5bff] via-[#1238f5] to-[#0b2be0] p-6 text-white shadow-[0_20px_44px_-20px_rgba(11,43,224,0.55)]">
+          <div className="pointer-events-none absolute -bottom-16 -left-12 h-52 w-52 rounded-full bg-[#ffb938]/25 blur-3xl" />
 
           <div className="relative">
             <h2 className="font-display text-[25px] font-bold leading-tight">
@@ -81,7 +81,7 @@ export default function UpgradePage() {
                 <span className="font-display text-[34px] font-bold leading-none">{PRICE_LABEL}</span>
                 <span className="font-body text-[12px] font-medium text-white/60">/ semester</span>
               </div>
-              <span className="rounded-full bg-white/15 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wide text-white/90">
+              <span className="rounded-[2px] bg-white/15 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wide text-white/90">
                 One-time
               </span>
             </div>
@@ -98,7 +98,7 @@ export default function UpgradePage() {
               key={b.title}
               className="flex gap-3 rounded-2xl bg-surface-container-lowest p-3.5 ring-1 ring-inset ring-black/[0.06] shadow-[0_8px_20px_-14px_rgba(16,24,40,0.2)]"
             >
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3ec995]/15">
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ffb938]/15">
                 <span className="material-symbols-outlined icon-filled text-[16px] leading-none text-[#0f9b6c]">
                   {b.icon}
                 </span>
@@ -116,9 +116,9 @@ export default function UpgradePage() {
         </div>
 
         {/* Value statement — the app's own voice, no fabricated testimonials */}
-        <div className="mt-7 rounded-2xl bg-[#22406a]/[0.06] p-5 ring-1 ring-inset ring-[#22406a]/10">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#22406a]/10">
-            <span className="material-symbols-outlined icon-filled text-[19px] leading-none text-[#22406a]">
+        <div className="mt-7 rounded-2xl bg-[#0b2be0]/[0.06] p-5 ring-1 ring-inset ring-[#0b2be0]/10">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0b2be0]/10">
+            <span className="material-symbols-outlined icon-filled text-[19px] leading-none text-[#0b2be0]">
               school
             </span>
           </span>
@@ -156,7 +156,7 @@ export default function UpgradePage() {
           type="button"
           onClick={pay}
           disabled={status === "pending"}
-          className="flex w-full items-center justify-center rounded-2xl bg-[#22406a] py-4 font-display text-sm font-bold text-white shadow-[0_10px_24px_-12px_rgba(34,64,106,0.7)] transition-opacity hover:bg-[#1b3357] disabled:opacity-60 squishy-press"
+          className="flex w-full items-center justify-center rounded-2xl bg-[#0b2be0] py-4 font-display text-sm font-bold text-white shadow-[0_10px_24px_-12px_rgba(11,43,224,0.7)] transition-opacity hover:bg-[#0a1c9c] disabled:opacity-60 squishy-press"
         >
           {status === "pending" ? "Starting…" : `Pay ${PRICE_LABEL}`}
         </button>

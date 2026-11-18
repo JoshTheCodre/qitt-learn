@@ -164,7 +164,7 @@ export default function TimetablePage() {
           <button
             type="button"
             onClick={() => setShowFreeTime((v) => !v)}
-            className={`flex items-center gap-1.5 font-display text-xs font-semibold border rounded-full px-3 py-1.5 transition-all squishy-press ${
+            className={`flex items-center gap-1.5 font-display text-xs font-semibold border rounded-[2px] px-3 py-1.5 transition-all squishy-press ${
               showFreeTime
                 ? "bg-amber-500 text-white border-amber-500"
                 : "text-on-surface-variant border-outline-variant/50 bg-surface-container-lowest"
@@ -211,7 +211,7 @@ export default function TimetablePage() {
             key={day}
             type="button"
             onClick={() => setSelectedDay(day)}
-            className={`flex-1 font-display text-[11px] font-semibold py-2.5 rounded-full transition-colors ${
+            className={`flex-1 font-display text-[11px] font-semibold py-2.5 rounded-[2px] transition-colors ${
               selectedDay === day ? "bg-primary text-white" : "text-on-surface-variant"
             }`}
           >
@@ -233,7 +233,7 @@ export default function TimetablePage() {
             <button
               type="button"
               onClick={openAdd}
-              className="mt-2 rounded-full bg-primary px-5 py-2.5 font-display text-[13px] font-bold text-white squishy-press"
+              className="mt-2 rounded-[2px] bg-primary px-5 py-2.5 font-display text-[13px] font-bold text-white squishy-press"
             >
               + Add a class
             </button>
@@ -242,7 +242,7 @@ export default function TimetablePage() {
           dayEntries.map((e) => (
             <div key={e.id}>
               <div className="relative bg-surface-container-lowest rounded-xl border border-outline-variant/30 px-4 py-4 pl-5 flex items-start justify-between shadow-sm overflow-hidden mb-3">
-                <span className="absolute left-0 top-3 bottom-3 w-[3px] bg-primary rounded-full" />
+                <span className="absolute left-0 top-3 bottom-3 w-[3px] bg-primary rounded-[2px]" />
                 <div className="min-w-0">
                   <p className="font-display text-[11px] font-medium text-on-surface-variant mb-0.5">
                     {compactTime(e.start)}–{compactTime(e.end)}
@@ -256,7 +256,7 @@ export default function TimetablePage() {
                 </div>
                 <div className="ml-3 flex shrink-0 flex-col items-end gap-2">
                   {e.location && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-primary/5 px-2 py-0.5 font-display text-[11px] font-medium text-primary">
+                    <span className="inline-flex items-center gap-1 rounded-[2px] bg-primary/5 px-2 py-0.5 font-display text-[11px] font-medium text-primary">
                       <span className="material-symbols-outlined text-[12px] leading-none">
                         location_on
                       </span>
@@ -322,14 +322,14 @@ export default function TimetablePage() {
                       key={d}
                       type="button"
                       onClick={() => setActiveDay(d)}
-                      className={`flex flex-1 items-center justify-center gap-1 rounded-full py-2 font-display text-[11px] font-semibold transition-colors ${
+                      className={`flex flex-1 items-center justify-center gap-1 rounded-[2px] py-2 font-display text-[11px] font-semibold transition-colors ${
                         activeDay === d ? "bg-primary text-white" : "bg-surface-container text-on-surface-variant"
                       }`}
                     >
                       {DAY_SHORT[d]}
                       {count > 0 && (
                         <span
-                          className={`rounded-full px-1 text-[9px] font-bold leading-tight ${
+                          className={`rounded-[2px] px-1 text-[9px] font-bold leading-tight ${
                             activeDay === d ? "bg-white/25 text-white" : "bg-primary/10 text-primary"
                           }`}
                         >

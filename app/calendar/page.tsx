@@ -22,8 +22,8 @@ export default function CalendarPage() {
 
       <main className="relative z-10 px-gutter pt-2 pb-28">
         {/* Term hero */}
-        <section className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-[#4d80bd] via-[#36669c] to-[#22406a] p-5 text-white shadow-[0_18px_40px_-18px_rgba(34,64,106,0.6)]">
-          <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#3ec995]/25 blur-3xl" />
+        <section className="relative overflow-hidden rounded-[2px] bg-gradient-to-br from-[#2f5bff] via-[#1238f5] to-[#0b2be0] p-5 text-white shadow-[0_18px_40px_-18px_rgba(11,43,224,0.6)]">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#ffb938]/25 blur-3xl" />
           <div className="relative">
             <p className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
               {term.label}
@@ -48,9 +48,9 @@ export default function CalendarPage() {
                   : "Exams & vacation period"}
             </p>
 
-            <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+            <div className="mt-4 h-1.5 w-full overflow-hidden rounded-[2px] bg-white/20">
               <div
-                className="h-full rounded-full bg-[#3ec995] transition-all"
+                className="h-full rounded-[2px] bg-[#ffb938] transition-all"
                 style={{ width: `${term.pct}%` }}
               />
             </div>

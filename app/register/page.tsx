@@ -13,9 +13,9 @@ const LEVELS = ["100 Level", "200 Level", "300 Level", "400 Level", "500 Level"]
 const FACULTY_NAMES = FACULTIES.map((f) => f.faculty);
 
 const FIELD =
-  "w-full rounded-xl border border-[#1a1712]/12 bg-white px-4 py-3.5 font-body text-[#1a1712] placeholder:text-[#1a1712]/35 focus:outline-none focus:border-[#1a1712]/45 transition-colors";
+  "w-full rounded-xl border border-[#0a1245]/12 bg-white px-4 py-3.5 font-body text-[#0a1245] placeholder:text-[#0a1245]/35 focus:outline-none focus:border-[#0a1245]/45 transition-colors";
 const LABEL =
-  "block font-display text-xs font-semibold uppercase tracking-wide text-[#1a1712]/65 mb-2";
+  "block font-display text-xs font-semibold uppercase tracking-wide text-[#0a1245]/65 mb-2";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -63,7 +63,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-[#f4f0e8] text-[#1a1712] relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-[#1a1712]/10 px-6 pt-6 pb-8">
+    <div className="mx-auto w-full max-w-[430px] min-h-screen bg-[#f6f8ff] text-[#0a1245] relative md:shadow-[0_0_60px_rgba(0,0,0,0.08)] md:border-x md:border-[#0a1245]/10 px-6 pt-6 pb-8">
       {/* Abstract tile — signing up shouldn't already feel like being inside the app. */}
       <PatternBackdrop variant="auth" />
 
@@ -73,7 +73,7 @@ export default function RegisterPage() {
         onClick={() => router.push("/")}
         className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white ring-1 ring-black/5 squishy-press"
       >
-        <span className="material-symbols-outlined text-[20px] leading-none text-[#1a1712]/70">
+        <span className="material-symbols-outlined text-[20px] leading-none text-[#0a1245]/70">
           arrow_back
         </span>
       </button>
@@ -82,10 +82,10 @@ export default function RegisterPage() {
         Create{" "}
         <span className="relative whitespace-nowrap">
           account
-          <span className="absolute -bottom-1 left-0 h-2 w-full rounded-full bg-[#f4a9c4]" />
+          <span className="absolute -bottom-1 left-0 h-2 w-full rounded-[2px] bg-[#ffb938]" />
         </span>
       </h1>
-      <p className="relative z-10 mt-2 font-body text-[14px] font-medium text-[#1a1712]/55">
+      <p className="relative z-10 mt-2 font-body text-[14px] font-medium text-[#0a1245]/55">
         Join Qitt and get ahead of every exam.
       </p>
 
@@ -183,15 +183,15 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-2 w-full rounded-full bg-[#1a1712] py-4 font-display text-sm font-bold text-[#f4f0e8] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
+          className="mt-2 w-full rounded-[2px] bg-[#0b2be0] py-4 font-display text-sm font-bold text-[#ffffff] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-40 squishy-press"
         >
           {busy ? "Creating account…" : "Create account"}
         </button>
       </form>
 
-      <p className="mt-6 text-center font-body text-sm font-medium text-[#1a1712]/55">
+      <p className="mt-6 text-center font-body text-sm font-medium text-[#0a1245]/55">
         Already have an account?{" "}
-        <Link href="/login" className="font-bold text-[#c9506a]">
+        <Link href="/login" className="font-bold text-[#0b2be0]">
           Log in
         </Link>
       </p>

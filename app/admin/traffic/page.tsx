@@ -62,7 +62,7 @@ export default function AdminTrafficPage() {
         <button
           type="button"
           onClick={load}
-          className="rounded-full bg-surface-container px-3.5 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
+          className="rounded-[2px] bg-surface-container px-3.5 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
         >
           Refresh
         </button>
@@ -113,9 +113,9 @@ function TopPages({ topPages }: { topPages: { path: string; views: number }[] })
               >
                 {p.path}
               </span>
-              <span className="relative h-2 flex-1 overflow-hidden rounded-full bg-black/[0.06]">
+              <span className="relative h-2 flex-1 overflow-hidden rounded-[2px] bg-black/[0.06]">
                 <span
-                  className="absolute inset-y-0 left-0 rounded-full bg-primary/80"
+                  className="absolute inset-y-0 left-0 rounded-[2px] bg-primary/80"
                   style={{ width: `${(p.views / maxViews) * 100}%` }}
                 />
               </span>

@@ -173,13 +173,13 @@ export default function AdminPage() {
       </header>
 
       {/* Tabs */}
-      <div className="mt-5 inline-flex rounded-full bg-surface-container p-1">
+      <div className="mt-5 inline-flex rounded-[2px] bg-surface-container p-1">
         {(["upload", "view"] as const).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => setTab(t)}
-            className={`rounded-full px-4 py-1.5 font-display text-[13px] font-semibold transition-colors ${
+            className={`rounded-[2px] px-4 py-1.5 font-display text-[13px] font-semibold transition-colors ${
               tab === t ? "bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.1)]" : "text-black/55"
             }`}
           >
@@ -277,9 +277,9 @@ export default function AdminPage() {
                           : `${j.progress}%`}
                     </span>
                   </div>
-                  <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-black/[0.07]">
+                  <div className="mt-1.5 h-1 w-full overflow-hidden rounded-[2px] bg-black/[0.07]">
                     <div
-                      className={`h-full rounded-full transition-all ${
+                      className={`h-full rounded-[2px] transition-all ${
                         j.status === "error" ? "bg-error" : "bg-brand"
                       }`}
                       style={{ width: `${j.status === "error" ? 100 : j.progress}%` }}
@@ -304,12 +304,12 @@ export default function AdminPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search course, name or type"
-              className="min-w-[200px] flex-1 rounded-full border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2 font-body text-[13px] text-on-surface focus:border-brand focus:outline-none"
+              className="min-w-[200px] flex-1 rounded-[2px] border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2 font-body text-[13px] text-on-surface focus:border-brand focus:outline-none"
             />
             <select
               value={kindFilter}
               onChange={(e) => setKindFilter(e.target.value as "all" | Kind)}
-              className="rounded-full border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2 font-display text-[13px] font-semibold text-on-surface focus:border-brand focus:outline-none"
+              className="rounded-[2px] border border-outline-variant/50 bg-surface-container-lowest px-3.5 py-2 font-display text-[13px] font-semibold text-on-surface focus:border-brand focus:outline-none"
             >
               <option value="all">All types</option>
               {KINDS.map((k) => (
@@ -346,21 +346,21 @@ export default function AdminPage() {
                     href={m.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 rounded-full bg-surface-container px-3 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
+                    className="shrink-0 rounded-[2px] bg-surface-container px-3 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
                   >
                     Open
                   </a>
                   <button
                     type="button"
                     onClick={() => navigator.clipboard.writeText(m.url)}
-                    className="shrink-0 rounded-full bg-surface-container px-3 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
+                    className="shrink-0 rounded-[2px] bg-surface-container px-3 py-1.5 font-display text-[12px] font-semibold text-on-surface-variant"
                   >
                     Copy URL
                   </button>
                   <button
                     type="button"
                     onClick={() => remove(m)}
-                    className="shrink-0 rounded-full px-3 py-1.5 font-display text-[12px] font-semibold text-error hover:bg-error-container"
+                    className="shrink-0 rounded-[2px] px-3 py-1.5 font-display text-[12px] font-semibold text-error hover:bg-error-container"
                   >
                     Delete
                   </button>

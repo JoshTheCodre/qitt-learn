@@ -19,7 +19,7 @@ export default function CourseHeader({ code, units }: { code: string; units: str
           </button>
           <h1 className="font-display text-[20px] font-bold text-on-surface">{code}</h1>
         </div>
-        <span className="px-3 py-1 rounded-full bg-primary/5 text-primary font-display text-xs font-semibold">
+        <span className="px-3 py-1 rounded-[2px] bg-primary/5 text-primary font-display text-xs font-semibold">
           {units}
         </span>
       </div>
